@@ -8,19 +8,18 @@ export const postType = defineType({
     defineField({
       name: 'title',
       type: 'string',
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().warning('Title is required'),
     }),
     defineField({
       name: 'slug',
       type: 'slug',
       options: { source: 'title' },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().warning('Slug will be auto-generated from title'),
     }),
     defineField({
       name: 'publishedAt',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'image',
