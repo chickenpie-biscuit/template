@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FeedPostCard from './FeedPostCard';
 import { client } from '@/sanity/lib/client';
@@ -56,29 +56,7 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
     }
   }, [filter, initialFilter]);
 
-  // Infinite scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
-          loadMorePosts();
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [hasMore, loading, filter]);
-
-  const loadMorePosts = async () => {
+  const loadMorePosts = useCallback(async () => {
     if (loading) return;
     setLoading(true);
 
@@ -103,7 +81,28 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter, loading, page]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const currentTarget = observerTarget.current;
+    if (!currentTarget) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loading) {
+          loadMorePosts();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(currentTarget);
+
+    return () => {
+      observer.unobserve(currentTarget);
+    };
+  }, [hasMore, loading, filter, loadMorePosts]);
 
   return (
     <div className="container-custom py-8">

@@ -21,7 +21,7 @@ const values = [
   },
   {
     title: 'Love, Chickens & Art',
-    description: 'At the end of the day, it's all about spreading joy through what we create.',
+    description: 'At the end of the day, it is all about spreading joy through what we create.',
     icon: '🐔',
   },
 ];

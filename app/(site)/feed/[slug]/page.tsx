@@ -66,11 +66,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
           )}
 
           {/* Body Content */}
-          {post.body && (
-            <div className="prose prose-lg max-w-none font-body text-black/80">
-              <PortableText value={post.body} />
-            </div>
-          )}
+          {post.body && <PortableText content={post.body} />}
 
           {/* CTA */}
           {post.ctaLink && (

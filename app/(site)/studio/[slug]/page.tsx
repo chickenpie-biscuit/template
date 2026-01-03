@@ -71,8 +71,8 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
 
           {/* Case Study Content */}
           {project.caseStudy && (
-            <div className="prose prose-lg max-w-none font-body text-black/80 mb-12">
-              <PortableText value={project.caseStudy} />
+            <div className="mb-12">
+              <PortableText content={project.caseStudy} />
             </div>
           )}
 

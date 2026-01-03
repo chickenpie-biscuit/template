@@ -58,7 +58,7 @@ export default function ContactForm() {
                 Message Sent!
               </h2>
               <p className="font-body text-lg text-black/80 mb-6">
-                Thanks for reaching out. We'll get back to you as soon as possible.
+                Thanks for reaching out. We will get back to you as soon as possible.
               </p>
               <button
                 onClick={() => setSubmitted(false)}

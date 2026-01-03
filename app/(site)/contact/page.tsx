@@ -12,7 +12,7 @@ export default function ContactPage() {
               Get in Touch
             </h1>
             <p className="font-body text-lg text-black/80 text-center mb-12">
-              Have a project in mind? A question about our shop? Just want to say hi? We'd
+              Have a project in mind? A question about our shop? Just want to say hi? We would
               love to hear from you.
             </p>
           </div>

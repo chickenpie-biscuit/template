@@ -9,7 +9,7 @@ const faqs = [
   {
     question: "What's your typical turnaround time?",
     answer:
-      'Project timelines vary depending on scope and complexity. Most branding projects take 4-6 weeks, web projects 6-12 weeks, and illustration work 1-3 weeks. We'll provide a detailed timeline during our initial consultation.',
+      'Project timelines vary depending on scope and complexity. Most branding projects take 4-6 weeks, web projects 6-12 weeks, and illustration work 1-3 weeks. We will provide a detailed timeline during our initial consultation.',
   },
   {
     question: 'Do you ship internationally?',
@@ -19,7 +19,7 @@ const faqs = [
   {
     question: 'Can I commission custom work?',
     answer:
-      'Absolutely! We love custom projects. Whether it's a custom illustration, branded merchandise, or a full design project, reach out through our contact form and we can discuss your needs.',
+      'Absolutely! We love custom projects. Whether it is a custom illustration, branded merchandise, or a full design project, reach out through our contact form and we can discuss your needs.',
   },
 ];
 

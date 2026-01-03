@@ -18,23 +18,23 @@ export default function BrandStory() {
             <p>
               Chickenpie started as a creative experiment—a way to blend professional
               design work with the playful, unexpected elements that make life interesting.
-              We're a design studio and lifestyle brand rolled into one, because why choose
+              We are a design studio and lifestyle brand rolled into one, because why choose
               between making beautiful things for clients and making beautiful things for
               ourselves?
             </p>
             <p>
               Our mission is simple: spread love, chickens, and art through playful design
-              and responsible creative work. We believe that great design doesn't have to
-              take itself too seriously, and that the best work happens when you're having
+              and responsible creative work. We believe that great design does not have to
+              take itself too seriously, and that the best work happens when you are having
               fun.
             </p>
             <p>
-              Why chickens? Because they're unexpected, a little absurd, and surprisingly
+              Why chickens? Because they are unexpected, a little absurd, and surprisingly
               resilient. They remind us not to take ourselves too seriously while still
-              doing serious work. Plus, they're just fun to draw.
+              doing serious work. Plus, they are just fun to draw.
             </p>
             <p>
-              Whether we're designing a brand identity, building a website, creating
+              Whether we are designing a brand identity, building a website, creating
               merchandise, or sharing our latest food find, everything we do is filtered
               through our unique lens: playful but professional, creatively responsible,
               and always ready to embrace the random.

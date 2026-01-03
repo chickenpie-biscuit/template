@@ -28,7 +28,7 @@ export default async function StudioPage() {
               Ready to start?
             </h2>
             <p className="font-body text-lg mb-8 text-black/80">
-              Let's create something amazing together
+              Let us create something amazing together
             </p>
             <Link
               href="/contact"

@@ -19,8 +19,8 @@ export default function CTASection() {
             Want to work together?
           </h2>
           <p className="font-body text-lg mb-8 text-black/80">
-            Let's create something amazing. Whether you need design services or just want
-            to say hi, we'd love to hear from you.
+            Let us create something amazing. Whether you need design services or just want
+            to say hi, we would love to hear from you.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
