@@ -6,12 +6,10 @@ import { Menu, X } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import CartButton from '@/components/cart/CartButton';
 import Container from './Container';
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const { scrollY } = useScroll();
   const itemCount = useCartStore((state) => state.getItemCount());
 
   // Close mobile menu on route change
@@ -73,12 +71,15 @@ export default function Header() {
 
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
-        {mobileMenuOpen && (
-          <div
-            className="lg:hidden fixed inset-0 bg-cream z-40 pt-24 border-t-2 border-black"
-          >
-            <nav className="px-4 py-8 h-full flex flex-col justify-between">
-              <div className="flex flex-col space-y-6">
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="lg:hidden fixed inset-0 bg-cream z-40 pt-24 border-t-2 border-black"
+            >
+              <nav className="px-4 py-8 h-full flex flex-col justify-between">
+                <div className="flex flex-col space-y-6">
                   {links.map((link) => (
                     <Link
                       key={link.href}
@@ -98,7 +99,6 @@ export default function Header() {
           )}
         </AnimatePresence>
       </Container>
-    </motion.header>
+    </header>
   );
 }
-
