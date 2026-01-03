@@ -162,14 +162,17 @@ export const getActiveBanners = groq`*[_type == "adBanner" && active == true] | 
   endDate
 }`;
 
-// Feed Post Queries
-export const getAllFeedPosts = groq`*[_type == "feedPost"] | order(publishedAt desc) {
+// Feed Post Queries - Includes both feedPost and regular blog posts
+export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | order(publishedAt desc) {
   _id,
+  _type,
   title,
   "slug": slug.current,
   category,
   featuredImage,
+  "mainImage": mainImage,
   description,
+  "excerpt": excerpt,
   ctaText,
   ctaLink,
   price,
@@ -180,13 +183,16 @@ export const getAllFeedPosts = groq`*[_type == "feedPost"] | order(publishedAt d
   featured
 }`;
 
-export const getFeedPostsByCategory = groq`*[_type == "feedPost" && category == $category] | order(publishedAt desc) {
+export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category == $category) || (_type == "post")] | order(publishedAt desc) {
   _id,
+  _type,
   title,
   "slug": slug.current,
   category,
   featuredImage,
+  "mainImage": mainImage,
   description,
+  "excerpt": excerpt,
   ctaText,
   ctaLink,
   price,
@@ -215,9 +221,10 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   featured
 }`;
 
-// Studio Project Queries
-export const getAllStudioProjects = groq`*[_type == "studioProject"] | order(publishedAt desc) {
+// Studio Project Queries - Includes both studioProject and feedPost with design-work category
+export const getAllStudioProjects = groq`*[_type == "studioProject" || (_type == "feedPost" && category == "design-work")] | order(publishedAt desc) {
   _id,
+  _type,
   title,
   "slug": slug.current,
   category,

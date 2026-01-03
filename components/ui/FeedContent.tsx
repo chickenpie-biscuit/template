@@ -8,11 +8,14 @@ import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
 
 interface FeedPost {
   _id: string;
+  _type?: string;
   title: string;
   slug: string;
-  category: string;
+  category?: string;
   featuredImage?: any;
+  mainImage?: any;
   description?: string;
+  excerpt?: string;
   ctaText?: string;
   ctaLink?: string;
   price?: number;

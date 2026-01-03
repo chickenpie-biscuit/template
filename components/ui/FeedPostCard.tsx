@@ -6,11 +6,14 @@ import { urlFor } from '@/sanity/lib/image';
 
 interface FeedPost {
   _id: string;
+  _type?: string;
   title: string;
   slug: string;
-  category: string;
+  category?: string;
   featuredImage?: any;
+  mainImage?: any; // For blog posts
   description?: string;
+  excerpt?: string; // For blog posts
   ctaText?: string;
   ctaLink?: string;
   price?: number;
@@ -40,16 +43,25 @@ const categoryColors: Record<string, string> = {
 };
 
 export default function FeedPostCard({ post }: FeedPostCardProps) {
-  const imageUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(800).height(1200).url()
+  // Handle both feedPost (featuredImage) and regular post (mainImage)
+  const image = post.featuredImage || post.mainImage;
+  const imageUrl = image
+    ? urlFor(image).width(800).height(1200).url()
     : null;
 
-  const categoryLabel = categoryLabels[post.category] || post.category.toUpperCase();
-  const categoryColor = categoryColors[post.category] || 'bg-black';
-  const href = post.ctaLink || `/feed/${post.slug}`;
+  // For blog posts, default category to 'thoughts'
+  const category = post.category || 'thoughts';
+  const categoryLabel = categoryLabels[category] || category.toUpperCase();
+  const categoryColor = categoryColors[category] || 'bg-black';
+  
+  // Use excerpt if description is not available (for blog posts)
+  const displayDescription = post.description || post.excerpt;
+  
+  // Determine link based on type
+  const href = post.ctaLink || (post._type === 'post' ? `/blog/${post.slug}` : `/feed/${post.slug}`);
 
-  // THOUGHTS - Quote Card Design (Text Only)
-  if (post.category === 'thoughts') {
+  // THOUGHTS - Quote Card Design (Text Only) - includes blog posts without category
+  if (category === 'thoughts' || post._type === 'post') {
     return (
       <Link
         href={href}
@@ -63,9 +75,9 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
           
           {/* Hover Overlay - Show description or CTA */}
           <div className="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center p-8">
-            {post.description && (
+            {displayDescription && (
               <p className="font-body text-sm text-cream/90 mb-4 line-clamp-4">
-                {post.description}
+                {displayDescription}
               </p>
             )}
             <div className="bg-cream text-black px-4 py-2 border-2 border-cream font-heading text-sm font-bold uppercase">
@@ -78,7 +90,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
   }
 
   // FINDS - Special Pinterest Card with Price Banner
-  if (post.category === 'finds') {
+  if (category === 'finds') {
     return (
       <Link
         href={href}
@@ -131,7 +143,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
   }
 
   // MERCH DROPS - Pinterest Card with Price on Hover
-  if (post.category === 'merch-drops') {
+  if (category === 'merch-drops') {
     return (
       <Link
         href={href}
@@ -157,9 +169,9 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
               <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-cream mb-2">
                 {post.title}
               </h3>
-              {post.description && (
+              {displayDescription && (
                 <p className="font-body text-sm text-cream/90 mb-4 line-clamp-2">
-                  {post.description}
+                  {displayDescription}
                 </p>
               )}
               
@@ -213,9 +225,9 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
             <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-cream mb-2">
               {post.title}
             </h3>
-            {post.description && (
+            {displayDescription && (
               <p className="font-body text-sm text-cream/90 mb-4 line-clamp-3">
-                {post.description}
+                {displayDescription}
               </p>
             )}
             <div className="bg-cream text-black px-4 py-2 inline-block self-start border-2 border-cream font-heading text-sm font-bold uppercase">
