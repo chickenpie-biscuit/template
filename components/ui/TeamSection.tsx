@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Container from './Container';
+import { ArrowRight } from 'lucide-react';
 
 const team = [
   {
@@ -24,63 +25,73 @@ const team = [
 
 export default function TeamSection() {
   return (
-    <section className="py-20 lg:py-32 bg-teal border-b-2 border-black">
+    <section className="py-24 lg:py-32 bg-cream border-b-2 border-black">
       <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl lg:text-6xl font-heading font-bold uppercase mb-6 text-black">
-            What We Do
-          </h2>
-          <p className="font-body text-lg text-black/80 max-w-3xl mx-auto">
-            A bunch of super cool people all over the world doing super cool stuff
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {team.map((item, index) => (
-            <motion.div
-              key={item.role}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              className="border-2 border-black bg-cream p-8 hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300"
-            >
-              <h3 className="font-heading text-2xl font-bold uppercase mb-4 text-black">
-                {item.role}
-              </h3>
-              <p className="font-body text-black/80">
-                {item.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Email CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="text-center mt-16"
-        >
-          <p className="font-heading text-sm uppercase tracking-wider text-black/60 mb-3">
-            Say Hello
-          </p>
-          <a
-            href="mailto:hello@chickenpie.co"
-            className="inline-block text-3xl lg:text-4xl font-heading font-bold text-black hover:text-red transition-colors"
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex items-baseline gap-4 mb-16"
           >
-            hello@chickenpie.co
-          </a>
-        </motion.div>
+            <span className="font-heading text-xs font-bold uppercase tracking-[0.2em] text-black/40">
+              03
+            </span>
+            <h2 className="text-4xl lg:text-5xl font-heading font-bold uppercase text-black">
+              What We Do
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+            {team.map((item, index) => (
+              <motion.div
+                key={item.role}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                className="group border-t-2 border-black pt-6"
+              >
+                <h3 className="font-heading text-2xl font-bold uppercase mb-4 text-black group-hover:text-black/60 transition-colors">
+                  {item.role}
+                </h3>
+                <p className="font-body text-lg text-black/60 leading-relaxed mb-6">
+                  {item.description}
+                </p>
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-[-10px] group-hover:translate-x-0">
+                  <ArrowRight size={24} />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Email CTA */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="mt-32 pt-12 border-t-2 border-black flex flex-col md:flex-row items-start md:items-center justify-between gap-8"
+          >
+            <div>
+              <p className="font-heading text-sm uppercase tracking-wider text-black/40 mb-2">
+                Start a conversation
+              </p>
+              <h3 className="font-heading text-2xl font-bold uppercase">
+                Have an idea? Let's talk.
+              </h3>
+            </div>
+            <a
+              href="mailto:hello@chickenpie.co"
+              className="group flex items-center gap-4 text-3xl lg:text-5xl font-heading font-bold text-black hover:text-black/60 transition-colors"
+            >
+              hello@chickenpie.co
+              <ArrowRight className="transform group-hover:translate-x-4 transition-transform duration-300" size={48} />
+            </a>
+          </motion.div>
+        </div>
       </Container>
     </section>
   );
 }
-

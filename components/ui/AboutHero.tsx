@@ -2,42 +2,62 @@
 
 import { motion } from 'framer-motion';
 import Container from './Container';
+import { Palette, Utensils, Monitor, ShoppingBag } from 'lucide-react';
 
 export default function AboutHero() {
+  const services = [
+    { icon: Palette, label: 'Creative Direction' },
+    { icon: Utensils, label: 'Food & Lifestyle' },
+    { icon: Monitor, label: 'Digital Design' },
+    { icon: ShoppingBag, label: 'Merchandise' },
+  ];
+
   return (
-    <section className="py-20 lg:py-32 bg-goldenrod border-b-2 border-black relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-20 left-10 w-40 h-40 border-4 border-black/10 rotate-12" />
-      <div className="absolute bottom-20 right-10 w-32 h-32 bg-red/20 border-2 border-black/10 -rotate-6" />
-      <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-teal/20 border-2 border-black/10 rotate-45" />
-      
+    <section className="py-24 lg:py-40 bg-cream border-b-2 border-black">
       <Container>
         <motion.div
-          className="max-w-5xl mx-auto text-center relative z-10"
+          className="max-w-5xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div
-            className="inline-block bg-black text-cream px-6 py-3 mb-8 border-2 border-black"
-            initial={{ scale: 0, rotate: -5 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-          >
-            <span className="font-heading text-sm font-bold uppercase tracking-wider">
-              About Us
-            </span>
-          </motion.div>
-          
-          <h1 className="text-6xl lg:text-8xl font-heading font-bold uppercase mb-8 text-black leading-tight">
-            Spreading Love,
-            <br />
-            Chickens & Art
+          {/* Minimal Header */}
+          <h1 className="text-6xl lg:text-9xl font-heading font-bold uppercase mb-12 text-black leading-[0.9] tracking-tight">
+            Design.<br />
+            Lifestyle.<br />
+            Universe.
           </h1>
-          <p className="font-body text-xl lg:text-2xl text-black/80 leading-relaxed max-w-3xl mx-auto">
-            A creative universe where design meets lifestyle. We build brands, create art, 
-            share delicious finds, and celebrate the weird and wonderful.
-          </p>
+
+          {/* Intro Text */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 mb-24">
+            <p className="font-body text-xl lg:text-2xl text-black leading-relaxed">
+              We are a creative studio and lifestyle brand blurring the lines between work and play.
+            </p>
+            <p className="font-body text-lg text-black/60 leading-relaxed">
+              Founded on the belief that everything is content and design is everywhere. 
+              We build brands, curate experiences, and create things we actually want to use.
+            </p>
+          </div>
+
+          {/* Icons Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t-2 border-black/10">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+                className="flex flex-col items-start gap-4 group"
+              >
+                <div className="p-4 border-2 border-black rounded-full group-hover:bg-black group-hover:text-cream transition-colors duration-300">
+                  <service.icon size={24} strokeWidth={1.5} />
+                </div>
+                <span className="font-heading font-bold uppercase text-sm tracking-wider">
+                  {service.label}
+                </span>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </Container>
     </section>
