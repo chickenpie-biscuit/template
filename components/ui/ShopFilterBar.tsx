@@ -10,11 +10,10 @@ interface ShopFilterBarProps {
 
 // Default product types (if no categories exist yet)
 const defaultProductTypes = [
-  { title: 'T-Shirts', slug: 'tshirt' },
-  { title: 'Art Prints', slug: 'art' },
-  { title: 'Stickers', slug: 'sticker' },
-  { title: 'Posters', slug: 'poster' },
-  { title: 'Accessories', slug: 'accessory' },
+  { title: 'T-Shirts', slug: 't-shirts' },
+  { title: 'Prints', slug: 'prints' },
+  { title: 'Accessories', slug: 'accessories' },
+  { title: 'Stickers', slug: 'stickers' },
 ];
 
 export default function ShopFilterBar({ categories, activeFilter }: ShopFilterBarProps) {
@@ -24,6 +23,7 @@ export default function ShopFilterBar({ categories, activeFilter }: ShopFilterBa
   const filterOptions = categories.length > 0 ? categories : defaultProductTypes;
 
   const handleFilterChange = (value: string) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     if (value === 'all') {
       router.push('/shop');
     } else {
@@ -33,32 +33,35 @@ export default function ShopFilterBar({ categories, activeFilter }: ShopFilterBa
 
   return (
     <div className="mb-8" id="products">
-      <div className="flex flex-wrap gap-3 justify-center">
+      <div className="flex flex-wrap gap-6 justify-center">
         <button
           onClick={() => handleFilterChange('all')}
-          className={`px-6 py-3 font-heading font-bold uppercase text-sm border-2 border-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
+          className={`font-heading font-bold uppercase text-sm tracking-widest transition-colors relative group ${
             activeFilter === 'all'
-              ? 'bg-red text-cream shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
-              : 'bg-cream text-black'
+              ? 'text-black'
+              : 'text-black/40 hover:text-black'
           }`}
         >
           All Products
+          <span className={`absolute -bottom-1 left-0 w-full h-[2px] bg-black transform transition-transform duration-300 ${activeFilter === 'all' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
         </button>
         {filterOptions.map((option) => {
           const slug = 'slug' in option ? option.slug : '';
           const title = option.title;
+          const isActive = activeFilter === slug;
           
           return (
             <button
               key={slug}
               onClick={() => handleFilterChange(slug)}
-              className={`px-6 py-3 font-heading font-bold uppercase text-sm border-2 border-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] ${
-                activeFilter === slug
-                  ? 'bg-red text-cream shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
-                  : 'bg-cream text-black'
+              className={`font-heading font-bold uppercase text-sm tracking-widest transition-colors relative group ${
+                isActive
+                  ? 'text-black'
+                  : 'text-black/40 hover:text-black'
               }`}
             >
               {title}
+              <span className={`absolute -bottom-1 left-0 w-full h-[2px] bg-black transform transition-transform duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
             </button>
           );
         })}

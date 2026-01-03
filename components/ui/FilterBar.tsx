@@ -57,10 +57,10 @@ export default function FilterBar() {
   };
 
   return (
-    <div className="sticky top-0 z-40 bg-cream border-b-2 border-black py-4 backdrop-blur-sm bg-cream/95">
+    <div className="sticky top-0 z-40 bg-cream/95 backdrop-blur-md border-b-2 border-black py-6">
       <div className="w-full px-4">
-        {/* Desktop: Centered buttons */}
-        <div className="hidden md:flex gap-4 justify-center flex-wrap">
+        {/* Desktop: Centered text links */}
+        <div className="hidden md:flex gap-8 justify-center flex-wrap">
           {categories.map((category) => {
             const count = postCounts[category.value] || 0;
             const isActive = activeFilter === category.value;
@@ -69,26 +69,27 @@ export default function FilterBar() {
               <button
                 key={category.value}
                 onClick={() => handleFilterChange(category.value)}
-                className={`px-6 py-3 font-heading font-bold uppercase text-sm whitespace-nowrap border-2 border-black transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-y-0 active:shadow-none ${
+                className={`font-heading font-bold uppercase text-sm tracking-widest transition-colors relative group flex items-start gap-1 ${
                   isActive
-                    ? 'bg-red text-cream shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
-                    : 'bg-cream text-black'
+                    ? 'text-black'
+                    : 'text-black/40 hover:text-black'
                 }`}
               >
                 {category.label}
                 {count > 0 && (
-                  <span className={`ml-2 text-xs ${isActive ? 'text-cream/80' : 'text-black/60'}`}>
-                    ({count})
+                  <span className="text-[10px] -mt-1 opacity-60">
+                    {count}
                   </span>
                 )}
+                <span className={`absolute -bottom-1 left-0 w-full h-[2px] bg-black transform transition-transform duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
               </button>
             );
           })}
         </div>
 
-        {/* Mobile: Swipeable carousel */}
+        {/* Mobile: Swipeable carousel (kept as text links) */}
         <div className="md:hidden overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-          <div className="flex gap-3 min-w-max">
+          <div className="flex gap-6 min-w-max">
             {categories.map((category) => {
               const count = postCounts[category.value] || 0;
               const isActive = activeFilter === category.value;
@@ -97,17 +98,20 @@ export default function FilterBar() {
                 <button
                   key={category.value}
                   onClick={() => handleFilterChange(category.value)}
-                  className={`px-6 py-3 font-heading font-bold uppercase text-sm whitespace-nowrap border-2 border-black transition-all duration-300 min-w-[120px] ${
+                  className={`font-heading font-bold uppercase text-sm tracking-widest transition-colors relative flex items-start gap-1 ${
                     isActive
-                      ? 'bg-red text-cream'
-                      : 'bg-cream text-black active:bg-black active:text-cream'
+                      ? 'text-black'
+                      : 'text-black/40'
                   }`}
                 >
                   {category.label}
                   {count > 0 && (
-                    <span className={`ml-2 text-xs block ${isActive ? 'text-cream/80' : 'text-black/60'}`}>
-                      ({count})
+                    <span className="text-[10px] -mt-1 opacity-60">
+                      {count}
                     </span>
+                  )}
+                  {isActive && (
+                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-black" />
                   )}
                 </button>
               );
