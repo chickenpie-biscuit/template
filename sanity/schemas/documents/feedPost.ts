@@ -49,10 +49,8 @@ export default defineType({
           name: 'alt',
           type: 'string',
           title: 'Alternative Text',
-          validation: (Rule) => Rule.required(),
         },
       ],
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
@@ -60,7 +58,7 @@ export default defineType({
       type: 'text',
       rows: 2,
       description: 'Short description (1-2 sentences)',
-      validation: (Rule) => Rule.required().max(200),
+      validation: (Rule) => Rule.max(200),
     }),
     defineField({
       name: 'body',

@@ -6,7 +6,7 @@ import config from '@/sanity/sanity.config';
 
 export default function StudioPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading Studio...</div>}>
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen bg-cream"><p className="font-body">Loading Studio...</p></div>}>
       <NextStudio config={config} />
     </Suspense>
   );
