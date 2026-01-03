@@ -11,10 +11,14 @@ interface FeedPost {
   title: string;
   slug: string;
   category: string;
-  featuredImage: any;
-  description: string;
+  featuredImage?: any;
+  description?: string;
   ctaText?: string;
   ctaLink?: string;
+  price?: number;
+  originalPrice?: number;
+  findPrice?: string;
+  findHighlight?: string;
 }
 
 interface FeedContentProps {
@@ -105,13 +109,15 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   }, [hasMore, loading, filter, loadMorePosts]);
 
   return (
-    <div className="container-custom py-8">
+    <div className="container mx-auto px-4 py-8 max-w-7xl">
       {posts.length > 0 ? (
         <>
           {/* Masonry Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
             {posts.map((post) => (
-              <FeedPostCard key={post._id} post={post} />
+              <div key={post._id} className="break-inside-avoid">
+                <FeedPostCard post={post} />
+              </div>
             ))}
           </div>
 

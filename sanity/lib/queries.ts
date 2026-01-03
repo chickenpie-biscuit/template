@@ -172,6 +172,10 @@ export const getAllFeedPosts = groq`*[_type == "feedPost"] | order(publishedAt d
   description,
   ctaText,
   ctaLink,
+  price,
+  originalPrice,
+  findPrice,
+  findHighlight,
   publishedAt,
   featured
 }`;
@@ -185,6 +189,10 @@ export const getFeedPostsByCategory = groq`*[_type == "feedPost" && category == 
   description,
   ctaText,
   ctaLink,
+  price,
+  originalPrice,
+  findPrice,
+  findHighlight,
   publishedAt,
   featured
 }`;
@@ -199,6 +207,10 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   body,
   ctaText,
   ctaLink,
+  price,
+  originalPrice,
+  findPrice,
+  findHighlight,
   publishedAt,
   featured
 }`;

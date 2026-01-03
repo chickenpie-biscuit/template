@@ -66,6 +66,36 @@ export default defineType({
       type: 'array',
       of: [{ type: 'block' }],
     }),
+    // Merch Drops specific fields
+    defineField({
+      name: 'price',
+      title: 'Price',
+      type: 'number',
+      description: 'For Merch Drops - product price',
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
+      name: 'originalPrice',
+      title: 'Original Price',
+      type: 'number',
+      description: 'For Merch Drops - crossed out price (optional)',
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    // Finds specific fields
+    defineField({
+      name: 'findPrice',
+      title: 'Price Info',
+      type: 'string',
+      description: 'For Finds - price display (e.g., "$54.99/month", "Free")',
+      hidden: ({ document }) => document?.category !== 'finds',
+    }),
+    defineField({
+      name: 'findHighlight',
+      title: 'Highlight Text',
+      type: 'string',
+      description: 'For Finds - top banner text (e.g., "Starting from just")',
+      hidden: ({ document }) => document?.category !== 'finds',
+    }),
     defineField({
       name: 'ctaText',
       title: 'CTA Button Text',
