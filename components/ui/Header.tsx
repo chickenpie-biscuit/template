@@ -77,7 +77,7 @@ export default function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               className="lg:hidden fixed left-0 right-0 bottom-0 z-40 border-t-2 border-black bg-[#F5F1E8]"
-              style={{ top: '80px' }}
+              style={{ top: '80px', height: 'calc(100vh - 80px)' }}
             >
               <nav className="px-6 py-8 h-full flex flex-col justify-between overflow-y-auto max-w-md mx-auto w-full bg-[#F5F1E8]">
                 <div className="flex flex-col space-y-8 mt-4">
