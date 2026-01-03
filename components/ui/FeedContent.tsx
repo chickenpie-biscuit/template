@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FeedPostCard from './FeedPostCard';
+import SkeletonCard from './SkeletonCard';
 import { client } from '@/sanity/lib/client';
 import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
 
@@ -116,33 +117,51 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   }, [hasMore, loading, filter, loadMorePosts]);
 
   return (
-    <div className="w-full px-4 md:px-6 py-8">
+    <div className="w-full px-4 md:px-6 lg:px-8 py-8">
       {posts.length > 0 ? (
         <>
-          {/* Masonry Grid - Uniform width, natural height */}
-          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-6">
+          {/* Masonry Grid - Tighter spacing for cohesive look */}
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5">
             {posts.map((post) => (
-              <div key={post._id} className="break-inside-avoid mb-4 md:mb-6">
+              <div key={post._id} className="break-inside-avoid mb-4 md:mb-5">
                 <FeedPostCard post={post} />
               </div>
             ))}
           </div>
 
-          {/* Loading indicator */}
+          {/* Loading indicator with skeleton cards */}
           {loading && (
-            <div className="text-center py-8">
-              <p className="font-body text-black/60">Loading more posts...</p>
+            <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5 mt-4 md:mt-5">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="break-inside-avoid mb-4 md:mb-5">
+                  <SkeletonCard />
+                </div>
+              ))}
             </div>
           )}
 
           {/* Observer target for infinite scroll */}
           <div ref={observerTarget} className="h-4" />
         </>
+      ) : loading ? (
+        // Initial loading state
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5">
+          {[...Array(12)].map((_, i) => (
+            <div key={i} className="break-inside-avoid mb-4 md:mb-5">
+              <SkeletonCard />
+            </div>
+          ))}
+        </div>
       ) : (
         <div className="text-center py-16">
-          <p className="font-body text-black/60 text-lg">
-            No posts found for this category. Check back soon!
-          </p>
+          <div className="inline-block border-2 border-black bg-cream p-8">
+            <p className="font-heading text-2xl font-bold uppercase text-black mb-2">
+              No posts yet
+            </p>
+            <p className="font-body text-sm text-black/60">
+              Check back soon for new content!
+            </p>
+          </div>
         </div>
       )}
     </div>
