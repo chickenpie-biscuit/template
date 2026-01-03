@@ -19,7 +19,14 @@ export default defineType({
         source: 'title',
         maxLength: 96,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) =>
+        Rule.required().custom((slug, context) => {
+          const title = (context.document?.title as string) || '';
+          if (!title && !slug?.current) {
+            return true; // Allow empty slug if title is also empty
+          }
+          return true;
+        }),
     }),
     defineField({
       name: 'author',

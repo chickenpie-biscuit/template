@@ -42,7 +42,7 @@ export default defineType({
         ],
         layout: 'radio',
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().warning('Category is required before publishing'),
     }),
     defineField({
       name: 'featuredImage',
