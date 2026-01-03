@@ -9,7 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().warning('Title is required'),
     }),
     defineField({
       name: 'slug',
@@ -19,14 +19,7 @@ export default defineType({
         source: 'title',
         maxLength: 96,
       },
-      validation: (Rule) =>
-        Rule.required().custom((slug, context) => {
-          const title = (context.document?.title as string) || '';
-          if (!title && !slug?.current) {
-            return true; // Allow empty slug if title is also empty
-          }
-          return true;
-        }),
+      validation: (Rule) => Rule.required().warning('Slug is required before publishing'),
     }),
     defineField({
       name: 'category',
