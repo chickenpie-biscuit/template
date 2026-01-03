@@ -1,5 +1,4 @@
 import imageUrlBuilder from '@sanity/image-url';
-import { client } from './client';
 import { projectId, dataset } from '../env';
 import { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
