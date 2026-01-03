@@ -70,7 +70,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
         <div className="relative p-8 md:p-12 min-h-[300px] flex flex-col justify-center items-center text-center bg-black">
           {/* Quote Text */}
           <h3 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold uppercase text-cream leading-tight mb-4">
-            "{post.title}"
+            &ldquo;{post.title}&rdquo;
           </h3>
           
           {/* Hover Overlay - Show description or CTA */}
