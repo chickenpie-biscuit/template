@@ -103,7 +103,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
               fill
-              className="object-contain"
+              className="object-cover"
             />
             
             {/* Hover Overlay */}
@@ -151,13 +151,15 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
       >
         {/* Image */}
         {imageUrl && (
-          <div className="relative w-full h-full overflow-hidden bg-white">
-            <Image
-              src={imageUrl}
-              alt={post.featuredImage?.alt || post.title}
-              fill
-              className="object-contain p-4"
-            />
+          <div className="relative w-full h-full overflow-hidden bg-white flex items-center justify-center p-4">
+            <div className="relative w-full h-full">
+              <Image
+                src={imageUrl}
+                alt={post.featuredImage?.alt || post.title}
+                fill
+                className="object-contain"
+              />
+            </div>
             
             {/* Hover Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
@@ -212,7 +214,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
             src={imageUrl}
             alt={post.featuredImage?.alt || post.title}
             fill
-            className="object-contain"
+            className="object-cover"
           />
           
           {/* Hover Overlay - Gradient from bottom */}
