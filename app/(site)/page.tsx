@@ -13,14 +13,16 @@ interface HomePageProps {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const filter = searchParams?.filter || 'all';
 
-  console.log('Filter:', filter); // Debug log
-  
-  const posts =
-    filter === 'all'
+  // Safe fetch with error handling
+  let posts: any[] = [];
+  try {
+    posts = filter === 'all'
       ? await client?.fetch(getAllFeedPosts).catch(() => []) ?? []
       : await client?.fetch(getFeedPostsByCategory, { category: filter }).catch(() => []) ?? [];
-
-  console.log('Posts found:', posts.length); // Debug log
+  } catch (error) {
+    console.error('Feed fetch error:', error);
+    posts = [];
+  }
 
   return (
     <div className="min-h-screen bg-cream w-full">

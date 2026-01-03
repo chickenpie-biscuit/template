@@ -4,39 +4,31 @@ import { motion } from 'framer-motion';
 import Container from './Container';
 
 export default function ShopHero() {
-  const scrollToProducts = () => {
-    const productsSection = document.querySelector('#products');
-    if (productsSection) {
-      productsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <section className="py-24 lg:py-32 bg-cream border-b-2 border-black">
+    <section className="py-24 lg:py-40 bg-cream border-b-2 border-black">
       <Container>
         <motion.div
-          className="text-center max-w-3xl mx-auto relative z-10"
+          className="max-w-5xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div
-            className="inline-block bg-black text-cream px-4 py-2 mb-6 border-2 border-black"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: 'spring' }}
-          >
-            <span className="font-heading text-xs font-bold uppercase tracking-wider">
-              Limited Drops
-            </span>
-          </motion.div>
-          
-          <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-6 text-black leading-tight">
-            Chickenpie Shop
+          {/* Minimal Header */}
+          <h1 className="text-6xl lg:text-9xl font-heading font-bold uppercase mb-12 text-black leading-[0.9] tracking-tight">
+            Shop.<br />
+            Goods.
           </h1>
-          <p className="font-body text-lg mb-8 text-black/80 max-w-2xl mx-auto">
-            Spread love, chickens & art with our curated collection.
-          </p>
+
+          {/* Intro Text */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+            <p className="font-body text-xl lg:text-2xl text-black leading-relaxed">
+              A curated collection of goods for everyday life. Designed with love, made to last.
+            </p>
+            <p className="font-body text-lg text-black/60 leading-relaxed">
+              Limited drops, art prints, and essentials that bring a little joy to your routine.
+              When they're gone, they're gone.
+            </p>
+          </div>
         </motion.div>
       </Container>
     </section>

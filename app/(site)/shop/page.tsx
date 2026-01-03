@@ -2,6 +2,8 @@ import { client } from '@/sanity/lib/client';
 import { getAllProducts, getAllCategories } from '@/sanity/lib/queries';
 import { Product, Category } from '@/types/sanity';
 import ProductCard from '@/components/ui/ProductCard';
+import Container from '@/components/ui/Container';
+import ShopHero from '@/components/ui/ShopHero';
 import ShopFilterBar from '@/components/ui/ShopFilterBar';
 import { Metadata } from 'next';
 
@@ -19,12 +21,28 @@ interface ShopPageProps {
 export default async function ShopPage({ searchParams }: ShopPageProps) {
   const selectedCategory = searchParams?.category || 'all';
   
-  const [allProducts, categories] = await Promise.all([
-    client?.fetch<Product[]>(getAllProducts).catch(() => []) ?? [],
-    client?.fetch<Category[]>(getAllCategories).catch(() => []) ?? [],
-  ]);
+  // Safe data fetching with error handling
+  let allProducts: Product[] = [];
+  let categories: Category[] = [];
 
-  // Filter products by category or productType if selected
+  try {
+    const [productsData, categoriesData] = await Promise.all([
+      client?.fetch<Product[]>(getAllProducts).catch((err) => {
+        console.error('Error fetching products:', err);
+        return [];
+      }),
+      client?.fetch<Category[]>(getAllCategories).catch((err) => {
+        console.error('Error fetching categories:', err);
+        return [];
+      }),
+    ]);
+    allProducts = productsData || [];
+    categories = categoriesData || [];
+  } catch (error) {
+    console.error('Shop page data fetch error:', error);
+  }
+
+  // Filter products by category if selected
   const products = selectedCategory === 'all' 
     ? allProducts 
     : allProducts.filter(p => {
@@ -37,31 +55,25 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
 
   return (
     <div className="min-h-screen bg-cream">
-      {/* Header with Filters */}
-      <div className="sticky top-0 z-40 bg-cream border-b-2 border-black py-6 backdrop-blur-sm bg-cream/95">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            {/* Shop Header */}
-            <div>
-              <h1 className="text-4xl lg:text-5xl font-heading font-bold uppercase text-black">
-                Chickenpie Shop
-              </h1>
-              <p className="font-body text-sm text-black/60 mt-1">
-                {products.length} {products.length === 1 ? 'product' : 'products'}
-              </p>
-            </div>
-
-            {/* Filter Buttons */}
+      <ShopHero />
+      
+      {/* Sticky Filter Bar */}
+      <div className="sticky top-20 z-30 bg-cream/95 backdrop-blur-sm border-b-2 border-black py-4">
+        <Container>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <span className="font-heading font-bold uppercase text-sm tracking-widest text-black/60">
+              {products.length} {products.length === 1 ? 'Item' : 'Items'}
+            </span>
             <ShopFilterBar categories={categories} activeFilter={selectedCategory} />
           </div>
-        </div>
+        </Container>
       </div>
 
-      {/* Products Grid */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
+      <section className="bg-cream min-h-[50vh]">
+        {/* Products Grid - Full Width like Feed */}
+        <div className="w-full px-4 md:px-6 lg:px-8 py-8">
           {products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
@@ -75,12 +87,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 <p className="font-body text-black/60 mb-6">
                   Try a different category or check back soon!
                 </p>
-                <button
-                  onClick={() => window.location.href = '/shop'}
-                  className="px-6 py-3 bg-black text-cream border-2 border-black font-heading font-bold uppercase hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all duration-300"
+                <a
+                  href="/shop"
+                  className="inline-block px-6 py-3 bg-black text-cream border-2 border-black font-heading font-bold uppercase hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all duration-300"
                 >
                   View All Products
-                </button>
+                </a>
               </div>
             </div>
           )}

@@ -8,19 +8,8 @@ interface ShopFilterBarProps {
   activeFilter: string;
 }
 
-// Default product types (if no categories exist yet)
-const defaultProductTypes = [
-  { title: 'T-Shirts', slug: 't-shirts' },
-  { title: 'Prints', slug: 'prints' },
-  { title: 'Accessories', slug: 'accessories' },
-  { title: 'Stickers', slug: 'stickers' },
-];
-
 export default function ShopFilterBar({ categories, activeFilter }: ShopFilterBarProps) {
   const router = useRouter();
-
-  // Use categories from Sanity if available, otherwise use defaults
-  const filterOptions = categories.length > 0 ? categories : defaultProductTypes;
 
   const handleFilterChange = (value: string) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -31,41 +20,39 @@ export default function ShopFilterBar({ categories, activeFilter }: ShopFilterBa
     }
   };
 
+  // Define common product types that should always show
+  const productTypes = [
+    { title: 'T-Shirts', slug: 't-shirts' },
+    { title: 'Prints', slug: 'prints' },
+    { title: 'Accessories', slug: 'accessories' },
+    { title: 'Stickers', slug: 'stickers' },
+  ];
+
   return (
-    <div className="mb-8" id="products">
-      <div className="flex flex-wrap gap-6 justify-center">
+    <div className="flex gap-6 overflow-x-auto pb-2 scrollbar-hide">
+      <button
+        onClick={() => handleFilterChange('all')}
+        className={`font-heading font-bold uppercase text-sm tracking-wider whitespace-nowrap transition-colors ${
+          activeFilter === 'all'
+            ? 'text-black'
+            : 'text-black/40 hover:text-black'
+        }`}
+      >
+        All
+      </button>
+      {productTypes.map((type) => (
         <button
-          onClick={() => handleFilterChange('all')}
-          className={`font-heading font-bold uppercase text-sm tracking-widest transition-colors relative group ${
-            activeFilter === 'all'
+          key={type.slug}
+          onClick={() => handleFilterChange(type.slug)}
+          className={`font-heading font-bold uppercase text-sm tracking-wider whitespace-nowrap transition-colors ${
+            activeFilter === type.slug
               ? 'text-black'
               : 'text-black/40 hover:text-black'
           }`}
         >
-          All Products
-          <span className={`absolute -bottom-1 left-0 w-full h-[2px] bg-black transform transition-transform duration-300 ${activeFilter === 'all' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
+          {type.title}
         </button>
-        {filterOptions.map((option) => {
-          const slug = 'slug' in option ? option.slug : '';
-          const title = option.title;
-          const isActive = activeFilter === slug;
-          
-          return (
-            <button
-              key={slug}
-              onClick={() => handleFilterChange(slug)}
-              className={`font-heading font-bold uppercase text-sm tracking-widest transition-colors relative group ${
-                isActive
-                  ? 'text-black'
-                  : 'text-black/40 hover:text-black'
-              }`}
-            >
-              {title}
-              <span className={`absolute -bottom-1 left-0 w-full h-[2px] bg-black transform transition-transform duration-300 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`} />
-            </button>
-          );
-        })}
-      </div>
+      ))}
     </div>
   );
 }
