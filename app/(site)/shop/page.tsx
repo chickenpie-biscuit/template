@@ -58,7 +58,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       <ShopHero />
       
       {/* Sticky Filter Bar */}
-      <div className="sticky top-20 z-30 bg-cream/95 backdrop-blur-sm border-b-2 border-black py-4">
+      <div className="sticky top-20 z-30 bg-cream border-b-2 border-black py-4 shadow-sm">
         <Container>
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <span className="font-heading font-bold uppercase text-sm tracking-widest text-black/60">
