@@ -2,11 +2,13 @@
   "name": "nxt-web-template",
   "version": "1.0.0",
   "private": true,
+  "packageManager": "npm@10.0.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "ci": "next build"
   },
   "dependencies": {
     "next": "^14.2.0",
