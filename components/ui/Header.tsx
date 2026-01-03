@@ -19,15 +19,6 @@ export default function Header() {
     setMobileMenuOpen(false);
   }, []);
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() || 0;
-    if (latest > previous && latest > 150) {
-      setHidden(true);
-    } else {
-      setHidden(false);
-    }
-  });
-
   const links = [
     { href: '/', label: 'Feed' },
     { href: '/studio', label: 'Studio' },
@@ -37,15 +28,7 @@ export default function Header() {
   ];
 
   return (
-    <motion.header
-      variants={{
-        visible: { y: 0 },
-        hidden: { y: '-100%' },
-      }}
-      animate={hidden ? 'hidden' : 'visible'}
-      transition={{ duration: 0.35, ease: 'easeInOut' }}
-      className="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b-2 border-black"
-    >
+    <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-md border-b-2 border-black">
       <Container>
         <div className="flex h-20 items-center justify-between">
           {/* Logo - Left */}
@@ -90,15 +73,12 @@ export default function Header() {
 
         {/* Mobile Menu Overlay */}
         <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="lg:hidden fixed inset-0 bg-cream z-40 pt-24 border-t-2 border-black"
-            >
-              <nav className="px-4 py-8 h-full flex flex-col justify-between">
-                <div className="flex flex-col space-y-6">
+        {mobileMenuOpen && (
+          <div
+            className="lg:hidden fixed inset-0 bg-cream z-40 pt-24 border-t-2 border-black"
+          >
+            <nav className="px-4 py-8 h-full flex flex-col justify-between">
+              <div className="flex flex-col space-y-6">
                   {links.map((link) => (
                     <Link
                       key={link.href}
