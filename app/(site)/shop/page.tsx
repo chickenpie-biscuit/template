@@ -26,10 +26,16 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     client?.fetch<Category[]>(getAllCategories).catch(() => []) ?? [],
   ]);
 
-  // Filter products by category if selected
+  // Filter products by category or productType if selected
   const products = selectedCategory === 'all' 
     ? allProducts 
-    : allProducts.filter(p => p.category?.slug === selectedCategory);
+    : allProducts.filter(p => {
+        // Check category slug match (for Product type)
+        if (p.category?.slug === selectedCategory) return true;
+        // Check productType match (for feedPost merch-drops)
+        if (p.productType === selectedCategory) return true;
+        return false;
+      });
 
   return (
     <div className="min-h-screen bg-cream">

@@ -68,6 +68,23 @@ export default defineType({
     }),
     // Merch Drops specific fields
     defineField({
+      name: 'productType',
+      title: 'Product Type',
+      type: 'string',
+      description: 'For Merch Drops - type of product',
+      options: {
+        list: [
+          { title: 'T-Shirt', value: 'tshirt' },
+          { title: 'Art Print', value: 'art' },
+          { title: 'Sticker', value: 'sticker' },
+          { title: 'Poster', value: 'poster' },
+          { title: 'Accessory', value: 'accessory' },
+          { title: 'Other', value: 'other' },
+        ],
+      },
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
       name: 'price',
       title: 'Price',
       type: 'number',
@@ -79,6 +96,14 @@ export default defineType({
       title: 'Original Price',
       type: 'number',
       description: 'For Merch Drops - crossed out price (optional)',
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
+      name: 'stock',
+      title: 'Stock',
+      type: 'number',
+      description: 'For Merch Drops - available quantity',
+      initialValue: 0,
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
     // Finds specific fields

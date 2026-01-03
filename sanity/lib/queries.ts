@@ -65,13 +65,14 @@ export const getFeaturedPosts = groq`*[_type == "post" && featured == true] | or
   }
 }`;
 
-export const getAllProducts = groq`*[_type == "product"] | order(publishedAt desc) {
+export const getAllProducts = groq`*[_type == "product" || (_type == "feedPost" && category == "merch-drops")] | order(publishedAt desc) {
   _id,
+  _type,
   title,
   "slug": slug.current,
   price,
-  images,
-  shortDescription,
+  "images": coalesce(images, [featuredImage]),
+  "shortDescription": coalesce(shortDescription, description),
   publishedAt,
   featured,
   stock,
@@ -179,6 +180,8 @@ export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | 
   originalPrice,
   findPrice,
   findHighlight,
+  productType,
+  stock,
   publishedAt,
   featured
 }`;
