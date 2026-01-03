@@ -2,7 +2,7 @@ import { createClient, SanityClient } from 'next-sanity';
 import { apiVersion, dataset, projectId } from '../env';
 
 // Check if Sanity is configured
-const isConfigured = projectId && projectId.trim() !== '';
+const isConfigured = Boolean(projectId && projectId.trim() !== '');
 
 // Create clients only if configured
 export const client: SanityClient | null = isConfigured
