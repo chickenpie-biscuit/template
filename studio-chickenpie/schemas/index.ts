@@ -5,6 +5,7 @@ import category from './documents/category';
 import adBanner from './documents/adBanner';
 import feedPost from './documents/feedPost';
 import studioProject from './documents/studioProject';
+import contactSubmission from './documents/contactSubmission';
 import seo from './objects/seo';
 import link from './objects/link';
 
@@ -18,6 +19,7 @@ export const schemaTypes = [
   adBanner,
   feedPost,
   studioProject,
+  contactSubmission,
   // Objects
   seo,
   link,

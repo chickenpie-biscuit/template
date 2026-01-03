@@ -4,6 +4,7 @@ import { Product, Category } from '@/types/sanity';
 import ProductCard from '@/components/ui/ProductCard';
 import Container from '@/components/ui/Container';
 import ShopHero from '@/components/ui/ShopHero';
+import ShopFilterBar from '@/components/ui/ShopFilterBar';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -13,11 +14,22 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-export default async function ShopPage() {
-  const [products, categories] = await Promise.all([
+interface ShopPageProps {
+  searchParams: { category?: string };
+}
+
+export default async function ShopPage({ searchParams }: ShopPageProps) {
+  const selectedCategory = searchParams?.category || 'all';
+  
+  const [allProducts, categories] = await Promise.all([
     client?.fetch<Product[]>(getAllProducts).catch(() => []) ?? [],
     client?.fetch<Category[]>(getAllCategories).catch(() => []) ?? [],
   ]);
+
+  // Filter products by category if selected
+  const products = selectedCategory === 'all' 
+    ? allProducts 
+    : allProducts.filter(p => p.category?.slug === selectedCategory);
 
   return (
     <div className="min-h-screen bg-cream">
@@ -26,40 +38,7 @@ export default async function ShopPage() {
       <section className="py-12 border-b-2 border-black">
         <Container>
           {/* Category Filter */}
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-2 justify-center">
-              <a
-                href="/shop"
-                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-red-200 text-red-300 hover:bg-red-300 transition-colors"
-              >
-                All Products
-              </a>
-              <a
-                href="/shop?category=t-shirts"
-                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
-              >
-                T-Shirts
-              </a>
-              <a
-                href="/shop?category=prints"
-                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
-              >
-                Prints
-              </a>
-              <a
-                href="/shop?category=accessories"
-                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
-              >
-                Accessories
-              </a>
-              <a
-                href="/shop?category=new-arrivals"
-                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
-              >
-                New Arrivals
-              </a>
-            </div>
-          </div>
+          <ShopFilterBar categories={categories} activeFilter={selectedCategory} />
 
           {/* Products Grid */}
           {products.length > 0 ? (
@@ -70,9 +49,14 @@ export default async function ShopPage() {
             </div>
           ) : (
             <div className="text-center py-16">
-              <p className="font-body text-black/60 text-lg">
-                No products available yet. Check back soon!
-              </p>
+              <div className="inline-block border-2 border-black bg-cream p-8">
+                <p className="font-heading text-2xl font-bold uppercase text-black mb-2">
+                  No products found
+                </p>
+                <p className="font-body text-sm text-black/60">
+                  Check back soon for new merchandise!
+                </p>
+              </div>
             </div>
           )}
         </Container>
@@ -80,4 +64,3 @@ export default async function ShopPage() {
     </div>
   );
 }
-

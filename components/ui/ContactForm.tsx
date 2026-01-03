@@ -19,19 +19,33 @@ export default function ContactForm() {
     e.preventDefault();
     setLoading(true);
 
-    // TODO: Implement form submission to API endpoint
-    // For now, just simulate success
-    setTimeout(() => {
-      setSubmitted(true);
-      setLoading(false);
-      setFormData({
-        name: '',
-        email: '',
-        inquiryType: 'general',
-        message: '',
-        budgetRange: '',
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-    }, 1000);
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          inquiryType: 'general',
+          message: '',
+          budgetRange: '',
+        });
+      } else {
+        alert('Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Contact form error:', error);
+      alert('Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (
