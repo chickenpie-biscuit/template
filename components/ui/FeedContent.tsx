@@ -57,29 +57,18 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
       const items = gsap.utils.toArray('.feed-item:not(.animated)');
       
       if (items.length > 0) {
-        gsap.fromTo(items, 
-          { 
-            y: 100, 
-            opacity: 0,
-            scale: 0.9
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: 'power3.out',
-            onComplete: () => {
-              items.forEach((item: any) => item.classList.add('animated'));
-            },
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top bottom-=100',
-              toggleActions: 'play none none none'
-            }
+        // Simple fade-in stagger for smoother performance
+        gsap.to(items, {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.6,
+          stagger: 0.05,
+          ease: 'power2.out',
+          onComplete: () => {
+            items.forEach((item: any) => item.classList.add('animated'));
           }
-        );
+        });
       }
     }, containerRef);
     
@@ -168,7 +157,10 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
           {/* Masonry Grid - Tighter spacing for cohesive look */}
           <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5">
             {posts.map((post) => (
-              <div key={post._id} className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0">
+              <div 
+                key={post._id} 
+                className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-8 scale-95"
+              >
                 <FeedPostCard post={post} />
               </div>
             ))}
