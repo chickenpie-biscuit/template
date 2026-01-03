@@ -5,23 +5,41 @@ import Container from './Container';
 
 export default function AboutHero() {
   return (
-    <section className="py-20 lg:py-32 bg-cream border-b-2 border-black">
+    <section className="py-20 lg:py-32 bg-goldenrod border-b-2 border-black relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-20 left-10 w-40 h-40 border-4 border-black/10 rotate-12" />
+      <div className="absolute bottom-20 right-10 w-32 h-32 bg-red/20 border-2 border-black/10 -rotate-6" />
+      <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-teal/20 border-2 border-black/10 rotate-45" />
+      
       <Container>
         <motion.div
-          className="text-center max-w-3xl mx-auto"
+          className="max-w-5xl mx-auto text-center relative z-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-6 text-black leading-tight">
-            What is Chickenpie?
+          <motion.div
+            className="inline-block bg-black text-cream px-6 py-3 mb-8 border-2 border-black"
+            initial={{ scale: 0, rotate: -5 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+          >
+            <span className="font-heading text-sm font-bold uppercase tracking-wider">
+              About Us
+            </span>
+          </motion.div>
+          
+          <h1 className="text-6xl lg:text-8xl font-heading font-bold uppercase mb-8 text-black leading-tight">
+            Spreading Love,
+            <br />
+            Chickens & Art
           </h1>
-          <div className="w-32 h-32 mx-auto bg-red-200 border-2 border-black flex items-center justify-center mb-8">
-            <span className="text-6xl">🐔</span>
-          </div>
+          <p className="font-body text-xl lg:text-2xl text-black/80 leading-relaxed max-w-3xl mx-auto">
+            A creative universe where design meets lifestyle. We build brands, create art, 
+            share delicious finds, and celebrate the weird and wonderful.
+          </p>
         </motion.div>
       </Container>
     </section>
   );
 }
-
