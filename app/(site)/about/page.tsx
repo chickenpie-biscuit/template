@@ -1,8 +1,14 @@
-import Container from '@/components/ui/Container';
+import { Metadata } from 'next';
 import AboutHero from '@/components/ui/AboutHero';
 import BrandStory from '@/components/ui/BrandStory';
 import ValuesSection from '@/components/ui/ValuesSection';
+import TeamSection from '@/components/ui/TeamSection';
 import CTASection from '@/components/ui/CTASection';
+
+export const metadata: Metadata = {
+  title: 'About | Chickenpie',
+  description: 'Learn about Chickenpie - a creative universe spreading love, chickens & art',
+};
 
 export default function AboutPage() {
   return (
@@ -10,8 +16,8 @@ export default function AboutPage() {
       <AboutHero />
       <BrandStory />
       <ValuesSection />
+      <TeamSection />
       <CTASection />
     </div>
   );
 }
-
