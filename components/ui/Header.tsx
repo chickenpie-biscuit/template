@@ -77,8 +77,9 @@ export default function Header() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               className="lg:hidden fixed inset-0 bg-cream z-40 pt-24 border-t-2 border-black"
+              style={{ top: '80px' }} // Position below header
             >
-              <nav className="px-4 py-8 h-full flex flex-col justify-between">
+              <nav className="px-4 py-8 h-full flex flex-col justify-between bg-cream">
                 <div className="flex flex-col space-y-6">
                   {links.map((link) => (
                     <Link
