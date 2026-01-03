@@ -22,7 +22,7 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
   }
 
   const featuredImageUrl = project.featuredImage
-    ? urlFor(project.featuredImage).width(1200).height(800).url()
+    ? urlFor(project.featuredImage).width(1600).height(1200).url()
     : null;
 
   const categoryLabels: Record<string, string> = {
@@ -35,85 +35,115 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
 
   return (
     <article className="min-h-screen bg-cream">
-      {/* Hero Image */}
+      {/* Editorial Hero - Full Width Parallax Effect */}
       {featuredImageUrl && (
-        <div className="relative w-full h-[60vh] bg-black border-b-2 border-black">
-          <Image
-            src={featuredImageUrl}
-            alt={project.featuredImage?.alt || project.title}
-            fill
-            className="object-cover"
-            priority
-          />
+        <div className="relative w-full h-[85vh] overflow-hidden">
+          <div className="fixed top-0 left-0 w-full h-full -z-10">
+             <Image
+              src={featuredImageUrl}
+              alt={project.featuredImage?.alt || project.title}
+              fill
+              className="object-cover opacity-90"
+              priority
+            />
+            <div className="absolute inset-0 bg-black/20" />
+          </div>
+          
+          {/* Hero Content Overlay */}
+          <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 lg:p-20 text-cream">
+            <div className="max-w-7xl mx-auto">
+              <span className="inline-block px-4 py-2 text-xs font-heading font-bold uppercase tracking-widest border border-cream/30 bg-black/20 backdrop-blur-md mb-6">
+                {categoryLabel}
+              </span>
+              <h1 className="text-5xl md:text-7xl lg:text-9xl font-heading font-bold uppercase leading-[0.85] tracking-tight mb-8">
+                {project.title}
+              </h1>
+            </div>
+          </div>
         </div>
       )}
 
-      <Container>
-        <div className="py-12 max-w-4xl mx-auto">
-          {/* Header Info */}
-          <div className="mb-8">
-            <span className="inline-block px-4 py-2 text-sm font-heading font-bold uppercase tracking-wide border-2 border-black bg-red-200 text-red-300 mb-4">
-              {categoryLabel}
-            </span>
-            <h1 className="text-4xl lg:text-6xl font-heading font-bold uppercase mb-4 text-black">
-              {project.title}
-            </h1>
-            <div className="flex flex-wrap gap-4 font-body text-black/60">
-              {project.year && <span>Year: {project.year}</span>}
-              {project.client && <span>Client: {project.client}</span>}
+      {/* Editorial Content Layout */}
+      <div className="bg-cream relative z-10">
+        <Container>
+          <div className="py-20 lg:py-32 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+            
+            {/* Sticky Sidebar Info */}
+            <div className="lg:col-span-4 relative">
+              <div className="sticky top-32 space-y-12">
+                <div className="space-y-8 border-t-2 border-black pt-8">
+                  {project.client && (
+                    <div>
+                      <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-black/40 mb-2">Client</h3>
+                      <p className="text-xl font-heading font-bold uppercase">{project.client}</p>
+                    </div>
+                  )}
+                  {project.year && (
+                    <div>
+                      <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-black/40 mb-2">Year</h3>
+                      <p className="text-xl font-heading font-bold uppercase">{project.year}</p>
+                    </div>
+                  )}
+                  {project.tags && project.tags.length > 0 && (
+                    <div>
+                      <h3 className="text-xs font-heading font-bold uppercase tracking-widest text-black/40 mb-2">Services</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag: string, index: number) => (
+                          <span key={index} className="text-lg font-heading font-bold uppercase">
+                            {tag}{index < project.tags.length - 1 ? ',' : ''}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {project.description && (
+                  <div className="pt-8 border-t-2 border-black">
+                    <p className="text-lg font-body leading-relaxed text-black/80">
+                      {project.description}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Narrative Content */}
+            <div className="lg:col-span-8 space-y-20">
+              {project.caseStudy && (
+                <div className="prose prose-xl prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase prose-p:font-body prose-p:text-black/80 max-w-none">
+                  <PortableText content={project.caseStudy} />
+                </div>
+              )}
+
+              {/* Immersive Gallery */}
+              {project.gallery && project.gallery.length > 0 && (
+                <div className="space-y-20">
+                  {project.gallery.map((image: any, index: number) => {
+                    const imageUrl = urlFor(image).width(1600).height(1200).url();
+                    // Alternate layouts for visual interest
+                    const isFullWidth = index % 3 === 0;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className={`relative ${isFullWidth ? 'aspect-[16/9] -mx-4 md:-mx-12 lg:-mx-20 w-[calc(100%+2rem)] md:w-[calc(100%+6rem)] lg:w-[calc(100%+10rem)]' : 'aspect-[4/3]'} bg-black overflow-hidden group`}
+                      >
+                        <Image
+                          src={imageUrl}
+                          alt={image.alt || `Gallery image ${index + 1}`}
+                          fill
+                          className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
-
-          {/* Description */}
-          {project.description && (
-            <p className="text-xl font-body text-black/80 mb-12">{project.description}</p>
-          )}
-
-          {/* Case Study Content */}
-          {project.caseStudy && (
-            <div className="mb-12">
-              <PortableText content={project.caseStudy} />
-            </div>
-          )}
-
-          {/* Gallery */}
-          {project.gallery && project.gallery.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              {project.gallery.map((image: any, index: number) => {
-                const imageUrl = urlFor(image).width(800).height(600).url();
-                return (
-                  <div
-                    key={index}
-                    className="relative aspect-[4/3] bg-black border-2 border-black overflow-hidden"
-                  >
-                    <Image
-                      src={imageUrl}
-                      alt={image.alt || `Gallery image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Tags */}
-          {project.tags && project.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 text-xs font-heading font-bold uppercase bg-cream-200 text-black border border-black"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </Container>
+        </Container>
+      </div>
     </article>
   );
 }
-

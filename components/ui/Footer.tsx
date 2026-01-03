@@ -5,127 +5,122 @@ import Container from './Container';
 import { Instagram, Twitter } from 'lucide-react';
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer className="bg-black text-cream border-t-2 border-black">
-      <Container>
-        <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Column 1 - Brand */}
-          <div>
-            <h3 className="text-cream text-xl font-heading font-bold uppercase mb-4">
-              Chickenpie
-            </h3>
-            <p className="text-sm font-body text-cream/80">
-              Spreading love, chickens & art
-            </p>
+    <footer className="bg-black text-cream border-t-2 border-black overflow-hidden">
+      <div className="pt-16 pb-8 md:pt-24 md:pb-12 px-4 md:px-8">
+        {/* Massive Wordmark */}
+        <div className="w-full border-b-2 border-cream/20 mb-16 pb-8">
+          <h1 className="text-[12vw] leading-[0.8] font-heading font-bold uppercase text-center tracking-tighter text-cream select-none pointer-events-none">
+            Chickenpie
+          </h1>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
+          {/* Brand Column */}
+          <div className="md:col-span-4 flex flex-col justify-between h-full min-h-[200px]">
+            <div>
+              <h3 className="text-xl font-heading font-bold uppercase mb-4">
+                Based in the Universe
+              </h3>
+              <p className="text-lg font-body text-cream/60 max-w-xs leading-relaxed">
+                A creative studio and lifestyle brand blurring the lines between work and play.
+              </p>
+            </div>
+            
+            <div className="mt-auto pt-8">
+              <a 
+                href="mailto:hello@chickenpie.co" 
+                className="text-2xl font-heading font-bold uppercase hover:text-red transition-colors inline-block relative group"
+              >
+                hello@chickenpie.co
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-red transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              </a>
+            </div>
           </div>
 
-          {/* Column 2 - Quick Links */}
-          <div>
-            <h4 className="text-cream font-heading font-bold uppercase mb-4 text-sm">
-              Quick Links
+          {/* Navigation Columns */}
+          <div className="md:col-span-2 md:col-start-6">
+            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-cream/40 mb-6">
+              Explore
             </h4>
-            <ul className="space-y-2 text-sm font-body">
-              <li>
-                <Link href="/studio" className="hover:text-red-200 transition-colors">
-                  Studio
-                </Link>
-              </li>
-              <li>
-                <Link href="/shop" className="hover:text-red-200 transition-colors">
-                  Shop
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-red-200 transition-colors">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-red-200 transition-colors">
-                  Contact
-                </Link>
-              </li>
+            <ul className="space-y-4">
+              {['Feed', 'Studio', 'Shop', 'About'].map((item) => (
+                <li key={item}>
+                  <Link 
+                    href={item === 'Feed' ? '/' : `/${item.toLowerCase()}`}
+                    className="text-xl font-body uppercase hover:text-red transition-colors inline-block"
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Column 3 - Social */}
-          <div>
-            <h4 className="text-cream font-heading font-bold uppercase mb-4 text-sm">
-              Social
+          <div className="md:col-span-2">
+            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-cream/40 mb-6">
+              Connect
             </h4>
-            <ul className="space-y-2 text-sm font-body">
+            <ul className="space-y-4">
               <li>
-                <a
-                  href="https://instagram.com/chickenpie"
-                  target="_blank"
+                <Link href="/contact" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <a 
+                  href="https://instagram.com/chickenpie" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-red-200 transition-colors flex items-center gap-2"
+                  className="text-xl font-body uppercase hover:text-red transition-colors inline-block"
                 >
-                  <Instagram size={16} />
                   Instagram
                 </a>
               </li>
               <li>
-                <a
-                  href="https://twitter.com/chickenpie"
-                  target="_blank"
+                <a 
+                  href="https://twitter.com/chickenpie" 
+                  target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-red-200 transition-colors flex items-center gap-2"
+                  className="text-xl font-body uppercase hover:text-red transition-colors inline-block"
                 >
-                  <Twitter size={16} />
                   Twitter/X
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://pinterest.com/chickenpie"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-red-200 transition-colors"
-                >
-                  Pinterest
                 </a>
               </li>
             </ul>
           </div>
 
-          {/* Column 4 - Newsletter */}
-          <div>
-            <h4 className="text-cream font-heading font-bold uppercase mb-4 text-sm">
-              Join the flock
+          <div className="md:col-span-2">
+            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-cream/40 mb-6">
+              Legal
             </h4>
-            <form className="space-y-2">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="w-full px-4 py-2 bg-cream text-black border-2 border-black font-body text-sm focus:outline-none focus:ring-2 focus:ring-red-200"
-              />
-              <button
-                type="submit"
-                className="w-full px-4 py-2 bg-red-200 text-black border-2 border-black font-heading font-bold uppercase text-sm hover:bg-red-300 transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
+            <ul className="space-y-4">
+              <li>
+                <Link href="/privacy" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                  Privacy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                  Terms
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t-2 border-cream/20 py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm font-body">
-          <p className="text-cream/80">
-            &copy; {new Date().getFullYear()} Chickenpie. All rights reserved.
+        <div className="mt-24 pt-8 border-t-2 border-cream/20 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
+          <p className="font-body text-sm text-cream/40 uppercase tracking-wide">
+            © {currentYear} Chickenpie. All rights reserved.
           </p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-red-200 transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-red-200 transition-colors">
-              Terms of Service
-            </Link>
-          </div>
+          <p className="font-body text-sm text-cream/40 uppercase tracking-wide">
+            Designed with ❤️ & 🐔
+          </p>
         </div>
-      </Container>
+      </div>
     </footer>
   );
 }
-

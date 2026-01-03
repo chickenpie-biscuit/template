@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FeedPostCard from './FeedPostCard';
 import SkeletonCard from './SkeletonCard';
 import { client } from '@/sanity/lib/client';
 import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface FeedPost {
   _id: string;
@@ -40,6 +42,49 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   const [hasMore, setHasMore] = useState(initialPosts.length >= POSTS_PER_PAGE);
   const [page, setPage] = useState(1);
   const observerTarget = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // GSAP Animation for new posts
+  useLayoutEffect(() => {
+    if (!containerRef.current) return;
+    
+    // Register ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Create context for cleanup
+    const ctx = gsap.context(() => {
+      // Animate feed items that haven't been animated yet
+      const items = gsap.utils.toArray('.feed-item:not(.animated)');
+      
+      if (items.length > 0) {
+        gsap.fromTo(items, 
+          { 
+            y: 100, 
+            opacity: 0,
+            scale: 0.9
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: 'power3.out',
+            onComplete: () => {
+              items.forEach((item: any) => item.classList.add('animated'));
+            },
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top bottom-=100',
+              toggleActions: 'play none none none'
+            }
+          }
+        );
+      }
+    }, containerRef);
+    
+    return () => ctx.revert();
+  }, [posts]); // Re-run when posts change
 
   // Reset when filter changes
   useEffect(() => {
@@ -117,13 +162,13 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   }, [hasMore, loading, filter, loadMorePosts]);
 
   return (
-    <div className="w-full px-4 md:px-6 lg:px-8 py-8">
+    <div className="w-full px-4 md:px-6 lg:px-8 py-8" ref={containerRef}>
       {posts.length > 0 ? (
         <>
           {/* Masonry Grid - Tighter spacing for cohesive look */}
           <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5">
             {posts.map((post) => (
-              <div key={post._id} className="break-inside-avoid mb-4 md:mb-5">
+              <div key={post._id} className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0">
                 <FeedPostCard post={post} />
               </div>
             ))}
