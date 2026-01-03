@@ -26,7 +26,7 @@ export default function ShopHero() {
             </p>
             <p className="font-body text-lg text-black/60 leading-relaxed">
               Limited drops, art prints, and essentials that bring a little joy to your routine.
-              When they're gone, they're gone.
+              When they&apos;re gone, they&apos;re gone.
             </p>
           </div>
         </motion.div>
