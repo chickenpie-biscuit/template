@@ -44,7 +44,9 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
       try {
         const query = filter === 'all' ? getAllFeedPosts : getFeedPostsByCategory;
         const params = filter === 'all' ? {} : { category: filter };
+        console.log('Fetching posts for filter:', filter, 'with params:', params); // Debug
         const newPosts = await client?.fetch(query, params).catch(() => []) ?? [];
+        console.log('Fetched posts:', newPosts.length); // Debug
         setPosts(newPosts.slice(0, POSTS_PER_PAGE));
         setPage(1);
         setHasMore(newPosts.length >= POSTS_PER_PAGE);
@@ -55,10 +57,12 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
       }
     };
 
+    // Always fetch when filter changes
+    setPosts(initialPosts);
     if (filter !== initialFilter) {
       fetchFilteredPosts();
     }
-  }, [filter, initialFilter]);
+  }, [filter, initialFilter, initialPosts]);
 
   const loadMorePosts = useCallback(async () => {
     if (loading) return;
@@ -109,11 +113,11 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   }, [hasMore, loading, filter, loadMorePosts]);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
+    <div className="w-full px-6 py-8">
       {posts.length > 0 ? (
         <>
-          {/* Masonry Grid */}
-          <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+          {/* Masonry Grid - Full Width */}
+          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6 space-y-6">
             {posts.map((post) => (
               <div key={post._id} className="break-inside-avoid">
                 <FeedPostCard post={post} />
@@ -134,7 +138,7 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
       ) : (
         <div className="text-center py-16">
           <p className="font-body text-black/60 text-lg">
-            No posts found. Check back soon!
+            No posts found for this category. Check back soon!
           </p>
         </div>
       )}

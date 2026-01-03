@@ -13,13 +13,17 @@ interface HomePageProps {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const filter = searchParams?.filter || 'all';
 
+  console.log('Filter:', filter); // Debug log
+  
   const posts =
     filter === 'all'
       ? await client?.fetch(getAllFeedPosts).catch(() => []) ?? []
       : await client?.fetch(getFeedPostsByCategory, { category: filter }).catch(() => []) ?? [];
 
+  console.log('Posts found:', posts.length); // Debug log
+
   return (
-    <div className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-cream w-full">
       <FilterBar />
       <FeedContent initialPosts={posts} initialFilter={filter} />
     </div>
