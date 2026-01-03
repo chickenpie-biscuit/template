@@ -15,6 +15,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Create contact submission in Sanity
+    if (!client) {
+      return NextResponse.json(
+        { error: 'CMS client not available' },
+        { status: 500 }
+      );
+    }
+
     const submission = await client.create({
       _type: 'contactSubmission',
       name,
