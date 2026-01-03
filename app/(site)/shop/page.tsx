@@ -3,12 +3,15 @@ import { getAllProducts, getAllCategories } from '@/sanity/lib/queries';
 import { Product, Category } from '@/types/sanity';
 import ProductCard from '@/components/ui/ProductCard';
 import Container from '@/components/ui/Container';
+import ShopHero from '@/components/ui/ShopHero';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Shop | Site Template',
-  description: 'Browse our collection of products',
+  title: 'Shop | Chickenpie',
+  description: 'Browse our collection of Chickenpie merchandise',
 };
+
+export const revalidate = 60;
 
 export default async function ShopPage() {
   const [products, categories] = await Promise.all([
@@ -17,57 +20,63 @@ export default async function ShopPage() {
   ]);
 
   return (
-    <div className="py-12">
-      <Container>
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4">Shop</h1>
-          <p className="text-gray-600">Browse our collection</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Sidebar */}
-          <aside className="lg:col-span-1">
-            <div className="bg-white p-6 rounded-lg shadow-md sticky top-20">
-              <h2 className="text-xl font-bold mb-4">Categories</h2>
-              <ul className="space-y-2">
-                <li>
-                  <a
-                    href="/shop"
-                    className="text-gray-700 hover:text-primary-600 transition-colors"
-                  >
-                    All Products
-                  </a>
-                </li>
-                {categories.map((category) => (
-                  <li key={category._id}>
-                    <a
-                      href={`/shop?category=${category.slug}`}
-                      className="text-gray-700 hover:text-primary-600 transition-colors"
-                    >
-                      {category.title}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+    <div className="min-h-screen bg-cream">
+      <ShopHero />
+      
+      <section className="py-12 border-b-2 border-black">
+        <Container>
+          {/* Category Filter */}
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-2 justify-center">
+              <a
+                href="/shop"
+                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-red-200 text-red-300 hover:bg-red-300 transition-colors"
+              >
+                All Products
+              </a>
+              <a
+                href="/shop?category=t-shirts"
+                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
+              >
+                T-Shirts
+              </a>
+              <a
+                href="/shop?category=prints"
+                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
+              >
+                Prints
+              </a>
+              <a
+                href="/shop?category=accessories"
+                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
+              >
+                Accessories
+              </a>
+              <a
+                href="/shop?category=new-arrivals"
+                className="px-4 py-2 font-heading font-bold uppercase text-sm border-2 border-black bg-cream text-black hover:bg-cream-200 transition-colors"
+              >
+                New Arrivals
+              </a>
             </div>
-          </aside>
+          </div>
 
           {/* Products Grid */}
-          <div className="lg:col-span-3">
-            {products.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                {products.map((product) => (
-                  <ProductCard key={product._id} product={product} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No products available yet</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </Container>
+          {products.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {products.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <p className="font-body text-black/60 text-lg">
+                No products available yet. Check back soon!
+              </p>
+            </div>
+          )}
+        </Container>
+      </section>
     </div>
   );
 }

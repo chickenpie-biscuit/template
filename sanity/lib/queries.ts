@@ -162,3 +162,102 @@ export const getActiveBanners = groq`*[_type == "adBanner" && active == true] | 
   endDate
 }`;
 
+// Feed Post Queries
+export const getAllFeedPosts = groq`*[_type == "feedPost"] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  description,
+  ctaText,
+  ctaLink,
+  publishedAt,
+  featured
+}`;
+
+export const getFeedPostsByCategory = groq`*[_type == "feedPost" && category == $category] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  description,
+  ctaText,
+  ctaLink,
+  publishedAt,
+  featured
+}`;
+
+export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  description,
+  body,
+  ctaText,
+  ctaLink,
+  publishedAt,
+  featured
+}`;
+
+// Studio Project Queries
+export const getAllStudioProjects = groq`*[_type == "studioProject"] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  description,
+  year,
+  client,
+  tags,
+  featured,
+  publishedAt
+}`;
+
+export const getStudioProjectsByCategory = groq`*[_type == "studioProject" && category == $category] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  description,
+  year,
+  client,
+  tags,
+  featured,
+  publishedAt
+}`;
+
+export const getStudioProjectBySlug = groq`*[_type == "studioProject" && slug.current == $slug][0] {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  gallery,
+  description,
+  caseStudy,
+  year,
+  client,
+  tags,
+  featured,
+  publishedAt
+}`;
+
+export const getFeaturedStudioProjects = groq`*[_type == "studioProject" && featured == true] | order(publishedAt desc) {
+  _id,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  description,
+  year,
+  client,
+  tags,
+  publishedAt
+}`;
+

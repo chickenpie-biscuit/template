@@ -4,10 +4,10 @@ import { schemaTypes } from './schemas';
 
 export default defineConfig({
   name: 'default',
-  title: 'Site Template',
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '0fg6ihzb',
+  title: 'Chickenpie CMS',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'osFWxKg1q',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  basePath: '/studio',
+  basePath: '/admin',
   plugins: [visionTool()],
   schema: {
     types: schemaTypes,
