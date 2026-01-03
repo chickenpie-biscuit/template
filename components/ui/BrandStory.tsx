@@ -30,8 +30,8 @@ export default function BrandStory() {
                 design work with the playful, unexpected elements that make life interesting.
               </p>
               <p className="text-black/60">
-                We believe that great design doesn't have to take itself too seriously, 
-                and that the best work happens when you're having fun. Whether we're 
+                We believe that great design doesn&apos;t have to take itself too seriously, 
+                and that the best work happens when you&apos;re having fun. Whether we&apos;re 
                 designing a brand identity or a t-shirt, the approach is the same: 
                 bold, intentional, and slightly unexpected.
               </p>

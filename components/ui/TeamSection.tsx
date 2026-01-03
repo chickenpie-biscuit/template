@@ -79,7 +79,7 @@ export default function TeamSection() {
                 Start a conversation
               </p>
               <h3 className="font-heading text-2xl font-bold uppercase">
-                Have an idea? Let's talk.
+                Have an idea? Let&apos;s talk.
               </h3>
             </div>
             <a
