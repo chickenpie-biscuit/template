@@ -113,13 +113,13 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   }, [hasMore, loading, filter, loadMorePosts]);
 
   return (
-    <div className="w-full px-6 py-8">
+    <div className="w-full px-4 md:px-6 py-8">
       {posts.length > 0 ? (
         <>
-          {/* Masonry Grid - Full Width */}
-          <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 2xl:columns-5 gap-6 space-y-6">
+          {/* Pinterest-style Masonry Grid */}
+          <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-6">
             {posts.map((post) => (
-              <div key={post._id} className="break-inside-avoid">
+              <div key={post._id} className="break-inside-avoid mb-4 md:mb-6">
                 <FeedPostCard post={post} />
               </div>
             ))}
