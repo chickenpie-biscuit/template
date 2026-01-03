@@ -65,11 +65,11 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     return (
       <Link
         href={href}
-        className="group block border-2 border-black bg-black hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden h-full"
+        className="group block border-2 border-black bg-black hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden"
       >
-        <div className="relative p-6 md:p-8 h-full flex flex-col justify-center items-center text-center bg-black">
+        <div className="relative p-8 md:p-12 min-h-[300px] flex flex-col justify-center items-center text-center bg-black">
           {/* Quote Text */}
-          <h3 className="font-heading text-xl md:text-2xl lg:text-3xl font-bold uppercase text-cream leading-tight mb-4">
+          <h3 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold uppercase text-cream leading-tight mb-4">
             &ldquo;{post.title}&rdquo;
           </h3>
           
@@ -94,11 +94,11 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     return (
       <Link
         href={href}
-        className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden relative h-full"
+        className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden relative"
       >
         {/* Image */}
         {imageUrl && (
-          <div className="relative w-full h-full overflow-hidden bg-white">
+          <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
             <Image
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
@@ -142,16 +142,16 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // MERCH DROPS - Pinterest Card with Price on Hover
+  // MERCH DROPS - Pinterest Card with Price on Hover (Full product image, no cropping)
   if (category === 'merch-drops') {
     return (
       <Link
         href={href}
-        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden relative h-full"
+        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden relative"
       >
-        {/* Image */}
+        {/* Image - Full product display */}
         {imageUrl && (
-          <div className="relative w-full h-full overflow-hidden bg-white flex items-center justify-center p-4">
+          <div className="relative w-full aspect-square overflow-hidden bg-white flex items-center justify-center p-6">
             <div className="relative w-full h-full">
               <Image
                 src={imageUrl}
@@ -205,11 +205,11 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
   return (
     <Link
       href={href}
-      className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden relative h-full"
+      className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 overflow-hidden relative"
     >
       {/* Image */}
       {imageUrl && (
-        <div className="relative w-full h-full overflow-hidden bg-white">
+        <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
           <Image
             src={imageUrl}
             alt={post.featuredImage?.alt || post.title}
