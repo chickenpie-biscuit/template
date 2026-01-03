@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Instagram, Twitter } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import CartButton from '@/components/cart/CartButton';
 import Container from './Container';
@@ -79,22 +79,47 @@ export default function Header() {
               className="lg:hidden fixed left-0 right-0 bottom-0 bg-cream z-40 border-t-2 border-black"
               style={{ top: '80px' }}
             >
-              <nav className="px-4 py-8 h-full flex flex-col justify-between overflow-y-auto">
-                <div className="flex flex-col space-y-6">
-                  {links.map((link) => (
-                    <Link
+              <nav className="px-6 py-8 h-full flex flex-col justify-between overflow-y-auto max-w-md mx-auto w-full">
+                <div className="flex flex-col space-y-8 mt-4">
+                  {links.map((link, index) => (
+                    <motion.div
                       key={link.href}
-                      href={link.href}
-                      className="text-4xl font-heading font-bold uppercase tracking-tight text-black hover:text-red transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.1 + index * 0.1 }}
                     >
-                      {link.label}
-                    </Link>
+                      <Link
+                        href={link.href}
+                        className="text-5xl font-heading font-bold uppercase tracking-tight text-black hover:text-red transition-colors inline-block"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
-                <div className="pb-12 text-sm font-body text-black/60 uppercase tracking-widest">
-                  Based in the Universe
-                </div>
+                
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="pb-12 border-t-2 border-black/10 pt-8 mt-auto"
+                >
+                  <p className="text-xs font-heading font-bold uppercase tracking-widest text-black/40 mb-4">
+                    Follow Us
+                  </p>
+                  <div className="flex gap-6 mb-8">
+                    <a href="https://instagram.com/chickenpie" target="_blank" rel="noopener noreferrer" className="text-black hover:text-red transition-colors">
+                      <Instagram size={24} />
+                    </a>
+                    <a href="https://twitter.com/chickenpie" target="_blank" rel="noopener noreferrer" className="text-black hover:text-red transition-colors">
+                      <Twitter size={24} />
+                    </a>
+                  </div>
+                  <p className="text-sm font-body text-black/60 uppercase tracking-widest">
+                    Based in the Universe
+                  </p>
+                </motion.div>
               </nav>
             </motion.div>
           )}
