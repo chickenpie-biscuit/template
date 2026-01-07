@@ -107,7 +107,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             {/* Pagination Dots */}
             {galleryImages.length > 1 && (
               <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 bg-black/40 backdrop-blur-md px-4 py-3 rounded-full border border-white/20">
-                {galleryImages.map((_, index: number) => (
+                {galleryImages.map((_img: any, index: number) => (
                   <button
                     key={index}
                     onClick={() => setActiveImageIndex(index)}
