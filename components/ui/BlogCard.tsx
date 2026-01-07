@@ -10,7 +10,7 @@ interface BlogCardProps {
 
 export default function BlogCard({ post }: BlogCardProps) {
   const imageUrl = post.mainImage
-    ? urlFor(post.mainImage).width(600).height(400).url()
+    ? urlFor(post.mainImage as any).width(600).height(400).url()
     : '/images/placeholder.jpg';
 
   return (
