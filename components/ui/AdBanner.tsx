@@ -20,7 +20,7 @@ export default function AdBannerComponent({ banners, placement }: AdBannerProps)
 
   // For now, show the first banner. Can be enhanced for rotation
   const banner = filteredBanners[0];
-  const imageUrl = urlFor(banner.image).width(1200).height(400).url();
+  const imageUrl = urlFor(banner.image as any).width(1200).height(400).url();
 
   if (banner.link) {
     return (
