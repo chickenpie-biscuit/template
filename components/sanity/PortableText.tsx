@@ -10,25 +10,31 @@ interface PortableTextProps {
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: { value: any }) => {
-      const imageUrl = value?.asset ? urlFor(value).url() : null;
+      // Robust check for asset availability
+      if (!value?.asset?._ref) {
+        return null;
+      }
+
+      const imageUrl = urlFor(value).url();
       const alt = value?.alt || 'Blog post image';
 
-      if (!imageUrl) return null;
-
       return (
-        <div className="relative w-full aspect-[16/9] my-8 overflow-hidden border-2 border-black">
-          <Image
-            src={imageUrl}
-            alt={alt}
-            fill
-            className="object-cover"
-          />
+        <figure className="my-12">
+          <div className="relative w-full aspect-[16/9] overflow-hidden border-2 border-black bg-cream-200">
+            <Image
+              src={imageUrl}
+              alt={alt}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 800px"
+            />
+          </div>
           {value.caption && (
-            <div className="absolute bottom-0 left-0 w-full bg-black/80 p-2">
-              <p className="text-white text-xs font-body text-center">{value.caption}</p>
-            </div>
+            <figcaption className="mt-3 text-center font-heading text-xs font-bold uppercase tracking-widest text-black/60">
+              {value.caption}
+            </figcaption>
           )}
-        </div>
+        </figure>
       );
     },
   },
