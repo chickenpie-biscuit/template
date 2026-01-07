@@ -321,49 +321,44 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     return (
       <Link
         href={href}
-        className="group block bg-white p-3 md:p-5 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative"
+        className="group block bg-white p-3 md:p-5 shadow-sm hover:shadow-xl transition-all duration-500 relative"
       >
+        {/* Gallery Plaque - Top */}
+        <div className="mb-4 border-b border-black/5 pb-2 flex justify-between items-center">
+          <span className="font-heading text-[10px] uppercase tracking-[0.2em] text-black/40">
+            Original Art
+          </span>
+          <span className="font-mono text-[10px] text-black/30">
+            001
+          </span>
+        </div>
+
         {/* Frame effect */}
-        <div className="bg-gradient-to-br from-black/90 to-black/70 p-2">
-          {/* Inner matte */}
-          <div className="bg-white p-3 md:p-5">
-            {imageUrl && (
-              <div className="relative w-full aspect-[3/4] bg-cream-50">
-                {!imageLoaded && (
-                  <div className="absolute inset-0 bg-cream-200 animate-pulse" />
-                )}
-                <Image
-                  src={imageUrl}
-                  alt={post.featuredImage?.alt || post.title}
-                  fill
-                  className="object-contain group-hover:opacity-95 transition-opacity duration-500"
-                  placeholder={blurDataUrl ? 'blur' : 'empty'}
-                  blurDataURL={blurDataUrl}
-                  onLoad={() => setImageLoaded(true)}
-                />
-              </div>
-            )}
-          </div>
+        <div className="bg-cream-50 p-4 md:p-8 flex items-center justify-center">
+          {imageUrl && (
+            <div className="relative w-full h-auto min-h-[200px] flex items-center justify-center">
+              {!imageLoaded && (
+                <div className="absolute inset-0 bg-cream-200 animate-pulse" />
+              )}
+              <Image
+                src={imageUrl}
+                alt={post.featuredImage?.alt || post.title}
+                width={600}
+                height={800}
+                className="w-auto h-auto max-w-full max-h-[400px] object-contain shadow-md group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-700 ease-out"
+                placeholder={blurDataUrl ? 'blur' : 'empty'}
+                blurDataURL={blurDataUrl}
+                onLoad={() => setImageLoaded(true)}
+              />
+            </div>
+          )}
         </div>
         
-        {/* Gallery Plaque */}
-        <div className="mt-4 bg-white border border-black/10 p-4">
-          <div className="flex items-start gap-2 mb-2">
-            <div className="w-1 h-5 bg-black flex-shrink-0 mt-1" />
-            <div className="flex-1">
-              <p className="font-heading text-sm uppercase tracking-wider text-black font-bold line-clamp-2">
-                {post.title}
-              </p>
-              {displayDescription && (
-                <p className="font-body text-xs text-black/60 mt-1 line-clamp-2">
-                  {displayDescription}
-                </p>
-              )}
-            </div>
-          </div>
-          <div className="font-heading text-[10px] uppercase tracking-widest text-black/40">
-            {categoryLabel}
-          </div>
+        {/* Minimal Title - Bottom */}
+        <div className="mt-4 text-center">
+          <h3 className="font-heading text-lg uppercase tracking-wide text-black font-bold group-hover:text-black/60 transition-colors">
+            {post.title}
+          </h3>
         </div>
       </Link>
     );
