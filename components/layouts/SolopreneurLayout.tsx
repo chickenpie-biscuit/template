@@ -66,7 +66,7 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
           {post.revenue !== undefined && post.revenue !== null && (
             <div className="mb-16 bg-gradient-to-br from-teal/20 to-goldenrod/20 border-2 border-teal p-12 text-center">
               <p className="font-heading uppercase text-xs tracking-[0.3em] text-teal mb-4">
-                This Week's Revenue
+                This Week&apos;s Revenue
               </p>
               <p className="text-7xl lg:text-8xl font-heading font-bold text-cream mb-2">
                 {formatCurrency(post.revenue)}
