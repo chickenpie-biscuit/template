@@ -52,7 +52,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     .catch(() => []) ?? Promise.resolve([]));
 
   const mainImageUrl = product.images?.[0]
-    ? urlFor(product.images[0]).width(800).height(800).url()
+    ? urlFor(product.images[0] as any).width(800).height(800).url()
     : '/images/placeholder.jpg';
 
   return (
