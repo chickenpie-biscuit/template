@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,8 +12,13 @@ interface SmoothScrollProps {
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
+  const isStudio = pathname?.startsWith('/admin') || pathname?.startsWith('/studio');
 
   useEffect(() => {
+    // Don't initialize Lenis on Studio pages to prevent scroll locking
+    if (isStudio) return;
+
     // Initialize Lenis
     const lenis = new Lenis({
       duration: 1.2,
@@ -43,7 +49,12 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
         lenis.raf(time * 1000);
       });
     };
-  }, []);
+  }, [isStudio]);
+
+  // If we are in the studio, just render children without Lenis context
+  if (isStudio) {
+    return <>{children}</>;
+  }
 
   return <>{children}</>;
 }
