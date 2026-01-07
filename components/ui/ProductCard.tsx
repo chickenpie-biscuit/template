@@ -16,7 +16,7 @@ interface ProductCardProps {
 export default function ProductCard({ product }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
   const imageUrl = product.images?.[0]
-    ? urlFor(product.images[0]).width(400).height(400).url()
+    ? urlFor(product.images[0] as any).width(400).height(400).url()
     : '/images/placeholder.jpg';
 
   const handleAddToCart = (e: React.MouseEvent) => {
