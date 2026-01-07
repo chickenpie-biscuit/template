@@ -74,7 +74,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {product.images && product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-4">
                 {product.images.slice(1, 5).map((image, index) => {
-                  const imageUrl = urlFor(image).width(200).height(200).url();
+                  const imageUrl = urlFor(image as any).width(200).height(200).url();
                   return (
                     <div
                       key={index}
