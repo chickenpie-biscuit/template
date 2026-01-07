@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
-import { Zap, Package, Clock, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Zap, Package, Clock, AlertCircle } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface CommerceLayoutProps {
@@ -80,85 +80,48 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        {/* Left: Product Image Gallery/Slider */}
-        <div className="relative h-[70vh] lg:h-screen bg-white flex flex-col items-center justify-center p-8 lg:p-16 lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
-          {/* Main Image with Navigation */}
-          <div className="relative w-full h-full max-w-2xl flex items-center justify-center mb-6">
+        {/* Left: Product Image Gallery with Pagination */}
+        <div className="relative h-[70vh] lg:h-screen bg-white flex flex-col items-center justify-center lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
+          {/* Main Image - Full Width, No Padding */}
+          <div className="relative w-full h-full flex items-center justify-center">
             {imageUrl && (
               <div className="relative w-full h-full">
                 <Image
                   src={imageUrl}
                   alt={activeImage?.alt || post.title}
                   fill
-                  className="object-contain drop-shadow-2xl"
+                  className="object-contain"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
               </div>
             )}
             
-            {/* Navigation Arrows (if multiple images) */}
-            {galleryImages.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/80 hover:bg-goldenrod text-white hover:text-black border-2 border-black flex items-center justify-center transition-colors backdrop-blur-sm"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/80 hover:bg-goldenrod text-white hover:text-black border-2 border-black flex items-center justify-center transition-colors backdrop-blur-sm"
-                  aria-label="Next image"
-                >
-                  <ChevronRight className="w-6 h-6" />
-                </button>
-              </>
-            )}
-            
             {/* Drop Badge */}
             {isLimited && (
-              <div className="absolute top-4 left-4 bg-red text-white px-6 py-3 border-2 border-white font-heading font-bold uppercase text-sm rotate-[-4deg] shadow-xl z-10">
+              <div className="absolute top-6 left-6 bg-red text-white px-6 py-3 border-2 border-white font-heading font-bold uppercase text-sm rotate-[-4deg] shadow-xl z-10">
                 Limited
               </div>
             )}
             
-            {/* Image Counter */}
+            {/* Pagination Dots */}
             {galleryImages.length > 1 && (
-              <div className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 font-heading text-xs font-bold backdrop-blur-sm">
-                {activeImageIndex + 1} / {galleryImages.length}
-              </div>
-            )}
-          </div>
-
-          {/* Thumbnail Gallery */}
-          {galleryImages.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-2 max-w-2xl w-full">
-              {galleryImages.map((img: any, index: number) => {
-                const thumbUrl = urlFor(img).width(150).height(150).url();
-                return (
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 bg-black/40 backdrop-blur-md px-4 py-3 rounded-full border border-white/20">
+                {galleryImages.map((_, index: number) => (
                   <button
                     key={index}
                     onClick={() => setActiveImageIndex(index)}
-                    className={`relative flex-shrink-0 w-20 h-20 border-2 transition-all ${
+                    className={`transition-all ${
                       index === activeImageIndex
-                        ? 'border-goldenrod shadow-lg scale-105'
-                        : 'border-black/20 hover:border-goldenrod/50'
+                        ? 'w-8 h-2 bg-goldenrod'
+                        : 'w-2 h-2 bg-white/40 hover:bg-white/60 rounded-full'
                     }`}
-                  >
-                    <Image
-                      src={thumbUrl}
-                      alt={img.alt || `Product image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="80px"
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          )}
+                    aria-label={`Go to image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Right: Product Details */}

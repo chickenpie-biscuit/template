@@ -37,7 +37,7 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
   return (
     <article className="min-h-screen bg-cream">
       {/* Editorial Hero - Full Width Parallax Effect */}
-      {featuredImageUrl && (
+      {featuredImageUrl ? (
         <div className="relative w-full h-[85vh] overflow-hidden">
           <div className="fixed top-0 left-0 w-full h-full -z-10">
              <Image
@@ -61,6 +61,23 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
               </h1>
             </div>
           </div>
+        </div>
+      ) : (
+        /* Fallback Hero (No Image) */
+        <div className="relative w-full bg-black border-b-4 border-goldenrod">
+          <Container>
+            <div className="py-20 lg:py-32">
+              <span className="inline-block px-4 py-2 text-xs font-heading font-bold uppercase tracking-widest border border-goldenrod/50 bg-goldenrod/10 text-goldenrod mb-6">
+                {categoryLabel}
+              </span>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold uppercase leading-[0.9] tracking-tight text-white">
+                {project.title}
+              </h1>
+              <p className="mt-6 text-lg text-white/60 font-body max-w-2xl">
+                Upload a featured image in Sanity to see the full hero treatment
+              </p>
+            </div>
+          </Container>
         </div>
       )}
 
