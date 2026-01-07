@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
+import { Target, Lightbulb, TrendingUp, ExternalLink } from 'lucide-react';
 
 interface StudioProjectPageProps {
   params: { slug: string };
@@ -110,6 +111,35 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
 
             {/* Narrative Content */}
             <div className="lg:col-span-8 space-y-20">
+              {/* Challenge & Solution */}
+              {(project.projectChallenge || project.projectSolution) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {project.projectChallenge && (
+                    <div className="border-4 border-black p-8 lg:p-10 bg-white">
+                      <div className="flex items-center gap-3 mb-6">
+                        <Target className="w-8 h-8 text-red" />
+                        <h2 className="font-heading font-bold uppercase text-2xl">The Challenge</h2>
+                      </div>
+                      <p className="text-lg text-black/80 leading-relaxed font-body">
+                        {project.projectChallenge}
+                      </p>
+                    </div>
+                  )}
+
+                  {project.projectSolution && (
+                    <div className="border-4 border-black p-8 lg:p-10 bg-teal">
+                      <div className="flex items-center gap-3 mb-6">
+                        <Lightbulb className="w-8 h-8 text-black" />
+                        <h2 className="font-heading font-bold uppercase text-2xl text-black">The Solution</h2>
+                      </div>
+                      <p className="text-lg text-black leading-relaxed font-body">
+                        {project.projectSolution}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {project.caseStudy && (
                 <div className="prose prose-xl prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase prose-p:font-body prose-p:text-black/80 max-w-none">
                   <PortableText content={project.caseStudy} />
@@ -119,6 +149,10 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
               {/* Immersive Gallery */}
               {project.gallery && project.gallery.length > 0 && (
                 <div className="space-y-20">
+                  <h2 className="font-heading font-bold uppercase text-4xl mb-8 flex items-center gap-3">
+                    <span className="w-1 h-12 bg-teal" />
+                    Project Gallery
+                  </h2>
                   {project.gallery.map((image: any, index: number) => {
                     const imageUrl = urlFor(image).width(1600).height(1200).url();
                     // Alternate layouts for visual interest
@@ -127,7 +161,7 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                     return (
                       <div
                         key={index}
-                        className={`relative ${isFullWidth ? 'aspect-[16/9] -mx-4 md:-mx-12 lg:-mx-20 w-[calc(100%+2rem)] md:w-[calc(100%+6rem)] lg:w-[calc(100%+10rem)]' : 'aspect-[4/3]'} bg-black overflow-hidden group`}
+                        className={`relative ${isFullWidth ? 'aspect-[16/9] -mx-4 md:-mx-12 lg:-mx-20 w-[calc(100%+2rem)] md:w-[calc(100%+6rem)] lg:w-[calc(100%+10rem)]' : 'aspect-[4/3]'} bg-black overflow-hidden group border-2 border-black`}
                       >
                         <Image
                           src={imageUrl}
@@ -138,6 +172,25 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                       </div>
                     );
                   })}
+                </div>
+              )}
+
+              {/* Results & Impact */}
+              {project.projectResults && project.projectResults.length > 0 && (
+                <div className="bg-black text-cream p-10 lg:p-14 border-4 border-black">
+                  <div className="flex items-center gap-3 mb-8">
+                    <TrendingUp className="w-8 h-8 text-teal" />
+                    <h2 className="font-heading font-bold uppercase text-3xl">Results & Impact</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {project.projectResults.map((result: string, index: number) => (
+                      <div key={index} className="border-2 border-teal p-6 bg-black/50">
+                        <p className="font-heading text-lg font-bold text-teal">
+                          {result}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>

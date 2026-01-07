@@ -80,10 +80,41 @@ export default defineType({
       description: 'Brief project description for grid view',
     }),
     defineField({
+      name: 'projectChallenge',
+      title: 'The Challenge',
+      type: 'text',
+      rows: 3,
+      description: 'What problem needed solving',
+    }),
+    defineField({
+      name: 'projectSolution',
+      title: 'The Solution',
+      type: 'text',
+      rows: 3,
+      description: 'How you solved it',
+    }),
+    defineField({
+      name: 'projectResults',
+      title: 'Results & Impact',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Measurable outcomes (e.g., "+40% conversion", "Featured on Awwwards")',
+    }),
+    defineField({
       name: 'caseStudy',
       title: 'Case Study Content',
       type: 'array',
-      of: [{ type: 'block' }],
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            { name: 'caption', type: 'string', title: 'Caption' },
+            { name: 'alt', type: 'string', title: 'Alternative Text' },
+          ],
+        },
+      ],
       description: 'Full case study content',
     }),
     defineField({
