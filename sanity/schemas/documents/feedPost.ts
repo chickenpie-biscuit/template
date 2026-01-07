@@ -153,6 +153,22 @@ export default defineType({
     }),
     // Merch Drops specific fields
     defineField({
+      name: 'productGallery',
+      title: 'Product Gallery',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            { name: 'alt', type: 'string', title: 'Alt Text' },
+          ],
+        },
+      ],
+      description: 'For Merch Drops - multiple product images (first image will be featured if featuredImage is empty)',
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
       name: 'dropDate',
       title: 'Drop Date',
       type: 'datetime',
@@ -183,6 +199,14 @@ export default defineType({
           { title: 'Other', value: 'other' },
         ],
       },
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
+      name: 'sizes',
+      title: 'Available Sizes',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'For Merch Drops - e.g., "S", "M", "L", "XL"',
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
     defineField({

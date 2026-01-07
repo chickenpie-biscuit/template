@@ -230,6 +230,8 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   dropDate,
   limitedQuantity,
   productType,
+  productGallery,
+  sizes,
   stock,
   promptText,
   promptResult,

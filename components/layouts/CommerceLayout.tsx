@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
-import { Zap, Package, Clock, AlertCircle } from 'lucide-react';
+import { Zap, Package, Clock, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface CommerceLayoutProps {
@@ -12,9 +12,27 @@ interface CommerceLayoutProps {
 }
 
 export default function CommerceLayout({ post }: CommerceLayoutProps) {
-  const imageUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(1200).url()
+  // Build gallery from productGallery or fallback to featuredImage
+  const galleryImages = post.productGallery && post.productGallery.length > 0
+    ? post.productGallery
+    : post.featuredImage
+    ? [post.featuredImage]
+    : [];
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  
+  const activeImage = galleryImages[activeImageIndex];
+  const imageUrl = activeImage
+    ? urlFor(activeImage).width(1200).url()
     : null;
+
+  const nextImage = () => {
+    setActiveImageIndex((prev) => (prev + 1) % galleryImages.length);
+  };
+
+  const prevImage = () => {
+    setActiveImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
+  };
 
   const [timeUntilDrop, setTimeUntilDrop] = useState<string>('');
   const isUpcoming = post.dropDate && new Date(post.dropDate) > new Date();
@@ -62,25 +80,83 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        {/* Left: Product Image */}
-        <div className="relative h-[60vh] lg:h-screen bg-white flex items-center justify-center p-12 lg:p-20 lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
-          {imageUrl && (
-            <div className="relative w-full h-full max-w-2xl">
-              <Image
-                src={imageUrl}
-                alt={post.featuredImage?.alt || post.title}
-                fill
-                className="object-contain drop-shadow-2xl"
-                priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          )}
-          
-          {/* Drop Badge */}
-          {isLimited && (
-            <div className="absolute top-8 left-8 bg-red text-white px-6 py-3 border-2 border-white font-heading font-bold uppercase text-sm rotate-[-4deg] shadow-xl">
-              Limited
+        {/* Left: Product Image Gallery/Slider */}
+        <div className="relative h-[70vh] lg:h-screen bg-white flex flex-col items-center justify-center p-8 lg:p-16 lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
+          {/* Main Image with Navigation */}
+          <div className="relative w-full h-full max-w-2xl flex items-center justify-center mb-6">
+            {imageUrl && (
+              <div className="relative w-full h-full">
+                <Image
+                  src={imageUrl}
+                  alt={activeImage?.alt || post.title}
+                  fill
+                  className="object-contain drop-shadow-2xl"
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+            )}
+            
+            {/* Navigation Arrows (if multiple images) */}
+            {galleryImages.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/80 hover:bg-goldenrod text-white hover:text-black border-2 border-black flex items-center justify-center transition-colors backdrop-blur-sm"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/80 hover:bg-goldenrod text-white hover:text-black border-2 border-black flex items-center justify-center transition-colors backdrop-blur-sm"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+            
+            {/* Drop Badge */}
+            {isLimited && (
+              <div className="absolute top-4 left-4 bg-red text-white px-6 py-3 border-2 border-white font-heading font-bold uppercase text-sm rotate-[-4deg] shadow-xl z-10">
+                Limited
+              </div>
+            )}
+            
+            {/* Image Counter */}
+            {galleryImages.length > 1 && (
+              <div className="absolute bottom-4 right-4 bg-black/80 text-white px-3 py-1 font-heading text-xs font-bold backdrop-blur-sm">
+                {activeImageIndex + 1} / {galleryImages.length}
+              </div>
+            )}
+          </div>
+
+          {/* Thumbnail Gallery */}
+          {galleryImages.length > 1 && (
+            <div className="flex gap-3 overflow-x-auto pb-2 max-w-2xl w-full">
+              {galleryImages.map((img: any, index: number) => {
+                const thumbUrl = urlFor(img).width(150).height(150).url();
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setActiveImageIndex(index)}
+                    className={`relative flex-shrink-0 w-20 h-20 border-2 transition-all ${
+                      index === activeImageIndex
+                        ? 'border-goldenrod shadow-lg scale-105'
+                        : 'border-black/20 hover:border-goldenrod/50'
+                    }`}
+                  >
+                    <Image
+                      src={thumbUrl}
+                      alt={img.alt || `Product image ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>
@@ -90,8 +166,8 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
           <div className="max-w-xl mx-auto w-full">
             {/* Product Type Badge */}
             <div className="flex items-center gap-3 mb-6">
-              <Package className="w-5 h-5 text-teal" />
-              <span className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-teal">
+              <Package className="w-5 h-5 text-goldenrod" />
+              <span className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-goldenrod">
                 {post.productType || 'Merch Drop'}
               </span>
             </div>
@@ -103,7 +179,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
 
             {/* Countdown or Stock Warning */}
             {isUpcoming && timeUntilDrop && (
-              <div className="bg-teal text-black p-6 mb-8 border-2 border-teal">
+              <div className="bg-goldenrod text-black p-6 mb-8 border-2 border-goldenrod">
                 <div className="flex items-center gap-3 mb-2">
                   <Clock className="w-6 h-6" />
                   <span className="font-heading text-xs font-bold uppercase tracking-wider">Drops In:</span>
@@ -137,7 +213,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                   )}
                 </div>
                 {post.originalPrice && (
-                  <p className="text-sm font-heading text-teal font-bold uppercase">
+                  <p className="text-sm font-heading text-goldenrod font-bold uppercase">
                     Save ${(post.originalPrice - post.price).toFixed(2)}
                   </p>
                 )}
@@ -145,6 +221,23 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             )}
 
             <div className="h-px bg-white/20 w-full mb-8" />
+
+            {/* Size Selector */}
+            {post.sizes && post.sizes.length > 0 && (
+              <div className="mb-8">
+                <p className="font-heading text-xs uppercase tracking-widest text-white/60 mb-3">Select Size</p>
+                <div className="flex gap-2">
+                  {post.sizes.map((size: string, index: number) => (
+                    <button
+                      key={index}
+                      className="px-5 py-3 border-2 border-white/30 text-white hover:border-goldenrod hover:bg-goldenrod hover:text-black transition-colors font-heading font-bold uppercase text-sm"
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Description */}
             {post.description && (
@@ -172,12 +265,12 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                   Sold Out
                 </button>
               ) : isUpcoming ? (
-                <button className="w-full py-5 bg-teal text-black hover:bg-white hover:text-black transition-colors border-2 border-teal font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,221,221,0.3)]">
+                <button className="w-full py-5 bg-goldenrod text-black hover:bg-white hover:text-black transition-colors border-2 border-goldenrod font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(218,165,32,0.3)]">
                   Notify Me When Available
                 </button>
               ) : (
                 <>
-                  <button className="w-full py-5 bg-white text-black hover:bg-teal hover:text-black transition-colors border-2 border-white font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] hover:-translate-y-0.5 transition-all">
+                  <button className="w-full py-5 bg-white text-black hover:bg-goldenrod hover:text-black transition-colors border-2 border-white font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(218,165,32,0.3)] hover:-translate-y-0.5 transition-all">
                     Add to Cart — ${post.price}
                   </button>
                   {post.ctaLink && (
@@ -185,7 +278,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                       href={post.ctaLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full py-4 text-center border-2 border-white/30 text-white hover:border-white hover:bg-white/10 transition-colors font-heading font-bold uppercase"
+                      className="block w-full py-4 text-center border-2 border-white/30 text-white hover:border-goldenrod hover:bg-goldenrod/10 transition-colors font-heading font-bold uppercase"
                     >
                       Learn More
                     </a>
