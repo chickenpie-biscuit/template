@@ -49,7 +49,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .catch(() => []) ?? Promise.resolve([]));
 
   const imageUrl = post.mainImage
-    ? urlFor(post.mainImage).width(1200).height(600).url()
+    ? urlFor(post.mainImage as any).width(1200).height(600).url()
     : '/images/placeholder.jpg';
 
   return (
