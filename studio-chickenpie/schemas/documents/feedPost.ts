@@ -65,7 +65,25 @@ export default defineType({
       name: 'body',
       title: 'Body Content',
       type: 'array',
-      of: [{ type: 'block' }],
+      of: [
+        { type: 'block' },
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Alternative Text',
+            },
+          ],
+        },
+      ],
     }),
     // Merch Drops specific fields
     defineField({
