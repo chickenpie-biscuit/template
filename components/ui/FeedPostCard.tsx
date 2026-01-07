@@ -46,7 +46,7 @@ const categoryLabels: Record<string, string> = {
 };
 
 const categoryColors: Record<string, string> = {
-  'design-work': 'bg-teal',
+  'design-work': 'bg-goldenrod',
   'art': 'bg-black',
   'merch-drops': 'bg-red',
   'prompt-week': 'bg-goldenrod',
@@ -318,49 +318,39 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
   }
 
 
-  // ART - Museum Gallery Card
+  // ART - Clean Gallery Card (Large Image, No Background)
   if (category === 'art') {
     return (
       <Link
         href={href}
-        className="group block bg-white p-3 md:p-5 shadow-sm hover:shadow-xl transition-all duration-500 relative"
+        className="group block hover:-translate-y-2 transition-all duration-500 relative"
       >
-        {/* Gallery Plaque - Top */}
-        <div className="mb-4 border-b border-black/5 pb-2 flex justify-between items-center">
-          <span className="font-heading text-[10px] uppercase tracking-[0.2em] text-black/40">
-            Original Art
-          </span>
-          <span className="font-mono text-[10px] text-black/30">
-            001
-          </span>
-        </div>
-
-        {/* Frame effect */}
-        <div className="bg-cream-50 p-4 md:p-8 flex items-center justify-center">
-          {imageUrl && (
-            <div className="relative w-full h-auto min-h-[200px] flex items-center justify-center">
-              {!imageLoaded && (
-                <div className="absolute inset-0 bg-cream-200 animate-pulse" />
-              )}
-              <Image
-                src={imageUrl}
-                alt={post.featuredImage?.alt || post.title}
-                width={600}
-                height={800}
-                className="w-auto h-auto max-w-full max-h-[400px] object-contain shadow-md group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-700 ease-out"
-                placeholder={blurDataUrl ? 'blur' : 'empty'}
-                blurDataURL={blurDataUrl}
-                onLoad={() => setImageLoaded(true)}
-              />
-            </div>
-          )}
-        </div>
+        {/* Large Art Image - No Background, Full Size */}
+        {imageUrl && (
+          <div className="relative w-full aspect-[3/4] mb-4">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-transparent animate-pulse" />
+            )}
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-contain drop-shadow-2xl group-hover:drop-shadow-[0_25px_50px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] transition-all duration-700 ease-out"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </div>
+        )}
         
-        {/* Minimal Title - Bottom */}
-        <div className="mt-4 text-center">
-          <h3 className="font-heading text-lg uppercase tracking-wide text-black font-bold group-hover:text-black/60 transition-colors">
+        {/* Centered Title Below */}
+        <div className="text-center px-2">
+          <h3 className="font-heading text-lg md:text-xl uppercase tracking-wide text-black font-bold group-hover:text-black/60 transition-colors">
             {post.title}
           </h3>
+          <p className="font-heading text-[10px] uppercase tracking-widest text-black/40 mt-1">
+            {categoryLabel}
+          </p>
         </div>
       </Link>
     );
@@ -462,7 +452,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     return (
       <Link
         href={href}
-        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,221,221,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
+        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
       >
         {/* Hero Image */}
         {imageUrl && (
@@ -485,8 +475,8 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
             
             {/* Category Badge on Image */}
             <div className="absolute top-4 left-4 flex items-center gap-2">
-              <div className="w-8 h-0.5 bg-teal" />
-              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-teal">
+              <div className="w-8 h-0.5 bg-goldenrod" />
+              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-goldenrod">
                 {categoryLabel}
               </span>
             </div>
@@ -496,7 +486,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
         {/* Content */}
         <div className="p-6 bg-white">
           {/* Title */}
-          <h3 className="font-heading text-2xl font-bold uppercase text-black mb-3 leading-tight line-clamp-2 group-hover:text-teal transition-colors">
+          <h3 className="font-heading text-2xl font-bold uppercase text-black mb-3 leading-tight line-clamp-2 group-hover:text-goldenrod transition-colors">
             {truncatedTitle}
           </h3>
 
@@ -521,7 +511,7 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
 
           {/* CTA */}
-          <div className="inline-block px-4 py-2 border-2 border-teal bg-teal text-black font-heading text-xs font-bold uppercase group-hover:bg-black group-hover:text-teal group-hover:border-black transition-colors">
+          <div className="inline-block px-4 py-2 border-2 border-goldenrod bg-goldenrod text-black font-heading text-xs font-bold uppercase group-hover:bg-black group-hover:text-goldenrod group-hover:border-black transition-colors">
             View Case Study
           </div>
         </div>

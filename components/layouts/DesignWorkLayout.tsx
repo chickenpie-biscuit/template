@@ -35,8 +35,8 @@ export default function DesignWorkLayout({ post }: DesignWorkLayoutProps) {
             <Container>
               <div className="max-w-4xl">
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="w-12 h-0.5 bg-teal" />
-                  <span className="font-heading font-bold uppercase text-xs tracking-[0.3em] text-teal">
+                  <div className="w-12 h-0.5 bg-goldenrod" />
+                  <span className="font-heading font-bold uppercase text-xs tracking-[0.3em] text-goldenrod">
                     Case Study
                   </span>
                 </div>
@@ -113,7 +113,7 @@ export default function DesignWorkLayout({ post }: DesignWorkLayoutProps) {
 
               {/* The Solution */}
               {post.projectSolution && (
-                <div className="border-2 border-black p-8 lg:p-12 bg-teal">
+                <div className="border-2 border-black p-8 lg:p-12 bg-goldenrod">
                   <div className="flex items-center gap-3 mb-6">
                     <Lightbulb className="w-8 h-8 text-black" />
                     <h2 className="font-heading font-bold uppercase text-3xl text-black">The Solution</h2>
@@ -144,7 +144,7 @@ export default function DesignWorkLayout({ post }: DesignWorkLayoutProps) {
           {post.projectGallery && post.projectGallery.length > 0 && (
             <div className="mb-20">
               <h2 className="font-heading font-bold uppercase text-4xl mb-12 flex items-center gap-3">
-                <span className="w-1 h-12 bg-teal" />
+                <span className="w-1 h-12 bg-goldenrod" />
                 Project Gallery
               </h2>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -177,13 +177,13 @@ export default function DesignWorkLayout({ post }: DesignWorkLayoutProps) {
           {post.projectResults && post.projectResults.length > 0 && (
             <div className="bg-black text-cream p-12 lg:p-16 border-2 border-black">
               <div className="flex items-center gap-3 mb-8">
-                <TrendingUp className="w-8 h-8 text-teal" />
+                <TrendingUp className="w-8 h-8 text-goldenrod" />
                 <h2 className="font-heading font-bold uppercase text-4xl">Results & Impact</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {post.projectResults.map((result: string, index: number) => (
-                  <div key={index} className="border-2 border-teal p-6 bg-black/50">
-                    <p className="font-heading text-xl font-bold text-teal">
+                  <div key={index} className="border-2 border-goldenrod p-6 bg-black/50">
+                    <p className="font-heading text-xl font-bold text-goldenrod">
                       {result}
                     </p>
                   </div>
@@ -199,7 +199,7 @@ export default function DesignWorkLayout({ post }: DesignWorkLayoutProps) {
                 href={post.ctaLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-12 py-5 bg-teal text-black hover:bg-black hover:text-teal border-2 border-black font-heading font-bold uppercase text-lg transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
+                className="inline-block px-12 py-5 bg-goldenrod text-black hover:bg-black hover:text-goldenrod border-2 border-black font-heading font-bold uppercase text-lg transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
               >
                 {post.ctaText || 'View Live Project'}
               </a>

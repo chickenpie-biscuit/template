@@ -127,7 +127,7 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                   )}
 
                   {project.projectSolution && (
-                    <div className="border-4 border-black p-8 lg:p-10 bg-teal">
+                    <div className="border-4 border-black p-8 lg:p-10 bg-goldenrod">
                       <div className="flex items-center gap-3 mb-6">
                         <Lightbulb className="w-8 h-8 text-black" />
                         <h2 className="font-heading font-bold uppercase text-2xl text-black">The Solution</h2>
@@ -150,7 +150,7 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
               {project.gallery && project.gallery.length > 0 && (
                 <div className="space-y-20">
                   <h2 className="font-heading font-bold uppercase text-4xl mb-8 flex items-center gap-3">
-                    <span className="w-1 h-12 bg-teal" />
+                    <span className="w-1 h-12 bg-goldenrod" />
                     Project Gallery
                   </h2>
                   {project.gallery.map((image: any, index: number) => {
@@ -179,13 +179,13 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
               {project.projectResults && project.projectResults.length > 0 && (
                 <div className="bg-black text-cream p-10 lg:p-14 border-4 border-black">
                   <div className="flex items-center gap-3 mb-8">
-                    <TrendingUp className="w-8 h-8 text-teal" />
+                    <TrendingUp className="w-8 h-8 text-goldenrod" />
                     <h2 className="font-heading font-bold uppercase text-3xl">Results & Impact</h2>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {project.projectResults.map((result: string, index: number) => (
-                      <div key={index} className="border-2 border-teal p-6 bg-black/50">
-                        <p className="font-heading text-lg font-bold text-teal">
+                      <div key={index} className="border-2 border-goldenrod p-6 bg-black/50">
+                        <p className="font-heading text-lg font-bold text-goldenrod">
                           {result}
                         </p>
                       </div>

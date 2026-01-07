@@ -15,7 +15,7 @@ interface PortfolioGridProps {
 const categories = [
   { value: 'all', label: 'All Work' },
   { value: 'branding', label: 'Branding' },
-  { value: 'web', label: 'Digital' },
+  { value: 'web', label: 'Web' },
   { value: 'illustration', label: 'Art Direction' },
 ];
 
