@@ -1,17 +1,13 @@
-import imageUrlBuilder from '@sanity/image-url';
-import { projectId, dataset } from '../env';
-import { SanityImageSource } from '@sanity/image-url/lib/types/types';
+import createImageUrlBuilder from '@sanity/image-url'
+import type { Image } from 'sanity'
 
-// Create builder with project details (works even if client is null)
-const builder = imageUrlBuilder({
+import { dataset, projectId } from '../env'
+
+const imageBuilder = createImageUrlBuilder({
   projectId: projectId || '',
-  dataset: dataset || 'production',
-});
+  dataset: dataset || '',
+})
 
-export function urlFor(source: SanityImageSource) {
-  if (!source) {
-    return builder.image('/images/placeholder.jpg');
-  }
-  return builder.image(source);
+export const urlFor = (source: Image) => {
+  return imageBuilder.image(source)
 }
-
