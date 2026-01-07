@@ -28,6 +28,7 @@ export default defineType({
       options: {
         list: [
           { title: 'Design Work', value: 'design-work' },
+          { title: 'Art', value: 'art' },
           { title: 'Merch Drops', value: 'merch-drops' },
           { title: 'Food', value: 'food' },
           { title: 'Finds', value: 'finds' },

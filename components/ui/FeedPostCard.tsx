@@ -30,6 +30,7 @@ interface FeedPostCardProps {
 
 const categoryLabels: Record<string, string> = {
   'design-work': 'DESIGN WORK',
+  'art': 'ART',
   'merch-drops': 'MERCH DROPS',
   'food': 'FOOD',
   'finds': 'FINDS',
@@ -38,6 +39,7 @@ const categoryLabels: Record<string, string> = {
 
 const categoryColors: Record<string, string> = {
   'design-work': 'bg-teal',
+  'art': 'bg-black',
   'merch-drops': 'bg-teal',
   'food': 'bg-goldenrod',
   'finds': 'bg-red',
@@ -156,6 +158,44 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
             <p className="font-heading text-xs font-bold uppercase tracking-wide">
               {post.findHighlight}
             </p>
+          </div>
+        )}
+      </Link>
+    );
+  }
+
+  // ART - Gallery Style (Full image, no crop, transparent bg)
+  if (category === 'art') {
+    return (
+      <Link
+        href={href}
+        className="group block transition-all duration-300 relative h-full hover:-translate-y-1"
+      >
+        {/* Image */}
+        {imageUrl && (
+          <div className="relative w-full h-full min-h-[300px] flex items-center justify-center">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-cream-200 animate-pulse rounded-sm" />
+            )}
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-xl"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+            
+            {/* Minimal Hover Info */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6 backdrop-blur-[2px] rounded-sm">
+              <span className="font-heading font-bold text-white uppercase tracking-widest text-sm mb-2 border-b border-white pb-1">
+                {post.title}
+              </span>
+              <span className="font-body text-white/80 text-xs uppercase tracking-wider">
+                View Art
+              </span>
+            </div>
           </div>
         )}
       </Link>
