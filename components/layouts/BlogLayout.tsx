@@ -10,8 +10,10 @@ interface BlogLayoutProps {
 }
 
 export default function BlogLayout({ post }: BlogLayoutProps) {
-  const imageUrl = post.featuredImage || post.mainImage
-    ? urlFor(post.featuredImage || post.mainImage).width(1200).height(600).url()
+  // Use mainImage (standard post) or featuredImage (feedPost)
+  const image = post.mainImage || post.featuredImage;
+  const imageUrl = image
+    ? urlFor(image).width(1200).height(600).url()
     : null;
 
   const date = new Date(post.publishedAt).toLocaleDateString('en-US', {
