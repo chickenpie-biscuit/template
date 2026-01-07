@@ -12,7 +12,7 @@ interface AddToCartButtonProps {
 export default function AddToCartButton({ product }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const imageUrl = product.images?.[0]
-    ? urlFor(product.images[0]).width(400).height(400).url()
+    ? urlFor(product.images[0] as any).width(400).height(400).url()
     : '/images/placeholder.jpg';
 
   const handleAddToCart = () => {
