@@ -21,14 +21,15 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
           
           {/* Gallery Image (Matte effect) */}
           <div className="lg:col-span-8 order-2 lg:order-1">
-            <div className="bg-white p-8 md:p-16 shadow-2xl relative">
+            <div className="bg-white p-8 md:p-16 shadow-2xl relative min-h-[50vh] flex items-center justify-center">
               {imageUrl ? (
-                <div className="relative aspect-[4/5] w-full">
+                <div className="relative w-full h-full min-h-[50vh]">
                   <Image
                     src={imageUrl}
                     alt={post.featuredImage?.alt || post.title}
-                    fill
-                    className="object-contain"
+                    width={1600}
+                    height={1200}
+                    className="w-full h-auto object-contain max-h-[80vh] mx-auto"
                     priority
                   />
                 </div>

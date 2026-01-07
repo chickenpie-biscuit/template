@@ -34,7 +34,6 @@ export default function RootLayout({
         <SmoothScroll>
           <GSAPProvider>
             <CartProvider>
-              <CustomCursor />
               {children}
             </CartProvider>
           </GSAPProvider>
