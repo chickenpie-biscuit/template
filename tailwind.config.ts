@@ -45,6 +45,7 @@ const config: Config = {
       fontFamily: {
         heading: ['"Space Grotesk"', 'sans-serif'],
         body: ['"Space Mono"', 'monospace'],
+        pixel: ['"Press Start 2P"', 'cursive'],
       },
       typography: {
         DEFAULT: {

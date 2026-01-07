@@ -192,21 +192,49 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                 </div>
               )}
 
-              {/* Results & Impact */}
+              {/* Results & Impact - 8-Bit Retro Style */}
               {project.projectResults && project.projectResults.length > 0 && (
-                <div className="bg-black text-cream p-10 lg:p-14 border-4 border-black">
-                  <div className="flex items-center gap-3 mb-8">
+                <div className="bg-black text-goldenrod p-8 lg:p-12 border-4 border-goldenrod relative overflow-hidden">
+                  {/* Decorative Pixel Corners */}
+                  <div className="absolute top-0 left-0 w-4 h-4 bg-goldenrod" />
+                  <div className="absolute top-0 right-0 w-4 h-4 bg-goldenrod" />
+                  <div className="absolute bottom-0 left-0 w-4 h-4 bg-goldenrod" />
+                  <div className="absolute bottom-0 right-0 w-4 h-4 bg-goldenrod" />
+                  
+                  {/* Scanline Effect Overlay */}
+                  <div className="absolute inset-0 pointer-events-none opacity-10" 
+                    style={{
+                      backgroundImage: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))',
+                      backgroundSize: '100% 2px, 3px 100%'
+                    }}
+                  />
+
+                  <div className="flex items-center gap-4 mb-10 relative z-10">
                     <TrendingUp className="w-8 h-8 text-goldenrod" />
-                    <h2 className="font-heading font-bold uppercase text-3xl">Results & Impact</h2>
+                    <h2 className="font-pixel text-xl md:text-2xl uppercase text-goldenrod leading-relaxed tracking-widest">
+                      RESULTS_&_IMPACT
+                    </h2>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                     {project.projectResults.map((result: string, index: number) => (
-                      <div key={index} className="border-2 border-goldenrod p-6 bg-black/50">
-                        <p className="font-heading text-lg font-bold text-goldenrod">
+                      <div 
+                        key={index} 
+                        className="group border-2 border-goldenrod/30 bg-black/50 p-6 hover:border-goldenrod hover:bg-goldenrod/10 transition-all duration-300 relative"
+                      >
+                        {/* Pixel Bullet Point */}
+                        <div className="absolute top-6 left-4 w-2 h-2 bg-goldenrod animate-pulse" />
+                        
+                        <p className="font-pixel text-xs md:text-sm text-goldenrod pl-6 leading-loose">
                           {result}
                         </p>
                       </div>
                     ))}
+                  </div>
+                  
+                  {/* Terminal Blinking Cursor at bottom */}
+                  <div className="mt-8 font-pixel text-xs text-goldenrod/50 animate-pulse">
+                    _END_OF_REPORT
                   </div>
                 </div>
               )}
