@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
-import { Copy, Check, Sparkles } from 'lucide-react';
+import { Copy, Check, Sparkles, Zap } from 'lucide-react';
 import { useState } from 'react';
 
 interface PromptWeekLayoutProps {
@@ -24,39 +24,38 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
   };
 
   return (
-    <article className="min-h-screen bg-black text-cream">
-      {/* Hero Section - Cyberpunk/Tech Aesthetic */}
-      <div className="relative border-b-2 border-teal overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-teal/10 via-transparent to-red/10" />
-        <div className="absolute inset-0" 
+    <article className="min-h-screen bg-white">
+      {/* Hero Section - Clean Tech Aesthetic */}
+      <div className="relative border-b-4 border-black bg-cream overflow-hidden">
+        <div className="absolute inset-0 opacity-5" 
           style={{
-            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)',
+            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)',
           }}
         />
         
         <Container>
           <div className="relative py-20 lg:py-32">
             <div className="flex items-center gap-3 mb-6">
-              <Sparkles className="w-6 h-6 text-teal" />
-              <span className="font-heading font-bold uppercase text-xs tracking-[0.3em] text-teal">
+              <Sparkles className="w-6 h-6 text-goldenrod" />
+              <span className="font-heading font-bold uppercase text-xs tracking-[0.3em] text-black/60">
                 Prompt of the Week
               </span>
               {post.aiTool && (
                 <>
-                  <span className="text-teal">/</span>
-                  <span className="font-heading font-bold uppercase text-xs tracking-widest text-cream/60">
+                  <span className="text-black/20">/</span>
+                  <span className="font-heading font-bold uppercase text-xs tracking-widest text-goldenrod">
                     {post.aiTool}
                   </span>
                 </>
               )}
             </div>
             
-            <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-8 leading-[0.9] max-w-4xl">
+            <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-8 leading-[0.9] max-w-4xl text-black">
               {post.title}
             </h1>
 
             {post.description && (
-              <p className="text-xl lg:text-2xl text-cream/80 leading-relaxed max-w-2xl font-body">
+              <p className="text-xl lg:text-2xl text-black/70 leading-relaxed max-w-2xl font-body">
                 {post.description}
               </p>
             )}
@@ -65,24 +64,27 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
       </div>
 
       {/* Split Screen Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[80vh]">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
         {/* Left: The Prompt */}
-        <div className="bg-black border-b-2 lg:border-b-0 lg:border-r-2 border-teal p-8 lg:p-16 flex flex-col">
+        <div className="bg-white border-b-4 lg:border-b-0 lg:border-r-4 border-black p-8 lg:p-16 flex flex-col min-h-[600px]">
           <div className="mb-8">
-            <h2 className="font-heading font-bold uppercase text-2xl mb-4 text-teal flex items-center gap-3">
-              <span className="w-2 h-2 bg-teal rounded-full animate-pulse" />
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-0.5 bg-goldenrod" />
+              <Zap className="w-5 h-5 text-goldenrod" />
+            </div>
+            <h2 className="font-heading font-bold uppercase text-3xl text-black">
               The Prompt
             </h2>
           </div>
 
-          <div className="flex-1 relative">
-            <div className="bg-cream/5 border-2 border-teal/30 rounded-sm p-6 font-mono text-sm lg:text-base text-cream/90 leading-relaxed">
+          <div className="flex-1 relative mb-8">
+            <div className="bg-black border-4 border-black p-6 font-mono text-sm lg:text-base text-cream leading-relaxed shadow-xl">
               <pre className="whitespace-pre-wrap">{post.promptText}</pre>
             </div>
 
             <button
               onClick={copyPrompt}
-              className="absolute top-4 right-4 p-2 bg-teal text-black hover:bg-cream transition-colors rounded-sm flex items-center gap-2 font-heading text-xs font-bold uppercase"
+              className="absolute top-4 right-4 p-3 bg-goldenrod text-black hover:bg-cream hover:text-black transition-colors border-2 border-black flex items-center gap-2 font-heading text-xs font-bold uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
               {copied ? (
                 <>
@@ -98,12 +100,18 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
             </button>
           </div>
 
-          <div className="mt-8 pt-8 border-t-2 border-cream/10">
-            <h3 className="font-heading font-bold uppercase text-sm mb-4 text-cream/60 tracking-widest">
+          <div className="pt-8 border-t-2 border-black/10">
+            <h3 className="font-heading font-bold uppercase text-sm mb-4 text-goldenrod tracking-widest flex items-center gap-2">
+              <span className="w-6 h-0.5 bg-goldenrod" />
               Why It Works
             </h3>
             {post.body && (
-              <div className="prose prose-invert prose-sm max-w-none font-body text-cream/80">
+              <div className="prose prose-lg max-w-none font-body text-black/80
+                prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase prose-headings:text-black
+                prose-p:text-black/80 prose-p:leading-relaxed
+                prose-a:text-goldenrod prose-a:font-bold hover:prose-a:underline
+                prose-strong:text-black prose-strong:font-bold
+                prose-ul:text-black/80 prose-ol:text-black/80">
                 <PortableText content={post.body} />
               </div>
             )}
@@ -111,16 +119,19 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
         </div>
 
         {/* Right: The Result */}
-        <div className="bg-gradient-to-br from-teal/5 to-red/5 p-8 lg:p-16 flex flex-col items-center justify-center">
+        <div className="bg-cream p-8 lg:p-16 flex flex-col items-center justify-center min-h-[600px]">
           <div className="mb-8 w-full">
-            <h2 className="font-heading font-bold uppercase text-2xl text-cream flex items-center gap-3">
-              <span className="w-2 h-2 bg-red rounded-full animate-pulse" />
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-0.5 bg-red" />
+              <Sparkles className="w-5 h-5 text-red" />
+            </div>
+            <h2 className="font-heading font-bold uppercase text-3xl text-black">
               The Result
             </h2>
           </div>
 
           {resultImageUrl && (
-            <div className="relative w-full max-w-2xl aspect-square bg-black border-2 border-cream/20 shadow-2xl">
+            <div className="relative w-full max-w-2xl aspect-square bg-white border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] p-4">
               <Image
                 src={resultImageUrl}
                 alt={post.promptResult?.alt || 'AI Generated Result'}
@@ -132,9 +143,11 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
           )}
 
           <div className="mt-8 text-center">
-            <p className="text-xs font-heading uppercase tracking-widest text-cream/40">
-              Generated with {post.aiTool || 'AI'}
-            </p>
+            <div className="inline-block px-4 py-2 bg-black text-goldenrod border-2 border-black">
+              <p className="text-xs font-heading uppercase tracking-widest font-bold">
+                Generated with {post.aiTool || 'AI'}
+              </p>
+            </div>
           </div>
         </div>
       </div>

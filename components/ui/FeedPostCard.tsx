@@ -49,7 +49,7 @@ const categoryColors: Record<string, string> = {
   'design-work': 'bg-teal',
   'art': 'bg-black',
   'merch-drops': 'bg-red',
-  'prompt-week': 'bg-black',
+  'prompt-week': 'bg-goldenrod',
   'chronicles': 'bg-goldenrod',
   'tool-tuesday': 'bg-teal',
   'solopreneur': 'bg-teal',
@@ -83,43 +83,45 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
   // Truncate title for display
   const truncatedTitle = post.title.length > 60 ? post.title.substring(0, 60) + '...' : post.title;
 
-  // PROMPT OF THE WEEK - Tech/Code Aesthetic
+  // PROMPT OF THE WEEK - Clean Tech Aesthetic
   if (category === 'prompt-week') {
     return (
       <Link
         href={href}
-        className="group block border-2 border-teal bg-black hover:shadow-[8px_8px_0px_0px_rgba(0,221,221,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+        className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
-        <div className="relative p-8 min-h-[400px] flex flex-col">
+        <div className="relative p-8 min-h-[400px] flex flex-col bg-cream">
           {/* Category Badge */}
           <div className="flex items-center gap-2 mb-4">
-            <span className="w-2 h-2 bg-teal rounded-full animate-pulse" />
-            <span className="font-heading text-xs font-bold uppercase tracking-widest text-teal">
+            <div className="w-6 h-0.5 bg-goldenrod" />
+            <span className="font-heading text-xs font-bold uppercase tracking-widest text-goldenrod">
               {categoryLabel}
             </span>
           </div>
 
           {/* Title */}
-          <h3 className="font-heading text-2xl md:text-3xl font-bold uppercase text-cream leading-tight mb-4 flex-1">
+          <h3 className="font-heading text-2xl md:text-3xl font-bold uppercase text-black leading-tight mb-4 flex-1">
             {truncatedTitle}
           </h3>
 
           {/* Description */}
           {displayDescription && (
-            <p className="font-body text-sm text-cream/70 mb-4 line-clamp-3">
+            <p className="font-body text-sm text-black/70 mb-4 line-clamp-3">
               {displayDescription}
             </p>
           )}
 
+          {/* Code Preview */}
+          <div className="bg-black border-2 border-black p-3 font-mono text-xs text-goldenrod">
+            {"<AI_PROMPT>"} ...
+          </div>
+
           {/* Hover Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-teal via-teal/90 to-black/80 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center p-8 text-center">
-            <div className="font-mono text-black text-xs mb-4 bg-black/20 p-2 rounded">
-              {"<AI_PROMPT>"}
-            </div>
+          <div className="absolute inset-0 bg-goldenrod opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center p-8 text-center">
             <p className="font-heading text-black font-bold uppercase text-lg mb-4">
-              Copy Winning Prompt
+              Copy The Winning Prompt
             </p>
-            <div className="bg-black text-teal px-4 py-2 border-2 border-black font-heading text-sm font-bold uppercase">
+            <div className="bg-black text-goldenrod px-6 py-3 border-2 border-black font-heading text-sm font-bold uppercase shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
               VIEW PROMPT
             </div>
           </div>
