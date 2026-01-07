@@ -3,8 +3,17 @@ import { PortableTextBlock } from '@portabletext/types';
 export interface SanityImage {
   _type: 'image';
   asset: {
-    _ref: string;
-    _type: 'reference';
+    _ref?: string;
+    _type?: 'reference';
+    _id?: string;
+    url?: string;
+    metadata?: {
+      dimensions?: {
+        width: number;
+        height: number;
+        aspectRatio: number;
+      };
+    };
   };
   alt?: string;
 }

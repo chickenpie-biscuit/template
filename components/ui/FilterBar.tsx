@@ -9,10 +9,16 @@ import Container from './Container';
 const categories = [
   { label: 'All', value: 'all' },
   { label: 'Design', value: 'design-work' },
+  { label: 'Art', value: 'art' },
   { label: 'Merch', value: 'merch-drops' },
   { label: 'Food', value: 'food' },
   { label: 'Finds', value: 'finds' },
   { label: 'Thoughts', value: 'thoughts' },
+  { label: 'Prompts', value: 'prompt-week' },
+  { label: 'Chronicles', value: 'chronicles' },
+  { label: 'Tools', value: 'tool-tuesday' },
+  { label: 'Journey', value: 'solopreneur' },
+  { label: 'Swings', value: 'sunday-swings' },
 ];
 
 export default function FilterBar() {

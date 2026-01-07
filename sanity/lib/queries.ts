@@ -221,7 +221,24 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   findPrice,
   findHighlight,
   publishedAt,
-  featured
+  featured,
+  promptText,
+  promptResult,
+  aiTool,
+  toolName,
+  toolWebsite,
+  toolRating,
+  toolPrice,
+  toolPros,
+  toolCons,
+  weekNumber,
+  revenue,
+  metrics,
+  wins,
+  losses,
+  characterName,
+  episodeNumber,
+  storyIllustration
 }`;
 
 // Studio Project Queries - Includes both studioProject and feedPost with design-work category

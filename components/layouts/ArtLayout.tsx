@@ -10,8 +10,9 @@ interface ArtLayoutProps {
 }
 
 export default function ArtLayout({ post }: ArtLayoutProps) {
+  // Get full resolution image without cropping
   const imageUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(1600).height(1200).url()
+    ? urlFor(post.featuredImage).url()
     : null;
 
   return (

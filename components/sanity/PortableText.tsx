@@ -10,14 +10,15 @@ interface PortableTextProps {
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: { value: any }) => {
-      // Robust check for asset
-      if (!value?.asset?._ref) {
+      // Check for asset reference
+      if (!value?.asset) {
+        console.warn('PortableText image missing asset:', value);
         return null;
       }
 
       try {
-        const imageUrl = urlFor(value).url();
-        const alt = value.alt || 'Article image';
+        const imageUrl = urlFor(value).width(1200).url();
+        const alt = value.alt || value.caption || 'Article image';
 
         return (
           <figure className="my-12">
@@ -26,7 +27,7 @@ const components: PortableTextComponents = {
                 src={imageUrl}
                 alt={alt}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width: 768px) 100vw, 800px"
               />
             </div>
@@ -38,7 +39,7 @@ const components: PortableTextComponents = {
           </figure>
         );
       } catch (error) {
-        console.error('Error rendering PortableText image:', error);
+        console.error('Error rendering PortableText image:', error, value);
         return null;
       }
     },

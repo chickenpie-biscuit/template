@@ -11,6 +11,11 @@ import CommerceLayout from '@/components/layouts/CommerceLayout';
 import BlogLayout from '@/components/layouts/BlogLayout';
 import QuoteLayout from '@/components/layouts/QuoteLayout';
 import ReviewLayout from '@/components/layouts/ReviewLayout';
+import PromptWeekLayout from '@/components/layouts/PromptWeekLayout';
+import ChroniclesLayout from '@/components/layouts/ChroniclesLayout';
+import ToolTuesdayLayout from '@/components/layouts/ToolTuesdayLayout';
+import SolopreneurLayout from '@/components/layouts/SolopreneurLayout';
+import SundaySwingsLayout from '@/components/layouts/SundaySwingsLayout';
 
 interface FeedPostPageProps {
   params: { slug: string };
@@ -54,6 +59,16 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     LayoutComponent = QuoteLayout;
   } else if (post.category === 'finds') {
     LayoutComponent = ReviewLayout;
+  } else if (post.category === 'prompt-week') {
+    LayoutComponent = PromptWeekLayout;
+  } else if (post.category === 'chronicles') {
+    LayoutComponent = ChroniclesLayout;
+  } else if (post.category === 'tool-tuesday') {
+    LayoutComponent = ToolTuesdayLayout;
+  } else if (post.category === 'solopreneur') {
+    LayoutComponent = SolopreneurLayout;
+  } else if (post.category === 'sunday-swings') {
+    LayoutComponent = SundaySwingsLayout;
   }
 
   return (
