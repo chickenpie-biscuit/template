@@ -9,8 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 import ArtLayout from '@/components/layouts/ArtLayout';
 import CommerceLayout from '@/components/layouts/CommerceLayout';
 import BlogLayout from '@/components/layouts/BlogLayout';
-import QuoteLayout from '@/components/layouts/QuoteLayout';
-import ReviewLayout from '@/components/layouts/ReviewLayout';
+import DesignWorkLayout from '@/components/layouts/DesignWorkLayout';
 import PromptWeekLayout from '@/components/layouts/PromptWeekLayout';
 import ChroniclesLayout from '@/components/layouts/ChroniclesLayout';
 import ToolTuesdayLayout from '@/components/layouts/ToolTuesdayLayout';
@@ -47,18 +46,15 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     notFound();
   }
 
-  // Determine Layout based on Category or Type
-  // Default to BlogLayout for 'design-work', 'food', and unknown categories
+  // Determine Layout based on Category
   let LayoutComponent = BlogLayout;
 
-  if (post.category === 'art') {
+  if (post.category === 'design-work') {
+    LayoutComponent = DesignWorkLayout;
+  } else if (post.category === 'art') {
     LayoutComponent = ArtLayout;
   } else if (post.category === 'merch-drops') {
     LayoutComponent = CommerceLayout;
-  } else if (post.category === 'thoughts') {
-    LayoutComponent = QuoteLayout;
-  } else if (post.category === 'finds') {
-    LayoutComponent = ReviewLayout;
   } else if (post.category === 'prompt-week') {
     LayoutComponent = PromptWeekLayout;
   } else if (post.category === 'chronicles') {

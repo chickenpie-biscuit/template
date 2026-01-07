@@ -29,12 +29,9 @@ interface FeedPostCardProps {
 }
 
 const categoryLabels: Record<string, string> = {
-  'design-work': 'DESIGN WORK',
-  'art': 'ART',
-  'merch-drops': 'MERCH DROPS',
-  'food': 'FOOD',
-  'finds': 'FINDS',
-  'thoughts': 'THOUGHTS',
+  'design-work': 'CASE STUDY',
+  'art': 'GALLERY',
+  'merch-drops': 'DROP',
   'prompt-week': 'PROMPT OF THE WEEK',
   'chronicles': 'CHICKEN CHRONICLES',
   'tool-tuesday': 'TOOL TUESDAY',
@@ -45,10 +42,7 @@ const categoryLabels: Record<string, string> = {
 const categoryColors: Record<string, string> = {
   'design-work': 'bg-teal',
   'art': 'bg-black',
-  'merch-drops': 'bg-teal',
-  'food': 'bg-goldenrod',
-  'finds': 'bg-red',
-  'thoughts': 'bg-black',
+  'merch-drops': 'bg-red',
   'prompt-week': 'bg-black',
   'chronicles': 'bg-goldenrod',
   'tool-tuesday': 'bg-teal',
@@ -406,54 +400,79 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // ART - Gallery Style (Full image, no crop, transparent bg)
+  // ART - Museum Gallery Card
   if (category === 'art') {
     return (
       <Link
         href={href}
-        className="group block transition-all duration-300 relative h-full hover:-translate-y-1"
+        className="group block bg-white p-3 md:p-5 shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 relative"
       >
-        {/* Image */}
-        {imageUrl && (
-          <div className="relative w-full h-full min-h-[300px] flex items-center justify-center">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-cream-200 animate-pulse rounded-sm" />
+        {/* Frame effect */}
+        <div className="bg-gradient-to-br from-black/90 to-black/70 p-2">
+          {/* Inner matte */}
+          <div className="bg-white p-3 md:p-5">
+            {imageUrl && (
+              <div className="relative w-full aspect-[3/4] bg-cream-50">
+                {!imageLoaded && (
+                  <div className="absolute inset-0 bg-cream-200 animate-pulse" />
+                )}
+                <Image
+                  src={imageUrl}
+                  alt={post.featuredImage?.alt || post.title}
+                  fill
+                  className="object-contain group-hover:opacity-95 transition-opacity duration-500"
+                  placeholder={blurDataUrl ? 'blur' : 'empty'}
+                  blurDataURL={blurDataUrl}
+                  onLoad={() => setImageLoaded(true)}
+                />
+              </div>
             )}
-            <Image
-              src={imageUrl}
-              alt={post.featuredImage?.alt || post.title}
-              fill
-              className="object-contain group-hover:scale-105 transition-transform duration-500 drop-shadow-xl"
-              placeholder={blurDataUrl ? 'blur' : 'empty'}
-              blurDataURL={blurDataUrl}
-              onLoad={() => setImageLoaded(true)}
-            />
-            
-            {/* Minimal Hover Info */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center items-center text-center p-6 backdrop-blur-[2px] rounded-sm">
-              <span className="font-heading font-bold text-white uppercase tracking-widest text-sm mb-2 border-b border-white pb-1">
+          </div>
+        </div>
+        
+        {/* Gallery Plaque */}
+        <div className="mt-4 bg-white border border-black/10 p-4">
+          <div className="flex items-start gap-2 mb-2">
+            <div className="w-1 h-5 bg-black flex-shrink-0 mt-1" />
+            <div className="flex-1">
+              <p className="font-heading text-sm uppercase tracking-wider text-black font-bold line-clamp-2">
                 {post.title}
-              </span>
-              <span className="font-body text-white/80 text-xs uppercase tracking-wider">
-                View Art
-              </span>
+              </p>
+              {displayDescription && (
+                <p className="font-body text-xs text-black/60 mt-1 line-clamp-2">
+                  {displayDescription}
+                </p>
+              )}
             </div>
           </div>
-        )}
+          <div className="font-heading text-[10px] uppercase tracking-widest text-black/40">
+            {categoryLabel}
+          </div>
+        </div>
       </Link>
     );
   }
 
-  // MERCH DROPS - Product Card (Full image, no cropping)
+  // MERCH DROPS - Hype Drop Card (Supreme Style)
   if (category === 'merch-drops') {
+    const isLowStock = post.stock !== undefined && post.stock > 0 && post.stock <= 10;
+    const isSoldOut = post.stock !== undefined && post.stock <= 0;
+    
     return (
       <Link
         href={href}
-        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
+        className="group block border-2 border-black bg-black hover:shadow-[8px_8px_0px_0px_rgba(255,0,0,0.8)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
       >
-        {/* Image - Full product display */}
+        {/* LIMITED Badge */}
+        {post.limitedQuantity && (
+          <div className="absolute top-4 left-4 bg-red text-white px-3 py-1 border border-white font-heading text-[10px] font-bold uppercase tracking-widest z-20 rotate-[-2deg]">
+            Limited
+          </div>
+        )}
+
+        {/* Product Image on White BG */}
         {imageUrl && (
-          <div className="relative w-full aspect-square overflow-hidden bg-white flex items-center justify-center p-6">
+          <div className="relative w-full aspect-square bg-white flex items-center justify-center p-8 border-b-2 border-black">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-cream-200 animate-pulse" />
             )}
@@ -468,54 +487,141 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
                 onLoad={() => setImageLoaded(true)}
               />
             </div>
-            
-            {/* Hover Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-              <div className={`inline-block ${categoryColor} text-cream px-3 py-1 mb-3 self-start transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100`}>
-                <span className="font-heading text-xs font-bold tracking-wider">
-                  {categoryLabel}
-                </span>
-              </div>
-              <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-cream mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">
-                {truncatedTitle}
-              </h3>
-              {displayDescription && (
-                <p className="font-body text-sm text-cream/90 mb-4 line-clamp-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-200">
-                  {displayDescription}
-                </p>
-              )}
-              
-              {/* Price */}
-              {post.price && (
-                <div className="flex items-baseline gap-2 mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-250">
-                  <span className="font-heading text-2xl font-bold text-cream">
-                    ${post.price.toFixed(2)}
-                  </span>
-                  {post.originalPrice && (
-                    <span className="font-body text-sm line-through text-cream/60">
-                      ${post.originalPrice.toFixed(2)}
-                    </span>
-                  )}
-                </div>
-              )}
-
-              <div className="bg-cream text-black px-4 py-2 inline-block self-start border-2 border-cream font-heading text-sm font-bold uppercase transform group-hover:scale-110 transition-transform duration-300 delay-300">
-                SHOP NOW
-              </div>
-            </div>
           </div>
         )}
+
+        {/* Product Details on Black BG */}
+        <div className="p-6 bg-black text-white">
+          {/* Category Badge */}
+          <div className="flex items-center justify-between mb-3">
+            <span className={`${categoryColor} text-white px-2 py-1 font-heading text-[10px] font-bold uppercase tracking-widest`}>
+              {categoryLabel}
+            </span>
+            {isLowStock && (
+              <span className="text-red text-[10px] font-heading font-bold uppercase tracking-wider">
+                {post.stock} Left
+              </span>
+            )}
+            {isSoldOut && (
+              <span className="text-white/40 text-[10px] font-heading font-bold uppercase tracking-wider">
+                Sold Out
+              </span>
+            )}
+          </div>
+
+          {/* Title */}
+          <h3 className="font-heading text-lg md:text-xl font-bold uppercase text-white mb-2 line-clamp-2 leading-tight">
+            {truncatedTitle}
+          </h3>
+
+          {/* Price */}
+          {post.price && (
+            <div className="flex items-baseline gap-2 mb-3">
+              <span className="font-heading text-2xl font-bold text-white">
+                ${post.price}
+              </span>
+              {post.originalPrice && (
+                <span className="font-heading text-sm line-through text-white/40">
+                  ${post.originalPrice}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Description */}
+          {displayDescription && (
+            <p className="font-body text-xs text-white/70 mb-4 line-clamp-2">
+              {displayDescription}
+            </p>
+          )}
+
+          {/* CTA */}
+          <div className="bg-white text-black px-4 py-2 text-center border-2 border-white font-heading text-xs font-bold uppercase group-hover:bg-red group-hover:text-white group-hover:border-red transition-colors">
+            {isSoldOut ? 'SOLD OUT' : 'SHOP NOW'}
+          </div>
+        </div>
       </Link>
     );
   }
 
-  // DEFAULT (Design Work, Food) - Clean Card
+  // DESIGN WORK - Case Study Card
+  if (category === 'design-work') {
+    return (
+      <Link
+        href={href}
+        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,221,221,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
+      >
+        {/* Hero Image */}
+        {imageUrl && (
+          <div className="relative w-full aspect-video overflow-hidden bg-black">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-cream-200 animate-pulse" />
+            )}
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+            
+            {/* Category Badge on Image */}
+            <div className="absolute top-4 left-4 flex items-center gap-2">
+              <div className="w-8 h-0.5 bg-teal" />
+              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-teal">
+                {categoryLabel}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="p-6 bg-white">
+          {/* Title */}
+          <h3 className="font-heading text-2xl font-bold uppercase text-black mb-3 leading-tight line-clamp-2 group-hover:text-teal transition-colors">
+            {truncatedTitle}
+          </h3>
+
+          {/* Description */}
+          {displayDescription && (
+            <p className="font-body text-sm text-black/70 mb-4 line-clamp-3 leading-relaxed">
+              {displayDescription}
+            </p>
+          )}
+
+          {/* Meta Info (if client/year available) */}
+          <div className="flex items-center gap-4 text-xs font-heading uppercase tracking-wider text-black/40 mb-4">
+            {(post as any).client && (
+              <span>Client: {(post as any).client}</span>
+            )}
+            {(post as any).projectYear && (
+              <>
+                <span>•</span>
+                <span>{(post as any).projectYear}</span>
+              </>
+            )}
+          </div>
+
+          {/* CTA */}
+          <div className="inline-block px-4 py-2 border-2 border-teal bg-teal text-black font-heading text-xs font-bold uppercase group-hover:bg-black group-hover:text-teal group-hover:border-black transition-colors">
+            View Case Study
+          </div>
+        </div>
+      </Link>
+    );
+  }
+
+  // DEFAULT (fallback) - Simple Card
   return (
     <Link
       href={href}
-      className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
+      className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
     >
-      {/* Image */}
       {imageUrl && (
         <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
           {!imageLoaded && (
@@ -525,33 +631,19 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
             src={imageUrl}
             alt={post.featuredImage?.alt || post.title}
             fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
             placeholder={blurDataUrl ? 'blur' : 'empty'}
             blurDataURL={blurDataUrl}
             onLoad={() => setImageLoaded(true)}
           />
-          
-          {/* Hover Overlay - Gradient from bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6">
-            <div className={`inline-block ${categoryColor} text-cream px-3 py-1 mb-3 self-start transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100`}>
-              <span className="font-heading text-xs font-bold tracking-wider">
-                {categoryLabel}
-              </span>
-            </div>
-            <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-cream mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">
-              {truncatedTitle}
-            </h3>
-            {displayDescription && (
-              <p className="font-body text-sm text-cream/90 mb-4 line-clamp-3 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-200">
-                {displayDescription}
-              </p>
-            )}
-            <div className="bg-cream text-black px-4 py-2 inline-block self-start border-2 border-cream font-heading text-sm font-bold uppercase transform group-hover:scale-110 transition-transform duration-300 delay-250">
-              {post.ctaText || 'VIEW'}
-            </div>
-          </div>
         </div>
       )}
+      <div className="p-6">
+        <h3 className="font-heading text-xl font-bold uppercase mb-2">{truncatedTitle}</h3>
+        {displayDescription && (
+          <p className="font-body text-sm text-black/70 line-clamp-3">{displayDescription}</p>
+        )}
+      </div>
     </Link>
   );
 }

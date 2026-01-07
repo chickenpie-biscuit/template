@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
+import { Zap, Package, Clock, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface CommerceLayoutProps {
   post: any;
@@ -11,84 +13,184 @@ interface CommerceLayoutProps {
 
 export default function CommerceLayout({ post }: CommerceLayoutProps) {
   const imageUrl = post.featuredImage
-    ? urlFor(post.featuredImage).width(1200).height(1200).url()
+    ? urlFor(post.featuredImage).width(1200).url()
     : null;
 
+  const [timeUntilDrop, setTimeUntilDrop] = useState<string>('');
+  const isUpcoming = post.dropDate && new Date(post.dropDate) > new Date();
+  const isLimited = post.limitedQuantity;
+  const stockLow = post.stock !== undefined && post.stock > 0 && post.stock <= 10;
+  const soldOut = post.stock !== undefined && post.stock <= 0;
+
+  // Countdown timer
+  useEffect(() => {
+    if (!isUpcoming) return;
+    
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const dropTime = new Date(post.dropDate).getTime();
+      const distance = dropTime - now;
+
+      if (distance < 0) {
+        setTimeUntilDrop('LIVE NOW');
+        clearInterval(interval);
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      setTimeUntilDrop(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [post.dropDate, isUpcoming]);
+
   return (
-    <article className="min-h-screen bg-white">
+    <article className="min-h-screen bg-black text-white">
+      {/* Alert Banner */}
+      {isLimited && (
+        <div className="bg-red text-white text-center py-3 px-4 border-b-2 border-white/20 sticky top-0 z-50 backdrop-blur-sm bg-red/95">
+          <div className="flex items-center justify-center gap-2 font-heading text-xs font-bold uppercase tracking-widest">
+            <Zap className="w-4 h-4 animate-pulse" />
+            <span>LIMITED EDITION DROP</span>
+            <Zap className="w-4 h-4 animate-pulse" />
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         {/* Left: Product Image */}
-        <div className="relative h-[50vh] lg:h-screen bg-cream-100 flex items-center justify-center p-12 lg:sticky lg:top-0">
+        <div className="relative h-[60vh] lg:h-screen bg-white flex items-center justify-center p-12 lg:p-20 lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
           {imageUrl && (
-            <div className="relative w-full h-full max-w-2xl max-h-[80vh]">
+            <div className="relative w-full h-full max-w-2xl">
               <Image
                 src={imageUrl}
                 alt={post.featuredImage?.alt || post.title}
                 fill
-                className="object-contain"
+                className="object-contain drop-shadow-2xl"
                 priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
+            </div>
+          )}
+          
+          {/* Drop Badge */}
+          {isLimited && (
+            <div className="absolute top-8 left-8 bg-red text-white px-6 py-3 border-2 border-white font-heading font-bold uppercase text-sm rotate-[-4deg] shadow-xl">
+              Limited
             </div>
           )}
         </div>
 
         {/* Right: Product Details */}
-        <div className="flex flex-col justify-center p-8 lg:p-24 bg-white">
+        <div className="flex flex-col justify-center p-8 lg:p-16 bg-black">
           <div className="max-w-xl mx-auto w-full">
-            <div className="flex items-center gap-4 mb-6">
-              <span className="px-3 py-1 bg-teal text-cream text-xs font-heading font-bold uppercase tracking-widest">
-                Merch Drop
+            {/* Product Type Badge */}
+            <div className="flex items-center gap-3 mb-6">
+              <Package className="w-5 h-5 text-teal" />
+              <span className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-teal">
+                {post.productType || 'Merch Drop'}
               </span>
-              {post.productType && (
-                <span className="text-xs font-heading font-bold uppercase tracking-widest text-black/40">
-                  {post.productType}
-                </span>
-              )}
             </div>
 
-            <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-4 leading-none">
+            {/* Product Title */}
+            <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-8 leading-[0.9] text-white">
               {post.title}
             </h1>
 
+            {/* Countdown or Stock Warning */}
+            {isUpcoming && timeUntilDrop && (
+              <div className="bg-teal text-black p-6 mb-8 border-2 border-teal">
+                <div className="flex items-center gap-3 mb-2">
+                  <Clock className="w-6 h-6" />
+                  <span className="font-heading text-xs font-bold uppercase tracking-wider">Drops In:</span>
+                </div>
+                <p className="font-heading text-3xl font-bold tabular-nums">
+                  {timeUntilDrop}
+                </p>
+              </div>
+            )}
+
+            {stockLow && !soldOut && (
+              <div className="bg-red/20 border-2 border-red text-red p-4 mb-8 flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                <p className="font-heading text-sm font-bold uppercase">
+                  Only {post.stock} Left in Stock!
+                </p>
+              </div>
+            )}
+
             {/* Price */}
             {post.price && (
-              <div className="flex items-baseline gap-4 mb-8">
-                <span className="text-4xl font-heading font-bold">
-                  ${post.price}
-                </span>
-                {post.originalPrice && (
-                  <span className="text-xl font-body text-black/40 line-through">
-                    ${post.originalPrice}
+              <div className="mb-8">
+                <div className="flex items-baseline gap-4 mb-2">
+                  <span className="text-5xl font-heading font-bold text-white">
+                    ${post.price}
                   </span>
+                  {post.originalPrice && (
+                    <span className="text-2xl font-heading text-white/40 line-through">
+                      ${post.originalPrice}
+                    </span>
+                  )}
+                </div>
+                {post.originalPrice && (
+                  <p className="text-sm font-heading text-teal font-bold uppercase">
+                    Save ${(post.originalPrice - post.price).toFixed(2)}
+                  </p>
                 )}
               </div>
             )}
 
-            <div className="h-px bg-black/10 w-full mb-8" />
+            <div className="h-px bg-white/20 w-full mb-8" />
 
             {/* Description */}
-            <div className="prose prose-lg font-body text-black/80 mb-12">
-              <p className="text-xl leading-relaxed mb-6">
+            {post.description && (
+              <p className="text-xl text-white/80 leading-relaxed mb-8 font-body">
                 {post.description}
               </p>
-              {post.body && <PortableText content={post.body} />}
-            </div>
+            )}
 
-            {/* Sticky Mobile CTA / Desktop CTA */}
-            <div className="sticky bottom-0 lg:relative py-4 lg:py-0 bg-white/95 lg:bg-transparent backdrop-blur-md lg:backdrop-blur-none border-t border-black/10 lg:border-0">
-              {post.stock !== undefined && post.stock <= 0 ? (
-                <button disabled className="w-full py-5 bg-gray-200 text-gray-500 font-heading font-bold uppercase cursor-not-allowed">
+            {/* Details */}
+            {post.body && (
+              <div className="prose prose-invert prose-lg max-w-none font-body mb-12
+                prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase
+                prose-p:text-white/70 prose-p:leading-relaxed
+                prose-a:text-teal prose-a:font-bold hover:prose-a:underline
+                prose-strong:text-white prose-strong:font-bold
+                prose-ul:text-white/70">
+                <PortableText content={post.body} />
+              </div>
+            )}
+
+            {/* CTA Buttons */}
+            <div className="space-y-4">
+              {soldOut ? (
+                <button disabled className="w-full py-5 bg-white/10 text-white/40 font-heading font-bold uppercase cursor-not-allowed border-2 border-white/20">
                   Sold Out
                 </button>
-              ) : (
-                <button className="w-full py-5 bg-black text-cream font-heading font-bold uppercase hover:bg-teal hover:text-black transition-colors text-lg">
-                  Add to Cart — ${post.price}
+              ) : isUpcoming ? (
+                <button className="w-full py-5 bg-teal text-black hover:bg-white hover:text-black transition-colors border-2 border-teal font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,221,221,0.3)]">
+                  Notify Me When Available
                 </button>
-              )}
-              {post.stock !== undefined && post.stock > 0 && post.stock < 10 && (
-                <p className="text-xs font-heading font-bold uppercase text-red-500 mt-3 text-center">
-                  Low Stock: Only {post.stock} left
-                </p>
+              ) : (
+                <>
+                  <button className="w-full py-5 bg-white text-black hover:bg-teal hover:text-black transition-colors border-2 border-white font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(255,255,255,0.3)] hover:-translate-y-0.5 transition-all">
+                    Add to Cart — ${post.price}
+                  </button>
+                  {post.ctaLink && (
+                    <a
+                      href={post.ctaLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block w-full py-4 text-center border-2 border-white/30 text-white hover:border-white hover:bg-white/10 transition-colors font-heading font-bold uppercase"
+                    >
+                      Learn More
+                    </a>
+                  )}
+                </>
               )}
             </div>
           </div>
