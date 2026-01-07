@@ -19,9 +19,15 @@ interface FeedPost {
   ctaLink?: string;
   price?: number;
   originalPrice?: number;
-  findPrice?: string;
-  findHighlight?: string;
   author?: string;
+  // Design Work fields
+  client?: string;
+  projectYear?: string;
+  // Merch Drops fields
+  stock?: number;
+  limitedQuantity?: boolean;
+  dropDate?: string;
+  productType?: string;
 }
 
 interface FeedPostCardProps {
