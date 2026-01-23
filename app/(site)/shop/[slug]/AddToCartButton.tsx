@@ -36,7 +36,7 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
   return (
     <Button
       size="lg"
-      className="w-full"
+      className="w-full bg-goldenrod text-black hover:bg-black hover:text-goldenrod border-2 border-black font-heading font-bold uppercase transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5"
       onClick={handleAddToCart}
       disabled={isOutOfStock || added}
       aria-label={`Add ${product.title} to cart`}

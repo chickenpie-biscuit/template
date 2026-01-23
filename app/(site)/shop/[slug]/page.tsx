@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import ProductCard from '@/components/ui/ProductCard';
+import ProductGallery from '@/components/shop/ProductGallery';
 import PortableText from '@/components/sanity/PortableText';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -74,13 +75,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
     .filter(p => (p as any).productType === (product as any).productType || p.featured)
     .slice(0, 4);
 
-  // Handle both product and feedPost image structures
-  const images = product.images || [(product as any).featuredImage].filter(Boolean);
-  const mainImage = images[0];
-  const mainImageUrl = mainImage
-    ? urlFor(mainImage as any).width(1000).height(1000).url()
-    : '/images/placeholder.jpg';
-
   // Product status
   const isLimited = (product as any).limitedQuantity;
   const stockLow = product.stock !== undefined && product.stock > 0 && product.stock <= 10;
@@ -133,67 +127,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <section className="py-12 lg:py-20">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            {/* Product Images */}
-            <div className="space-y-4">
-              {/* Main Image */}
-              <div className="aspect-square relative bg-black/5 border-4 border-black overflow-hidden shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <Image
-                  src={mainImageUrl}
-                  alt={mainImage?.alt || product.title}
-                  fill
-                  className={`object-cover ${soldOut ? 'grayscale opacity-60' : ''}`}
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-                
-                {/* Badges */}
-                <div className="absolute top-4 left-4 flex flex-col gap-2">
-                  {isLimited && (
-                    <span className="px-4 py-2 bg-red text-cream font-heading font-bold uppercase text-sm border-2 border-cream">
-                      Limited
-                    </span>
-                  )}
-                  {hasDiscount && (
-                    <span className="px-4 py-2 bg-goldenrod text-black font-heading font-bold uppercase text-sm">
-                      -{discountPercent}% Off
-                    </span>
-                  )}
-                </div>
-
-                {soldOut && (
-                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
-                    <span className="px-8 py-4 bg-cream text-black font-heading font-bold uppercase text-xl border-4 border-black">
-                      Sold Out
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Thumbnail Gallery */}
-              {images.length > 1 && (
-                <div className="grid grid-cols-4 gap-3">
-                  {images.slice(0, 4).map((image: any, index: number) => {
-                    const thumbUrl = urlFor(image).width(200).height(200).url();
-                    return (
-                      <div
-                        key={index}
-                        className={`aspect-square relative border-2 border-black overflow-hidden cursor-pointer hover:border-teal transition-colors ${
-                          index === 0 ? 'ring-2 ring-teal ring-offset-2' : ''
-                        }`}
-                      >
-                        <Image
-                          src={thumbUrl}
-                          alt={image.alt || `${product.title} ${index + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="100px"
-                        />
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
+            {/* Product Images (Client Component) */}
+            <ProductGallery product={product} />
 
             {/* Product Info */}
             <div className="lg:sticky lg:top-32 lg:self-start">
@@ -222,7 +157,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     <span className="text-xl font-heading text-black/40 line-through">
                       {formatPrice((product as any).originalPrice)}
                     </span>
-                    <span className="px-3 py-1 bg-goldenrod text-black font-heading font-bold uppercase text-xs">
+                    <span className="px-3 py-1 bg-goldenrod text-black font-heading font-bold uppercase text-xs border border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
                       Save {formatPrice((product as any).originalPrice - product.price)}
                     </span>
                   </>
