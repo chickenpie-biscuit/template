@@ -440,7 +440,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // QUOTES - Minimal Quote Card (Text fills area, scales based on length)
+  // QUOTES - Minimal Quote Card (Text never cropped, scales based on length)
   if (category === 'quotes') {
     // Only navigate if CTA link is provided
     const hasLink = post.ctaLink && post.ctaLink.trim() !== '';
@@ -450,20 +450,22 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     const charCount = quoteText.length;
     
     // Dynamic font sizing: fewer chars = bigger text, more chars = smaller text
-    // Range: 2-10 chars = huge (clamp 4-6rem), 10-50 = large (2-4rem), 50-150 = medium (1.5-2rem), 150+ = small (1-1.5rem)
     const getFontSizeClass = () => {
-      if (charCount <= 15) return 'text-5xl md:text-6xl lg:text-7xl'; // Very short - huge
-      if (charCount <= 40) return 'text-4xl md:text-5xl lg:text-6xl'; // Short - large
-      if (charCount <= 80) return 'text-3xl md:text-4xl lg:text-5xl'; // Medium-short
-      if (charCount <= 120) return 'text-2xl md:text-3xl lg:text-4xl'; // Medium
-      if (charCount <= 180) return 'text-xl md:text-2xl lg:text-3xl'; // Medium-long
-      return 'text-lg md:text-xl lg:text-2xl'; // Long text
+      if (charCount <= 15) return 'text-4xl md:text-5xl lg:text-6xl'; // Very short - huge
+      if (charCount <= 40) return 'text-3xl md:text-4xl lg:text-5xl'; // Short - large
+      if (charCount <= 80) return 'text-2xl md:text-3xl lg:text-4xl'; // Medium-short
+      if (charCount <= 120) return 'text-xl md:text-2xl lg:text-3xl'; // Medium
+      if (charCount <= 200) return 'text-lg md:text-xl lg:text-2xl'; // Medium-long
+      return 'text-base md:text-lg lg:text-xl'; // Long text
     };
     
+    // Has background image?
+    const hasImage = !!imageUrl;
+    
     const cardContent = (
-      <div className="group relative aspect-square flex flex-col justify-center items-center p-6 md:p-8 overflow-hidden bg-black">
-        {/* Background Image (always fills) */}
-        {imageUrl ? (
+      <div className={`group relative min-h-[280px] flex flex-col justify-center items-center p-8 md:p-10 overflow-hidden ${hasImage ? 'bg-black' : 'bg-cream'}`}>
+        {/* Background Image (only if uploaded) */}
+        {hasImage && (
           <>
             <Image
               src={imageUrl}
@@ -476,29 +478,27 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/50" />
           </>
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
         )}
         
-        {/* Quote Content - Fills the entire area */}
-        <div className="relative z-10 flex flex-col justify-center items-center text-center w-full h-full px-4">
-          {/* Quote Text (Title) - Scales to fill */}
-          <blockquote className={`font-heading font-black text-white leading-[1.1] uppercase tracking-tight ${getFontSizeClass()}`}>
-            {quoteText}
+        {/* Quote Content */}
+        <div className="relative z-10 flex flex-col justify-center items-center text-center w-full">
+          {/* Quote Text (Title) - Never cropped */}
+          <blockquote className={`font-heading font-black leading-[1.15] uppercase tracking-tight ${getFontSizeClass()} ${hasImage ? 'text-white' : 'text-black'}`}>
+            &ldquo;{quoteText}&rdquo;
           </blockquote>
           
-          {/* Attribution (Description) - Small at bottom */}
+          {/* Attribution (Description) */}
           {displayDescription && (
-            <cite className="absolute bottom-4 left-4 right-4 font-body text-xs md:text-sm text-white/60 not-italic text-center">
+            <cite className={`mt-6 font-body text-sm not-italic ${hasImage ? 'text-white/70' : 'text-black/60'}`}>
               — {displayDescription}
             </cite>
           )}
           
           {/* CTA if link exists - appears on hover */}
           {hasLink && (
-            <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="inline-block bg-white text-black px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider">
-                {post.ctaText || 'Read'}
+            <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className={`inline-block px-4 py-2 font-heading text-xs font-bold uppercase tracking-wider ${hasImage ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                {post.ctaText || 'Read More'}
               </span>
             </div>
           )}
@@ -521,11 +521,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     }
 
     // No link - just render the card (not clickable)
-    return (
-      <div>
-        {cardContent}
-      </div>
-    );
+    return <div>{cardContent}</div>;
   }
 
   // ART - Clean Gallery Card (Large Image, No Background)
