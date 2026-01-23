@@ -2,7 +2,20 @@
 
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
-import { TrendingUp, TrendingDown, Target, Award, AlertCircle, BarChart3 } from 'lucide-react';
+import { urlFor } from '@/sanity/lib/image';
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  Target, 
+  Award, 
+  AlertCircle, 
+  Rocket,
+  Calendar,
+  DollarSign,
+  ArrowUpRight,
+  Zap,
+  Coffee
+} from 'lucide-react';
 
 interface SolopreneurLayoutProps {
   post: any;
@@ -26,123 +39,172 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
   };
 
   return (
-    <article className="min-h-screen bg-black text-cream">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-teal to-goldenrod border-b-2 border-cream">
+    <article className="min-h-screen bg-cream">
+      {/* Hero Header - Gradient Banner */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-teal via-teal-200 to-goldenrod">
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-20 -right-20 w-64 h-64 bg-goldenrod/30 rounded-full blur-3xl" />
+          <div className="absolute -bottom-32 -left-20 w-80 h-80 bg-teal-300/40 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-cream/10 rounded-full blur-2xl" />
+        </div>
+        
         <Container>
-          <div className="py-12 lg:py-16">
-            <div className="flex items-center gap-3 mb-4">
-              <BarChart3 className="w-8 h-8 text-black" />
-              <span className="font-heading font-bold uppercase text-sm tracking-[0.3em] text-black">
+          <div className="relative py-16 lg:py-24">
+            {/* Category Badge */}
+            <div className="inline-flex items-center gap-3 mb-6 bg-black/90 text-cream px-5 py-3 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
+              <Rocket className="w-5 h-5" />
+              <span className="font-heading font-bold uppercase text-sm tracking-[0.2em]">
                 Solopreneur Sundays
               </span>
             </div>
             
-            <div className="flex items-baseline gap-4 mb-6">
-              <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase leading-none text-black">
+            {/* Week Number & Date */}
+            <div className="flex flex-wrap items-end gap-6 mb-8">
+              <h1 className="text-7xl lg:text-9xl font-heading font-bold uppercase leading-none text-black drop-shadow-sm">
                 Week {post.weekNumber || '—'}
               </h1>
               {post.publishedAt && (
-                <time className="font-heading text-lg text-black/70">
-                  {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric'
-                  })}
-                </time>
+                <div className="flex items-center gap-2 mb-2">
+                  <Calendar className="w-5 h-5 text-black/70" />
+                  <time className="font-heading text-lg text-black/80 font-bold uppercase tracking-wide">
+                    {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}
+                  </time>
+                </div>
               )}
             </div>
 
-            <h2 className="text-3xl lg:text-4xl font-heading font-bold text-black/90 max-w-3xl">
+            {/* Title */}
+            <h2 className="text-3xl lg:text-5xl font-heading font-bold text-black max-w-4xl leading-tight">
               {post.title}
             </h2>
+
+            {/* Description */}
+            {post.description && (
+              <p className="mt-6 text-xl font-body text-black/80 max-w-2xl leading-relaxed">
+                {post.description}
+              </p>
+            )}
           </div>
         </Container>
       </div>
 
       <Container>
-        <div className="py-16 lg:py-24 max-w-6xl mx-auto">
-          {/* Revenue Highlight */}
+        <div className="py-16 lg:py-20 max-w-6xl mx-auto">
+          
+          {/* Revenue Highlight Card */}
           {post.revenue !== undefined && post.revenue !== null && (
-            <div className="mb-16 bg-gradient-to-br from-teal/20 to-goldenrod/20 border-2 border-teal p-12 text-center">
-              <p className="font-heading uppercase text-xs tracking-[0.3em] text-teal mb-4">
-                This Week&apos;s Revenue
-              </p>
-              <p className="text-7xl lg:text-8xl font-heading font-bold text-cream mb-2">
-                {formatCurrency(post.revenue)}
-              </p>
-              <div className="w-24 h-1 bg-teal mx-auto" />
+            <div className="mb-16 relative">
+              <div className="bg-black text-cream p-10 lg:p-16 border-4 border-black shadow-[8px_8px_0px_0px_rgba(78,205,196,1)]">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <DollarSign className="w-10 h-10 text-teal" />
+                  <p className="font-heading uppercase text-sm tracking-[0.3em] text-teal font-bold">
+                    This Week&apos;s Revenue
+                  </p>
+                </div>
+                <p className="text-7xl lg:text-9xl font-heading font-bold text-cream text-center">
+                  {formatCurrency(post.revenue)}
+                </p>
+                <div className="flex justify-center mt-6">
+                  <div className="w-32 h-1 bg-gradient-to-r from-teal to-goldenrod" />
+                </div>
+              </div>
             </div>
           )}
 
           {/* Metrics Grid */}
           {post.metrics && post.metrics.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-              {post.metrics.map((metric: any, i: number) => {
-                const changeInfo = parseChange(metric.change);
-                return (
-                  <div
-                    key={i}
-                    className="bg-cream/5 border-2 border-cream/20 p-6 hover:border-teal transition-colors"
-                  >
-                    <p className="font-heading uppercase text-xs tracking-widest text-cream/60 mb-3">
-                      {metric.label}
-                    </p>
-                    <p className="text-4xl font-heading font-bold text-cream mb-2">
-                      {metric.value}
-                    </p>
-                    {changeInfo && (
-                      <div className={`flex items-center gap-2 text-sm font-heading ${
-                        changeInfo.isPositive ? 'text-teal' :
-                        changeInfo.isNegative ? 'text-red' : 'text-cream/60'
-                      }`}>
-                        {changeInfo.isPositive && <TrendingUp className="w-4 h-4" />}
-                        {changeInfo.isNegative && <TrendingDown className="w-4 h-4" />}
-                        <span>{changeInfo.value}</span>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div className="mb-16">
+              <h3 className="font-heading font-bold uppercase text-2xl mb-8 flex items-center gap-3 text-black">
+                <Zap className="w-7 h-7 text-goldenrod" />
+                Key Metrics
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {post.metrics.map((metric: any, i: number) => {
+                  const changeInfo = parseChange(metric.change);
+                  const colors = [
+                    { bg: 'bg-teal', border: 'border-teal', shadow: 'shadow-[4px_4px_0px_0px_rgba(78,205,196,1)]' },
+                    { bg: 'bg-goldenrod', border: 'border-goldenrod', shadow: 'shadow-[4px_4px_0px_0px_rgba(244,162,97,1)]' },
+                    { bg: 'bg-red', border: 'border-red', shadow: 'shadow-[4px_4px_0px_0px_rgba(231,76,60,1)]' },
+                  ];
+                  const color = colors[i % colors.length];
+                  
+                  return (
+                    <div
+                      key={i}
+                      className={`bg-cream border-4 border-black p-8 ${color.shadow} hover:-translate-y-1 transition-transform`}
+                    >
+                      <p className="font-heading uppercase text-xs tracking-[0.2em] text-black/60 mb-4 font-bold">
+                        {metric.label}
+                      </p>
+                      <p className="text-5xl font-heading font-bold text-black mb-3">
+                        {metric.value}
+                      </p>
+                      {changeInfo && (
+                        <div className={`inline-flex items-center gap-2 text-sm font-heading font-bold px-3 py-1 ${
+                          changeInfo.isPositive ? 'bg-teal/20 text-teal-300' :
+                          changeInfo.isNegative ? 'bg-red/20 text-red-300' : 'bg-black/10 text-black/60'
+                        }`}>
+                          {changeInfo.isPositive && <TrendingUp className="w-4 h-4" />}
+                          {changeInfo.isNegative && <TrendingDown className="w-4 h-4" />}
+                          <span>{changeInfo.value}</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
 
-          {/* Wins & Losses */}
+          {/* Wins & Challenges Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
             {/* Wins */}
             {post.wins && post.wins.length > 0 && (
-              <div className="bg-teal/10 border-2 border-teal p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <Award className="w-8 h-8 text-teal" />
-                  <h3 className="font-heading font-bold uppercase text-2xl text-cream">
+              <div className="bg-teal border-4 border-black p-8 lg:p-10 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-14 h-14 bg-black flex items-center justify-center">
+                    <Award className="w-8 h-8 text-teal" />
+                  </div>
+                  <h3 className="font-heading font-bold uppercase text-3xl text-black">
                     Wins
                   </h3>
                 </div>
-                <ul className="space-y-4">
+                <ul className="space-y-5">
                   {post.wins.map((win: string, i: number) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <Target className="w-5 h-5 text-teal mt-1 flex-shrink-0" />
-                      <span className="font-body text-lg text-cream/90">{win}</span>
+                    <li key={i} className="flex items-start gap-4 group">
+                      <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-goldenrod transition-colors">
+                        <Target className="w-4 h-4 text-cream" />
+                      </div>
+                      <span className="font-body text-lg text-black leading-relaxed">{win}</span>
                     </li>
                   ))}
                 </ul>
               </div>
             )}
 
-            {/* Losses/Challenges */}
+            {/* Challenges */}
             {post.losses && post.losses.length > 0 && (
-              <div className="bg-red/10 border-2 border-red p-8">
-                <div className="flex items-center gap-3 mb-6">
-                  <AlertCircle className="w-8 h-8 text-red" />
-                  <h3 className="font-heading font-bold uppercase text-2xl text-cream">
+              <div className="bg-goldenrod border-4 border-black p-8 lg:p-10 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-14 h-14 bg-black flex items-center justify-center">
+                    <AlertCircle className="w-8 h-8 text-goldenrod" />
+                  </div>
+                  <h3 className="font-heading font-bold uppercase text-3xl text-black">
                     Challenges
                   </h3>
                 </div>
-                <ul className="space-y-4">
+                <ul className="space-y-5">
                   {post.losses.map((loss: string, i: number) => (
-                    <li key={i} className="flex items-start gap-3">
-                      <div className="w-2 h-2 bg-red rounded-full mt-3 flex-shrink-0" />
-                      <span className="font-body text-lg text-cream/90">{loss}</span>
+                    <li key={i} className="flex items-start gap-4 group">
+                      <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-red transition-colors">
+                        <Coffee className="w-4 h-4 text-cream" />
+                      </div>
+                      <span className="font-body text-lg text-black leading-relaxed">{loss}</span>
                     </li>
                   ))}
                 </ul>
@@ -150,47 +212,75 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
             )}
           </div>
 
-          {/* Insights & Story */}
+          {/* Body Content / Insights Section */}
           {post.body && (
-            <div className="bg-cream/5 border-2 border-cream/20 p-8 lg:p-12">
-              <h3 className="font-heading font-bold uppercase text-3xl mb-8 text-cream flex items-center gap-3">
-                <span className="w-1 h-8 bg-goldenrod" />
+            <div className="mb-16 bg-cream border-4 border-black p-8 lg:p-12 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
+              <h3 className="font-heading font-bold uppercase text-3xl mb-10 text-black flex items-center gap-4">
+                <span className="w-2 h-10 bg-gradient-to-b from-teal to-goldenrod" />
                 Insights & Lessons
               </h3>
-              <div className="prose prose-lg prose-invert max-w-none font-body
-                prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase prose-headings:text-cream
-                prose-p:text-cream/80 prose-p:leading-relaxed
-                prose-a:text-teal prose-a:font-bold hover:prose-a:underline
-                prose-strong:text-cream prose-strong:font-bold
-                prose-ul:text-cream/80 prose-ol:text-cream/80">
+              <div className="
+                font-body text-lg text-black/90 leading-relaxed
+                [&_h1]:font-heading [&_h1]:font-bold [&_h1]:uppercase [&_h1]:text-4xl [&_h1]:text-black [&_h1]:mt-10 [&_h1]:mb-6
+                [&_h2]:font-heading [&_h2]:font-bold [&_h2]:uppercase [&_h2]:text-3xl [&_h2]:text-black [&_h2]:mt-10 [&_h2]:mb-6
+                [&_h3]:font-heading [&_h3]:font-bold [&_h3]:uppercase [&_h3]:text-2xl [&_h3]:text-black [&_h3]:mt-8 [&_h3]:mb-4
+                [&_h4]:font-heading [&_h4]:font-bold [&_h4]:uppercase [&_h4]:text-xl [&_h4]:text-black [&_h4]:mt-6 [&_h4]:mb-4
+                [&_p]:mb-6 [&_p]:leading-relaxed
+                [&_a]:text-teal-300 [&_a]:font-bold [&_a]:underline [&_a]:underline-offset-4 hover:[&_a]:text-red
+                [&_strong]:text-black [&_strong]:font-bold
+                [&_em]:italic
+                [&_code]:bg-black [&_code]:text-teal [&_code]:px-2 [&_code]:py-1 [&_code]:font-body [&_code]:text-sm
+                [&_blockquote]:border-l-4 [&_blockquote]:border-teal [&_blockquote]:pl-6 [&_blockquote]:py-2 [&_blockquote]:my-8 [&_blockquote]:bg-teal/10 [&_blockquote]:italic [&_blockquote]:text-black/80
+                [&_ul]:my-6 [&_ul]:ml-0 [&_ul]:space-y-3
+                [&_ol]:my-6 [&_ol]:ml-0 [&_ol]:space-y-3 [&_ol]:list-decimal [&_ol]:list-inside
+                [&_li]:flex [&_li]:items-start [&_li]:gap-3
+                [&_ul_li]:before:content-['→'] [&_ul_li]:before:text-teal [&_ul_li]:before:font-bold [&_ul_li]:before:flex-shrink-0
+                [&_img]:my-8 [&_img]:border-4 [&_img]:border-black [&_img]:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
+              ">
                 <PortableText content={post.body} />
+              </div>
+            </div>
+          )}
+
+          {/* Featured Image */}
+          {post.featuredImage && (
+            <div className="mb-16">
+              <div className="border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+                <img
+                  src={urlFor(post.featuredImage).width(1200).height(675).url()}
+                  alt={post.featuredImage.alt || post.title}
+                  className="w-full h-auto"
+                />
               </div>
             </div>
           )}
 
           {/* CTA Button */}
           {post.ctaLink && (
-            <div className="mt-16 text-center">
+            <div className="text-center mb-16">
               <a
                 href={post.ctaLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-10 py-4 bg-teal text-black hover:bg-goldenrod hover:text-black border-2 border-teal hover:border-goldenrod font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,221,221,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(218,165,32,0.3)] hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center gap-3 px-10 py-5 bg-black text-cream hover:bg-teal hover:text-black border-4 border-black font-heading font-bold uppercase text-xl shadow-[6px_6px_0px_0px_rgba(78,205,196,1)] hover:shadow-[6px_6px_0px_0px_rgba(244,162,97,1)] hover:-translate-y-1 transition-all"
               >
                 {post.ctaText || 'Learn More'}
+                <ArrowUpRight className="w-6 h-6" />
               </a>
             </div>
           )}
 
           {/* Footer Note */}
-          <div className="mt-12 pt-8 border-t-2 border-cream/10 text-center">
-            <p className="font-body text-cream/60 italic">
-              Building in public, one week at a time. Follow the journey.
-            </p>
+          <div className="pt-10 border-t-4 border-black text-center">
+            <div className="inline-flex items-center gap-4 bg-gradient-to-r from-teal to-goldenrod px-8 py-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+              <Rocket className="w-6 h-6 text-black" />
+              <p className="font-heading font-bold uppercase text-sm tracking-widest text-black">
+                Building in public, one week at a time
+              </p>
+            </div>
           </div>
         </div>
       </Container>
     </article>
   );
 }
-
