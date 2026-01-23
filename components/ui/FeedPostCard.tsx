@@ -189,38 +189,49 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
         {imageUrl && (
-          <div className="relative w-full aspect-square overflow-hidden bg-cream-100 border-b-4 border-black flex items-center justify-center p-8">
+          <div className="relative w-full aspect-[4/3] overflow-hidden bg-black border-b-4 border-black">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-teal/10 animate-pulse" />
+            )}
             <Image
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
               fill
-              className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
               placeholder={blurDataUrl ? 'blur' : 'empty'}
               blurDataURL={blurDataUrl}
               onLoad={() => setImageLoaded(true)}
             />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* Category Badge on image */}
+            <div className="absolute top-4 left-4 bg-teal text-black px-3 py-1.5 border-2 border-black">
+              <span className="font-heading text-xs font-bold uppercase tracking-wider">
+                {categoryLabel}
+              </span>
+            </div>
           </div>
         )}
 
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="bg-teal text-black px-3 py-1 font-heading text-xs font-bold uppercase tracking-wider">
-              {categoryLabel}
-            </div>
-          </div>
-
-          <h3 className="font-heading text-2xl font-bold uppercase text-black leading-tight mb-3">
+        <div className="p-5 bg-cream">
+          <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-black leading-tight mb-2 group-hover:text-teal transition-colors">
             {truncatedTitle}
           </h3>
 
           {displayDescription && (
-            <p className="font-body text-black/70 mb-4 line-clamp-3">
+            <p className="font-body text-sm text-black/70 mb-4 line-clamp-2">
               {displayDescription}
             </p>
           )}
 
-          <div className="bg-black text-cream px-4 py-2 inline-block border-2 border-black font-heading text-sm font-bold uppercase group-hover:bg-teal group-hover:text-black transition-colors">
-            READ REVIEW
+          <div className="flex items-center justify-between">
+            <div className="text-black/50 font-heading text-[10px] uppercase tracking-wider">
+              Tool Review
+            </div>
+            <div className="bg-black text-teal px-3 py-1.5 font-heading text-xs font-bold uppercase group-hover:bg-teal group-hover:text-black transition-colors">
+              Read Review
+            </div>
           </div>
         </div>
       </Link>
