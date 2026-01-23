@@ -18,8 +18,8 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
 
   return (
     <article className="min-h-screen bg-cream">
-      {/* Minimal Header */}
-      <div className="border-b border-black/10 bg-white/50 backdrop-blur-sm sticky top-0 z-40">
+      {/* Minimal Header - z-30 to stay below global back button */}
+      <div className="border-b border-black/10 bg-white/50 backdrop-blur-sm sticky top-0 z-30">
         <Container>
           <div className="py-6 flex items-center gap-3">
             <Palette className="w-5 h-5 text-black/40" />
