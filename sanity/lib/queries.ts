@@ -269,8 +269,8 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   cuisine
 }`;
 
-// Studio Project Queries - Includes both studioProject and feedPost with design-work category
-export const getAllStudioProjects = groq`*[_type == "studioProject" || (_type == "feedPost" && category == "design-work")] | order(publishedAt desc) {
+// Studio Project Queries - Only studioProject type (feedPost design-work stays in feed only)
+export const getAllStudioProjects = groq`*[_type == "studioProject"] | order(publishedAt desc) {
   _id,
   _type,
   title,
