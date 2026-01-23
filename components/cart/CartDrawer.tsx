@@ -9,11 +9,13 @@ import Button from '@/components/ui/Button';
 import { getStripe } from '@/lib/stripe';
 
 interface CartDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
+  // isOpen: boolean; // Removed props
+  // onClose: () => void;
 }
 
-export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
+export default function CartDrawer() {
+  const isOpen = useCartStore((state) => state.isCartOpen);
+  const onClose = useCartStore((state) => state.closeCart);
   const items = useCartStore((state) => state.items);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const removeItem = useCartStore((state) => state.removeItem);

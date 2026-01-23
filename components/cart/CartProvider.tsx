@@ -1,13 +1,18 @@
 'use client';
 
 import { ReactNode } from 'react';
+import CartDrawer from './CartDrawer';
 
 interface CartProviderProps {
   children: ReactNode;
 }
 
 export default function CartProvider({ children }: CartProviderProps) {
-  // Zustand store is global, so we just need to render children
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <CartDrawer />
+    </>
+  );
 }
 

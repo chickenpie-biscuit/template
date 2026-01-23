@@ -11,6 +11,7 @@ export interface CartItem {
 
 interface CartStore {
   items: CartItem[];
+  isCartOpen: boolean;
   addItem: (product: {
     id: string;
     name: string;
@@ -22,12 +23,16 @@ interface CartStore {
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
+  openCart: () => void;
+  closeCart: () => void;
+  toggleCart: () => void;
 }
 
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      isCartOpen: false,
       addItem: (product) => {
         const items = get().items;
         const existingItem = items.find((item) => item.id === product.id);
@@ -39,10 +44,12 @@ export const useCartStore = create<CartStore>()(
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             ),
+            isCartOpen: true, // Open cart when adding item
           });
         } else {
           set({
             items: [...items, { ...product, quantity: 1 }],
+            isCartOpen: true, // Open cart when adding item
           });
         }
       },
@@ -74,9 +81,13 @@ export const useCartStore = create<CartStore>()(
       getItemCount: () => {
         return get().items.reduce((count, item) => count + item.quantity, 0);
       },
+      openCart: () => set({ isCartOpen: true }),
+      closeCart: () => set({ isCartOpen: false }),
+      toggleCart: () => set((state) => ({ isCartOpen: !state.isCartOpen })),
     }),
     {
       name: 'cart-storage',
+      partialize: (state) => ({ items: state.items }), // Don't persist UI state like isCartOpen
     }
   )
 );
