@@ -12,6 +12,8 @@ import AdBannerComponent from '@/components/ui/AdBanner';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Calendar, User, ArrowLeft, Share2, BookOpen } from 'lucide-react';
+import ArticleSchema from '@/components/seo/ArticleSchema';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -31,9 +33,57 @@ export async function generateMetadata({
     };
   }
 
+  // Generate OG image URL
+  const ogImageUrl = post.seo?.ogImage 
+    ? urlFor(post.seo.ogImage).width(1200).height(630).url()
+    : post.mainImage
+    ? urlFor(post.mainImage as any).width(1200).height(630).url()
+    : null;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const postUrl = `${siteUrl}/blog/${slug}`;
+
   return {
-    title: `${post.title} | Chickenpie`,
-    description: post.excerpt || post.title,
+    title: post.seo?.metaTitle || `${post.title} | Chickenpie`,
+    description: post.seo?.metaDescription || post.excerpt || post.title,
+    keywords: post.seo?.keywords || post.tags || [],
+    alternates: {
+      canonical: post.seo?.canonicalUrl || postUrl,
+    },
+    openGraph: {
+      type: 'article',
+      title: post.seo?.metaTitle || post.title,
+      description: post.seo?.metaDescription || post.excerpt || post.title,
+      url: postUrl,
+      siteName: 'Chickenpie',
+      locale: 'en_US',
+      publishedTime: post.publishedAt,
+      authors: [post.author || 'Chickenpie'],
+      images: ogImageUrl ? [{
+        url: ogImageUrl,
+        width: 1200,
+        height: 630,
+        alt: post.seo?.ogImage?.alt || post.title,
+      }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.seo?.metaTitle || post.title,
+      description: post.seo?.metaDescription || post.excerpt || post.title,
+      images: ogImageUrl ? [ogImageUrl] : [],
+      creator: '@chickenpie',
+    },
+    robots: {
+      index: !post.seo?.noIndex,
+      follow: !post.seo?.noFollow,
+      googleBot: {
+        index: !post.seo?.noIndex,
+        follow: !post.seo?.noFollow,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
   };
 }
 
@@ -63,8 +113,33 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const wordCount = post.body ? JSON.stringify(post.body).split(/\s+/).length : 0;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const postUrl = `${siteUrl}/blog/${slug}`;
+
   return (
-    <article className="min-h-screen bg-cream">
+    <>
+      {/* Structured Data - Article Schema */}
+      <ArticleSchema
+        title={post.title}
+        description={post.excerpt || post.title}
+        datePublished={post.publishedAt || new Date().toISOString()}
+        dateModified={post._updatedAt || post.publishedAt || new Date().toISOString()}
+        author={post.author || 'Chickenpie'}
+        imageUrl={imageUrl || undefined}
+        url={postUrl}
+        category={post.categories?.[0]?.title}
+        keywords={post.categories?.map(cat => cat.title) || []}
+      />
+      
+      {/* Breadcrumb Schema */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Blog', url: `${siteUrl}/blog` },
+          { name: post.title, url: postUrl },
+        ]}
+      />
+      
+      <article className="min-h-screen bg-cream">
       {/* Hero Section */}
       <section className="relative bg-black overflow-hidden">
         {imageUrl ? (

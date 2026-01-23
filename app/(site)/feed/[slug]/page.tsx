@@ -21,6 +21,8 @@ import SolopreneurLayout from '@/components/layouts/SolopreneurLayout';
 import SundaySwingsLayout from '@/components/layouts/SundaySwingsLayout';
 import NomNomLayout from '@/components/layouts/NomNomLayout';
 import CourseReviewLayout from '@/components/layouts/CourseReviewLayout';
+import ArticleSchema from '@/components/seo/ArticleSchema';
+import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 
 interface FeedPostPageProps {
   params: { slug: string };
@@ -52,33 +54,45 @@ export async function generateMetadata({
     };
   }
 
-  // Generate OG image URL from featured image
-  const ogImageUrl = post.featuredImage 
+  // Generate OG image URL (prioritize SEO ogImage, then featuredImage)
+  const ogImageUrl = post.seo?.ogImage
+    ? urlFor(post.seo.ogImage).width(1200).height(630).url()
+    : post.featuredImage 
     ? urlFor(post.featuredImage).width(1200).height(630).url()
     : null;
   
   const categoryLabel = categoryLabels[post.category] || post.category;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
   const postUrl = `${siteUrl}/feed/${post.slug}`;
+  
+  // Combine SEO keywords with category
+  const allKeywords = [
+    ...(post.seo?.keywords || []),
+    categoryLabel,
+    'Chickenpie',
+    'creative',
+    'design',
+    post.title
+  ].filter(Boolean);
 
   return {
-    title: `${post.title} | Chickenpie`,
-    description: post.description || `${categoryLabel} - Creative content from Chickenpie`,
-    keywords: [categoryLabel, 'Chickenpie', 'creative', 'design', post.title].filter(Boolean),
+    title: post.seo?.metaTitle || `${post.title} | Chickenpie`,
+    description: post.seo?.metaDescription || post.description || `${categoryLabel} - Creative content from Chickenpie`,
+    keywords: allKeywords,
     authors: [{ name: 'Chickenpie' }],
     creator: 'Chickenpie',
     publisher: 'Chickenpie',
     
     // Canonical URL
     alternates: {
-      canonical: postUrl,
+      canonical: post.seo?.canonicalUrl || postUrl,
     },
     
     // Open Graph
     openGraph: {
       type: 'article',
-      title: post.title,
-      description: post.description || `${categoryLabel} - Creative content from Chickenpie`,
+      title: post.seo?.metaTitle || post.title,
+      description: post.seo?.metaDescription || post.description || `${categoryLabel} - Creative content from Chickenpie`,
       url: postUrl,
       siteName: 'Chickenpie',
       locale: 'en_US',
@@ -89,7 +103,7 @@ export async function generateMetadata({
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: post.title,
+          alt: post.seo?.ogImage?.alt || post.title,
         },
       ] : [],
     },
@@ -97,19 +111,19 @@ export async function generateMetadata({
     // Twitter Card
     twitter: {
       card: 'summary_large_image',
-      title: post.title,
-      description: post.description || `${categoryLabel} - Creative content from Chickenpie`,
+      title: post.seo?.metaTitle || post.title,
+      description: post.seo?.metaDescription || post.description || `${categoryLabel} - Creative content from Chickenpie`,
       images: ogImageUrl ? [ogImageUrl] : [],
       creator: '@chickenpie',
     },
     
     // Robots
     robots: {
-      index: true,
-      follow: true,
+      index: !post.seo?.noIndex,
+      follow: !post.seo?.noFollow,
       googleBot: {
-        index: true,
-        follow: true,
+        index: !post.seo?.noIndex,
+        follow: !post.seo?.noFollow,
         'max-video-preview': -1,
         'max-image-preview': 'large',
         'max-snippet': -1,
@@ -161,8 +175,37 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   const showSidebarBanner = ['art', 'chronicles', 'prompt-week', 'tool-tuesday', 'solopreneur', 'sunday-swings', 'nom-nom'].includes(post.category);
   const sidebarBanners = banners?.filter(b => b.placement === 'sidebar') || [];
 
+  // SEO data
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const postUrl = `${siteUrl}/feed/${params.slug}`;
+  const categoryLabel = categoryLabels[post.category] || post.category;
+  const imageUrl = post.featuredImage 
+    ? urlFor(post.featuredImage).width(1200).height(630).url()
+    : null;
+
   return (
     <>
+      {/* Structured Data - Article Schema */}
+      <ArticleSchema
+        title={post.title}
+        description={post.description || categoryLabel}
+        datePublished={post.publishedAt || new Date().toISOString()}
+        dateModified={post._updatedAt || post.publishedAt || new Date().toISOString()}
+        author={post.author || 'Chickenpie'}
+        imageUrl={imageUrl || undefined}
+        url={postUrl}
+        category={categoryLabel}
+        keywords={[categoryLabel]}
+      />
+      
+      {/* Breadcrumb Schema */}
+      <BreadcrumbSchema
+        items={[
+          { name: categoryLabel, url: `${siteUrl}/?filter=${post.category}` },
+          { name: post.title, url: postUrl },
+        ]}
+      />
+      
       {/* Global Back Button (Fixed) - Hidden on commerce layouts, z-[45] to be above layout elements */}
       {showBackButton && (
         <div className="fixed top-28 left-6 z-[45] hidden lg:block">

@@ -4,6 +4,7 @@ import Script from 'next/script';
 import './globals.css';
 import CartProvider from '@/components/cart/CartProvider';
 import SmoothScroll from '@/components/providers/SmoothScroll';
+import OrganizationSchema from '@/components/seo/OrganizationSchema';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -49,6 +50,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           />
         </noscript>
+        
+        {/* Structured Data - Organization Schema */}
+        <OrganizationSchema />
+        
         <SmoothScroll>
           <CartProvider>
             {children}

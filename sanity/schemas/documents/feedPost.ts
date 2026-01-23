@@ -589,6 +589,16 @@ export default defineType({
       description: 'External link for Finds/Tools, or leave empty for internal post',
     }),
     defineField({
+      name: 'seo',
+      title: 'SEO Settings',
+      type: 'seo',
+      description: 'Search engine optimization settings',
+      options: {
+        collapsible: true,
+        collapsed: true,
+      },
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',

@@ -66,6 +66,16 @@ export const postType = defineType({
       description: 'Short summary for feeds and SEO',
     }),
     defineField({
+      name: 'seo',
+      title: 'SEO Settings',
+      type: 'seo',
+      description: 'Search engine optimization settings',
+      options: {
+        collapsible: true,
+        collapsed: true,
+      },
+    }),
+    defineField({
       name: 'body',
       title: 'Body',
       type: 'array',

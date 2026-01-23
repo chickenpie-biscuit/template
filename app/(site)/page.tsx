@@ -3,6 +3,7 @@ import { getAllFeedPosts, getFeedPostsByCategory, getActiveBanners } from '@/san
 import FilterBar from '@/components/ui/FilterBar';
 import FeedContent from '@/components/ui/FeedContent';
 import { AdBanner } from '@/types/sanity';
+import WebSiteSchema from '@/components/seo/WebSiteSchema';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -31,9 +32,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-cream w-full">
-      <FilterBar />
-      <FeedContent initialPosts={posts} initialFilter={filter} banners={banners} />
-    </div>
+    <>
+      {/* Structured Data - WebSite Schema */}
+      <WebSiteSchema />
+      
+      <div className="min-h-screen bg-cream w-full">
+        <FilterBar />
+        <FeedContent initialPosts={posts} initialFilter={filter} banners={banners} />
+      </div>
+    </>
   );
 }

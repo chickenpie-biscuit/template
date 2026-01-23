@@ -8,6 +8,8 @@ import studioProject from './documents/studioProject';
 import contactSubmission from './documents/contactSubmission';
 import seo from './objects/seo';
 import link from './objects/link';
+import seoImage from './objects/seoImage';
+import review from './objects/review';
 
 export const schemaTypes = [
   // Start with minimal post schema
@@ -23,5 +25,7 @@ export const schemaTypes = [
   // Objects
   seo,
   link,
+  seoImage,
+  review,
 ];
 

@@ -145,6 +145,16 @@ export default defineType({
       description: 'Show in featured section',
     }),
     defineField({
+      name: 'seo',
+      title: 'SEO Settings',
+      type: 'seo',
+      description: 'Search engine optimization settings',
+      options: {
+        collapsible: true,
+        collapsed: true,
+      },
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
