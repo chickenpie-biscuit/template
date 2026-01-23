@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
 import { urlFor } from '@/sanity/lib/image';
@@ -245,11 +246,12 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
           {/* Featured Image */}
           {post.featuredImage && (
             <div className="mb-16">
-              <div className="border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-                <img
+              <div className="relative border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden aspect-video">
+                <Image
                   src={urlFor(post.featuredImage).width(1200).height(675).url()}
                   alt={post.featuredImage.alt || post.title}
-                  className="w-full h-auto"
+                  fill
+                  className="object-cover"
                 />
               </div>
             </div>
