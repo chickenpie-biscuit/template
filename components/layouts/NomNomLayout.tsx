@@ -212,7 +212,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
               {videoEmbed && (
                 <div className="mb-12">
                   <h2 className="font-heading text-2xl font-bold uppercase text-black mb-6 flex items-center gap-2">
-                    <span>🎬</span> Watch How It's Made
+                    <span>🎬</span> Watch How It&apos;s Made
                   </h2>
                   <div className="relative w-full aspect-video bg-black border-4 border-black overflow-hidden">
                     <iframe
