@@ -165,7 +165,8 @@ export const getActiveBanners = groq`*[_type == "adBanner" && active == true] | 
   placement,
   displayOrder,
   startDate,
-  endDate
+  endDate,
+  active
 }`;
 
 // Feed Post Queries - Includes both feedPost and regular blog posts
