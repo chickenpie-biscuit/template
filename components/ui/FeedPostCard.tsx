@@ -44,6 +44,7 @@ const categoryLabels: Record<string, string> = {
   'solopreneur': 'SOLOPRENEUR SUNDAYS',
   'sunday-swings': 'SUNDAY SWINGS',
   'nom-nom': 'NOM NOM',
+  'quotes': 'QUOTE',
 };
 
 const categoryColors: Record<string, string> = {
@@ -56,6 +57,7 @@ const categoryColors: Record<string, string> = {
   'solopreneur': 'bg-teal',
   'sunday-swings': 'bg-goldenrod',
   'nom-nom': 'bg-orange-500',
+  'quotes': 'bg-black/80',
 };
 
 function FeedPostCard({ post }: FeedPostCardProps) {
@@ -435,6 +437,82 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+    );
+  }
+
+  // QUOTES - Minimal Quote Card (No Border, Optional BG Image)
+  if (category === 'quotes') {
+    // Only navigate if CTA link is provided
+    const hasLink = post.ctaLink && post.ctaLink.trim() !== '';
+    
+    const cardContent = (
+      <div className="group relative min-h-[300px] md:min-h-[400px] flex flex-col justify-center items-center p-8 overflow-hidden">
+        {/* Background Image (optional) */}
+        {imageUrl && (
+          <>
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || 'Quote background'}
+              fill
+              className="object-cover opacity-30 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+          </>
+        )}
+        
+        {/* Quote Content */}
+        <div className="relative z-10 text-center max-w-lg">
+          {/* Quote Mark */}
+          <div className="text-6xl md:text-8xl font-heading text-black/10 leading-none mb-4">
+            &ldquo;
+          </div>
+          
+          {/* Quote Text (Title) */}
+          <blockquote className="font-heading text-xl md:text-2xl lg:text-3xl font-bold text-black leading-tight mb-6">
+            {post.title}
+          </blockquote>
+          
+          {/* Attribution (Description) */}
+          {displayDescription && (
+            <cite className="font-body text-sm text-black/60 not-italic">
+              — {displayDescription}
+            </cite>
+          )}
+          
+          {/* CTA if link exists */}
+          {hasLink && (
+            <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className="inline-block bg-black text-cream px-4 py-2 font-heading text-xs font-bold uppercase tracking-wider">
+                {post.ctaText || 'Learn More'}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+
+    // If has link, wrap in Link component
+    if (hasLink) {
+      return (
+        <Link
+          href={post.ctaLink!}
+          target={post.ctaLink!.startsWith('http') ? '_blank' : undefined}
+          rel="noopener noreferrer"
+          className="block bg-cream hover:bg-cream/80 transition-colors"
+        >
+          {cardContent}
+        </Link>
+      );
+    }
+
+    // No link - just render the card (not clickable)
+    return (
+      <div className="bg-cream">
+        {cardContent}
+      </div>
     );
   }
 

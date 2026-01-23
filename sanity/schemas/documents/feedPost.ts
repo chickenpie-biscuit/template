@@ -36,6 +36,7 @@ export default defineType({
           { title: 'Solopreneur Sundays', value: 'solopreneur' },
           { title: 'Sunday Swings', value: 'sunday-swings' },
           { title: 'Nom Nom', value: 'nom-nom' },
+          { title: 'Quotes', value: 'quotes' },
         ],
         layout: 'radio',
       },
