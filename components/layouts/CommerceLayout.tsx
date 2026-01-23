@@ -83,17 +83,17 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         {/* Left: Product Image Gallery with Pagination */}
         <div className="relative h-[70vh] lg:h-screen bg-white flex flex-col items-center justify-center lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
-          {/* Back Button */}
+          {/* Back Button - positioned top right to avoid LIMITED badge */}
           <Link 
             href="/shop"
-            className="absolute top-6 left-6 z-20 flex items-center gap-2 group"
+            className="absolute top-6 right-6 z-20 flex items-center gap-2 group"
           >
-            <div className="w-10 h-10 rounded-full border-2 border-black bg-white flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300 shadow-lg">
-              <ArrowLeft size={16} />
-            </div>
-            <span className="font-heading font-bold uppercase text-xs tracking-widest text-black opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-              Shop
+            <span className="font-heading font-bold uppercase text-xs tracking-widest text-black opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+              Back
             </span>
+            <div className="w-10 h-10 rounded-full border-2 border-black bg-cream flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+              <ArrowLeft size={16} className="rotate-180" />
+            </div>
           </Link>
           {/* Main Image - Full Width, No Padding */}
           <div className="relative w-full h-full flex items-center justify-center">
