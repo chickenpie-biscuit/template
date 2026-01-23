@@ -440,30 +440,31 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // QUOTES - Minimal Quote Card (Text never cropped, scales based on length)
+  // QUOTES - Minimal Quote Card (Text scales to fit, never cropped)
   if (category === 'quotes') {
     // Only navigate if CTA link is provided
     const hasLink = post.ctaLink && post.ctaLink.trim() !== '';
     
-    // Calculate font size based on text length
+    // Calculate font size based on text length - more aggressive scaling
     const quoteText = post.title || '';
     const charCount = quoteText.length;
     
-    // Dynamic font sizing: fewer chars = bigger text, more chars = smaller text
+    // Dynamic font sizing: aggressive scaling to always fit in square
     const getFontSizeClass = () => {
-      if (charCount <= 15) return 'text-4xl md:text-5xl lg:text-6xl'; // Very short - huge
-      if (charCount <= 40) return 'text-3xl md:text-4xl lg:text-5xl'; // Short - large
-      if (charCount <= 80) return 'text-2xl md:text-3xl lg:text-4xl'; // Medium-short
-      if (charCount <= 120) return 'text-xl md:text-2xl lg:text-3xl'; // Medium
-      if (charCount <= 200) return 'text-lg md:text-xl lg:text-2xl'; // Medium-long
-      return 'text-base md:text-lg lg:text-xl'; // Long text
+      if (charCount <= 10) return 'text-3xl md:text-4xl'; // Very short
+      if (charCount <= 25) return 'text-2xl md:text-3xl'; // Short
+      if (charCount <= 50) return 'text-xl md:text-2xl'; // Medium-short
+      if (charCount <= 80) return 'text-lg md:text-xl'; // Medium
+      if (charCount <= 120) return 'text-base md:text-lg'; // Medium-long
+      if (charCount <= 180) return 'text-sm md:text-base'; // Long
+      return 'text-xs md:text-sm'; // Very long
     };
     
     // Has background image?
     const hasImage = !!imageUrl;
     
     const cardContent = (
-      <div className={`group relative min-h-[280px] flex flex-col justify-center items-center p-8 md:p-10 overflow-hidden ${hasImage ? 'bg-black' : 'bg-cream'}`}>
+      <div className={`group relative aspect-square flex flex-col justify-center items-center p-6 overflow-hidden ${hasImage ? 'bg-black' : 'bg-cream'}`}>
         {/* Background Image (only if uploaded) */}
         {hasImage && (
           <>
@@ -480,25 +481,25 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </>
         )}
         
-        {/* Quote Content */}
-        <div className="relative z-10 flex flex-col justify-center items-center text-center w-full">
-          {/* Quote Text (Title) - Never cropped */}
-          <blockquote className={`font-heading font-black leading-[1.15] uppercase tracking-tight ${getFontSizeClass()} ${hasImage ? 'text-white' : 'text-black'}`}>
+        {/* Quote Content - Constrained to fit */}
+        <div className="relative z-10 flex flex-col justify-center items-center text-center w-full h-full px-2">
+          {/* Quote Text (Title) - Scales down to fit */}
+          <blockquote className={`font-heading font-black leading-[1.1] uppercase tracking-tight break-words hyphens-auto ${getFontSizeClass()} ${hasImage ? 'text-white' : 'text-black'}`}>
             &ldquo;{quoteText}&rdquo;
           </blockquote>
           
-          {/* Attribution (Description) */}
+          {/* Attribution (Description) - At bottom */}
           {displayDescription && (
-            <cite className={`mt-6 font-body text-sm not-italic ${hasImage ? 'text-white/70' : 'text-black/60'}`}>
+            <cite className={`absolute bottom-6 left-6 right-6 font-body text-xs not-italic text-center truncate ${hasImage ? 'text-white/70' : 'text-black/60'}`}>
               — {displayDescription}
             </cite>
           )}
           
           {/* CTA if link exists - appears on hover */}
           {hasLink && (
-            <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className={`inline-block px-4 py-2 font-heading text-xs font-bold uppercase tracking-wider ${hasImage ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                {post.ctaText || 'Read More'}
+            <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className={`inline-block px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider ${hasImage ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                {post.ctaText || 'Read'}
               </span>
             </div>
           )}
