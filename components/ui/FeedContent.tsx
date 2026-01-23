@@ -6,7 +6,7 @@ import FeedPostCard from './FeedPostCard';
 import SkeletonCard from './SkeletonCard';
 import AdBannerComponent from './AdBanner';
 import { client } from '@/sanity/lib/client';
-import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
+import { getAllFeedPosts, getAllFeedPostsAsc, getFeedPostsByCategory, getFeedPostsByCategoryAsc } from '@/sanity/lib/queries';
 import { AdBanner } from '@/types/sanity';
 
 interface FeedPost {
@@ -39,6 +39,7 @@ const BANNER_INTERVAL = 15; // Show banner every 15 posts
 export default function FeedContent({ initialPosts, initialFilter, banners = [] }: FeedContentProps) {
   const searchParams = useSearchParams();
   const filter = searchParams.get('filter') || 'all';
+  const sort = searchParams.get('sort') || 'newest';
   const [posts, setPosts] = useState<FeedPost[]>(initialPosts);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialPosts.length >= POSTS_PER_PAGE);
@@ -66,12 +67,18 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
     });
   }, [posts]);
 
-  // Reset when filter changes
+  // Reset when filter or sort changes
   useEffect(() => {
     const fetchFilteredPosts = async () => {
       setLoading(true);
       try {
-        const query = filter === 'all' ? getAllFeedPosts : getFeedPostsByCategory;
+        let query;
+        if (filter === 'all') {
+          query = sort === 'oldest' ? getAllFeedPostsAsc : getAllFeedPosts;
+        } else {
+          query = sort === 'oldest' ? getFeedPostsByCategoryAsc : getFeedPostsByCategory;
+        }
+        
         const params = filter === 'all' ? {} : { category: filter };
         const newPosts = await client?.fetch(query, params).catch(() => []) ?? [];
         setPosts(newPosts.slice(0, POSTS_PER_PAGE));
@@ -84,19 +91,43 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
       }
     };
 
-    // Always fetch when filter changes
-    setPosts(initialPosts);
-    if (filter !== initialFilter) {
-      fetchFilteredPosts();
+    // If initial load matches params, don't refetch
+    // But since we can't easily know if initialPosts are sorted correctly without checking params,
+    // we should fetch if sort or filter changed from initial props.
+    // However, initialPosts are server-fetched and might not respect the client-side params immediately if page is cached?
+    // Actually, on first render with matching params, we should use initialPosts.
+    // But if user clicks sort, we need to fetch.
+    
+    if (filter === initialFilter && sort === 'newest') { // Assuming initial is always newest
+        // Check if we need to set posts back to initial if coming back to default state?
+        // Simpler approach: Fetch if params differ from defaults or if we navigated.
+        // Actually, let's just fetch if the current state doesn't match the desired filter/sort
+        // Optimization: if filter/sort match initial props, reset to initialPosts?
+        // But initialPosts is static from server time.
+        
+        // Let's just always fetch if it's NOT the first render or if params changed.
+        // But useEffect runs on mount. 
+        // We'll skip fetch if it matches initial state AND we haven't fetched yet?
+        // Let's stick to the existing logic pattern: fetch if filter changes. Now also if sort changes.
     }
-  }, [filter, initialFilter, initialPosts]);
+
+    // Refetching logic
+    fetchFilteredPosts();
+    
+  }, [filter, sort, initialFilter, initialPosts]);
 
   const loadMorePosts = useCallback(async () => {
     if (loading) return;
     setLoading(true);
 
     try {
-      const query = filter === 'all' ? getAllFeedPosts : getFeedPostsByCategory;
+      let query;
+      if (filter === 'all') {
+        query = sort === 'oldest' ? getAllFeedPostsAsc : getAllFeedPosts;
+      } else {
+        query = sort === 'oldest' ? getFeedPostsByCategoryAsc : getFeedPostsByCategory;
+      }
+
       const params = filter === 'all' ? {} : { category: filter };
       const allPosts = await client?.fetch(query, params).catch(() => []) ?? [];
       const nextPage = page + 1;
@@ -116,7 +147,7 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
     } finally {
       setLoading(false);
     }
-  }, [filter, loading, page]);
+  }, [filter, sort, loading, page]);
 
   // Infinite scroll
   useEffect(() => {

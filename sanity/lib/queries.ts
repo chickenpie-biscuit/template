@@ -192,7 +192,51 @@ export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | 
   featured
 }`;
 
+export const getAllFeedPostsAsc = groq`*[_type == "feedPost" || _type == "post"] | order(publishedAt asc) {
+  _id,
+  _type,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  mainImage,
+  description,
+  "excerpt": excerpt,
+  ctaText,
+  ctaLink,
+  price,
+  originalPrice,
+  findPrice,
+  findHighlight,
+  productType,
+  stock,
+  publishedAt,
+  featured
+}`;
+
 export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt desc) {
+  _id,
+  _type,
+  title,
+  "slug": slug.current,
+  category,
+  featuredImage,
+  mainImage,
+  description,
+  "excerpt": excerpt,
+  ctaText,
+  ctaLink,
+  price,
+  originalPrice,
+  findPrice,
+  findHighlight,
+  productType,
+  stock,
+  publishedAt,
+  featured
+}`;
+
+export const getFeedPostsByCategoryAsc = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt asc) {
   _id,
   _type,
   title,
