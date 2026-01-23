@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Build product data
-    const productData: Record<string, any> = {
-      _type: 'product',
+    const productData = {
+      _type: 'product' as const,
       title: feedPost.title,
       slug: feedPost.slug,
       price: feedPost.price || 0,
