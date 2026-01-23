@@ -1,60 +1,60 @@
 'use client';
 
-import { ReactNode, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef, useCallback } from 'react';
 import { usePathname } from 'next/navigation';
-import Lenis from 'lenis';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface SmoothScrollProps {
   children: ReactNode;
 }
 
 export default function SmoothScroll({ children }: SmoothScrollProps) {
-  const lenisRef = useRef<Lenis | null>(null);
+  const lenisRef = useRef<any>(null);
+  const rafRef = useRef<number | null>(null);
   const pathname = usePathname();
   const isStudio = pathname?.startsWith('/admin') || pathname?.startsWith('/studio');
 
+  // Memoize RAF callback
+  const raf = useCallback((time: number) => {
+    lenisRef.current?.raf(time);
+    rafRef.current = requestAnimationFrame(raf);
+  }, []);
+
   useEffect(() => {
-    // Don't initialize Lenis on Studio pages to prevent scroll locking
+    // Don't initialize Lenis on Studio pages or mobile
     if (isStudio) return;
+    
+    // Check if mobile - disable smooth scroll on touch devices for better performance
+    const isMobile = window.matchMedia('(max-width: 768px)').matches || 
+                     'ontouchstart' in window;
+    if (isMobile) return;
 
-    // Initialize Lenis
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      touchMultiplier: 2,
+    // Dynamic import Lenis for code splitting
+    import('lenis').then((LenisModule) => {
+      const Lenis = LenisModule.default;
+      
+      const lenis = new Lenis({
+        duration: 1.0, // Slightly faster for snappier feel
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        touchMultiplier: 2,
+      });
+
+      lenisRef.current = lenis;
+
+      // Use native RAF instead of GSAP ticker for better performance
+      rafRef.current = requestAnimationFrame(raf);
     });
-
-    lenisRef.current = lenis;
-
-    // Synchronize Lenis scrolling with GSAP's ScrollTrigger
-    lenis.on('scroll', ScrollTrigger.update);
-
-    // Add Lenis's requestAnimationFrame to GSAP's ticker
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
-    });
-
-    // Disable GSAP's lag smoothing to ensure smooth scrolling
-    gsap.ticker.lagSmoothing(0);
 
     // Clean up
     return () => {
-      lenis.destroy();
-      gsap.ticker.remove((time) => {
-        lenis.raf(time * 1000);
-      });
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      lenisRef.current?.destroy();
     };
-  }, [isStudio]);
-
-  // If we are in the studio, just render children without Lenis context
-  if (isStudio) {
-    return <>{children}</>;
-  }
+  }, [isStudio, raf]);
 
   return <>{children}</>;
 }

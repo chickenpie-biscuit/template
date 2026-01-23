@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
-import { useState } from 'react';
+import { useState, memo, useMemo } from 'react';
 
 interface FeedPost {
   _id: string;
@@ -56,7 +56,7 @@ const categoryColors: Record<string, string> = {
   'sunday-swings': 'bg-goldenrod',
 };
 
-export default function FeedPostCard({ post }: FeedPostCardProps) {
+function FeedPostCard({ post }: FeedPostCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   
   // Handle both feedPost (featuredImage) and regular post (mainImage)
@@ -573,3 +573,8 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     </Link>
   );
 }
+
+// Memoize to prevent unnecessary re-renders
+export default memo(FeedPostCard, (prevProps, nextProps) => {
+  return prevProps.post._id === nextProps.post._id;
+});

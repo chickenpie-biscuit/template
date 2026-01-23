@@ -1,13 +1,11 @@
 'use client';
 
-import { useEffect, useState, useRef, useCallback, useLayoutEffect } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FeedPostCard from './FeedPostCard';
 import SkeletonCard from './SkeletonCard';
 import { client } from '@/sanity/lib/client';
 import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 interface FeedPost {
   _id: string;
@@ -44,36 +42,22 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   const observerTarget = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // GSAP Animation for new posts
-  useLayoutEffect(() => {
+  // CSS-based animation instead of GSAP for better performance
+  useEffect(() => {
     if (!containerRef.current) return;
     
-    // Register ScrollTrigger
-    gsap.registerPlugin(ScrollTrigger);
-    
-    // Create context for cleanup
-    const ctx = gsap.context(() => {
-      // Animate feed items that haven't been animated yet
-      const items = gsap.utils.toArray('.feed-item:not(.animated)');
-      
-      if (items.length > 0) {
-        // Simple fade-in stagger for smoother performance
-        gsap.to(items, {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          duration: 0.6,
-          stagger: 0.05,
-          ease: 'power2.out',
-          onComplete: () => {
-            items.forEach((item: any) => item.classList.add('animated'));
-          }
-        });
-      }
-    }, containerRef);
-    
-    return () => ctx.revert();
-  }, [posts]); // Re-run when posts change
+    // Use CSS transitions with staggered delays
+    const items = containerRef.current.querySelectorAll('.feed-item:not(.animated)');
+    items.forEach((item, index) => {
+      const element = item as HTMLElement;
+      // Stagger the animation with CSS
+      element.style.transitionDelay = `${index * 50}ms`;
+      // Trigger animation on next frame
+      requestAnimationFrame(() => {
+        element.classList.add('animated');
+      });
+    });
+  }, [posts]);
 
   // Reset when filter changes
   useEffect(() => {
@@ -82,9 +66,7 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
       try {
         const query = filter === 'all' ? getAllFeedPosts : getFeedPostsByCategory;
         const params = filter === 'all' ? {} : { category: filter };
-        console.log('Fetching posts for filter:', filter, 'with params:', params); // Debug
         const newPosts = await client?.fetch(query, params).catch(() => []) ?? [];
-        console.log('Fetched posts:', newPosts.length); // Debug
         setPosts(newPosts.slice(0, POSTS_PER_PAGE));
         setPage(1);
         setHasMore(newPosts.length >= POSTS_PER_PAGE);
@@ -159,7 +141,7 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
             {posts.map((post) => (
               <div 
                 key={post._id} 
-                className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-8 scale-95"
+                className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
               >
                 <FeedPostCard post={post} />
               </div>

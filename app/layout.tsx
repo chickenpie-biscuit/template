@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import { Space_Grotesk, Space_Mono } from 'next/font/google';
 import './globals.css';
 import CartProvider from '@/components/cart/CartProvider';
-import GSAPProvider from '@/components/providers/GSAPProvider';
 import SmoothScroll from '@/components/providers/SmoothScroll';
-import CustomCursor from '@/components/ui/CustomCursor';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -32,11 +30,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${spaceGrotesk.variable} ${spaceMono.variable} font-body`}>
         <SmoothScroll>
-          <GSAPProvider>
-            <CartProvider>
-              {children}
-            </CartProvider>
-          </GSAPProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
         </SmoothScroll>
       </body>
     </html>
