@@ -257,7 +257,16 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   losses,
   characterName,
   episodeNumber,
-  storyIllustration
+  storyIllustration,
+  // Nom Nom specific fields
+  recipeGallery,
+  recipeVideo,
+  ingredients,
+  prepTime,
+  cookTime,
+  servings,
+  difficulty,
+  cuisine
 }`;
 
 // Studio Project Queries - Includes both studioProject and feedPost with design-work category
