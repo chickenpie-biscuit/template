@@ -463,7 +463,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     // Has uploaded image?
     const hasImage = !!imageUrl;
     
-    // If image is uploaded, show ONLY the image (no text overlay)
+    // If image is uploaded, show ONLY the image (fills the card)
     if (hasImage) {
       const imageCard = (
         <div className="group relative aspect-square overflow-hidden">
@@ -474,7 +474,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             src={imageUrl}
             alt={post.featuredImage?.alt || post.title}
             fill
-            className="object-contain group-hover:scale-105 transition-transform duration-500"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
             placeholder={blurDataUrl ? 'blur' : 'empty'}
             blurDataURL={blurDataUrl}
             onLoad={() => setImageLoaded(true)}
