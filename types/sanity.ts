@@ -65,6 +65,7 @@ export interface Product {
   slug: string;
   price: number;
   images?: SanityImage[];
+  productGallery?: SanityImage[];
   featuredImage?: SanityImage;
   description?: PortableTextBlock[];
   shortDescription?: string;
