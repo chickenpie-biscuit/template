@@ -440,7 +440,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // QUOTES - Minimal Quote Card (Text scales to fit, never cropped)
+  // QUOTES - Minimal Quote Card (Image displayed as-is, or text on cream)
   if (category === 'quotes') {
     // Only navigate if CTA link is provided
     const hasLink = post.ctaLink && post.ctaLink.trim() !== '';
@@ -460,37 +460,58 @@ function FeedPostCard({ post }: FeedPostCardProps) {
       return 'text-xs md:text-sm'; // Very long
     };
     
-    // Has background image?
+    // Has uploaded image?
     const hasImage = !!imageUrl;
     
+    // If image is uploaded, show ONLY the image (no text overlay)
+    if (hasImage) {
+      const imageCard = (
+        <div className="group relative aspect-square overflow-hidden">
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-cream animate-pulse" />
+          )}
+          <Image
+            src={imageUrl}
+            alt={post.featuredImage?.alt || post.title}
+            fill
+            className="object-contain group-hover:scale-105 transition-transform duration-500"
+            placeholder={blurDataUrl ? 'blur' : 'empty'}
+            blurDataURL={blurDataUrl}
+            onLoad={() => setImageLoaded(true)}
+          />
+        </div>
+      );
+      
+      // If has link, wrap in Link component
+      if (hasLink) {
+        return (
+          <Link
+            href={post.ctaLink!}
+            target={post.ctaLink!.startsWith('http') ? '_blank' : undefined}
+            rel="noopener noreferrer"
+            className="block"
+          >
+            {imageCard}
+          </Link>
+        );
+      }
+      
+      return <div>{imageCard}</div>;
+    }
+    
+    // No image - show text quote on cream background
     const cardContent = (
-      <div className={`group relative aspect-square flex flex-col justify-center items-center p-6 overflow-hidden ${hasImage ? 'bg-black' : 'bg-cream'}`}>
-        {/* Background Image (only if uploaded) */}
-        {hasImage && (
-          <>
-            <Image
-              src={imageUrl}
-              alt={post.featuredImage?.alt || 'Quote background'}
-              fill
-              className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
-              placeholder={blurDataUrl ? 'blur' : 'empty'}
-              blurDataURL={blurDataUrl}
-              onLoad={() => setImageLoaded(true)}
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/50" />
-          </>
-        )}
-        
+      <div className="group relative aspect-square flex flex-col justify-center items-center p-6 overflow-hidden bg-cream">
         {/* Quote Content - Constrained to fit */}
         <div className="relative z-10 flex flex-col justify-center items-center text-center w-full h-full px-2">
           {/* Quote Text (Title) - Scales down to fit */}
-          <blockquote className={`font-heading font-black leading-[1.1] uppercase tracking-tight break-words hyphens-auto ${getFontSizeClass()} ${hasImage ? 'text-white' : 'text-black'}`}>
+          <blockquote className={`font-heading font-black leading-[1.1] uppercase tracking-tight break-words hyphens-auto ${getFontSizeClass()} text-black`}>
             &ldquo;{quoteText}&rdquo;
           </blockquote>
           
           {/* Attribution (Description) - At bottom */}
           {displayDescription && (
-            <cite className={`absolute bottom-6 left-6 right-6 font-body text-xs not-italic text-center truncate ${hasImage ? 'text-white/70' : 'text-black/60'}`}>
+            <cite className="absolute bottom-6 left-6 right-6 font-body text-xs not-italic text-center truncate text-black/60">
               — {displayDescription}
             </cite>
           )}
@@ -498,7 +519,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           {/* CTA if link exists - appears on hover */}
           {hasLink && (
             <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className={`inline-block px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider ${hasImage ? 'bg-white text-black' : 'bg-black text-white'}`}>
+              <span className="inline-block px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider bg-black text-white">
                 {post.ctaText || 'Read'}
               </span>
             </div>
