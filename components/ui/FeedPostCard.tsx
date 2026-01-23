@@ -440,53 +440,65 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // QUOTES - Minimal Quote Card (No Border, Optional BG Image)
+  // QUOTES - Minimal Quote Card (Text fills area, scales based on length)
   if (category === 'quotes') {
     // Only navigate if CTA link is provided
     const hasLink = post.ctaLink && post.ctaLink.trim() !== '';
     
+    // Calculate font size based on text length
+    const quoteText = post.title || '';
+    const charCount = quoteText.length;
+    
+    // Dynamic font sizing: fewer chars = bigger text, more chars = smaller text
+    // Range: 2-10 chars = huge (clamp 4-6rem), 10-50 = large (2-4rem), 50-150 = medium (1.5-2rem), 150+ = small (1-1.5rem)
+    const getFontSizeClass = () => {
+      if (charCount <= 15) return 'text-5xl md:text-6xl lg:text-7xl'; // Very short - huge
+      if (charCount <= 40) return 'text-4xl md:text-5xl lg:text-6xl'; // Short - large
+      if (charCount <= 80) return 'text-3xl md:text-4xl lg:text-5xl'; // Medium-short
+      if (charCount <= 120) return 'text-2xl md:text-3xl lg:text-4xl'; // Medium
+      if (charCount <= 180) return 'text-xl md:text-2xl lg:text-3xl'; // Medium-long
+      return 'text-lg md:text-xl lg:text-2xl'; // Long text
+    };
+    
     const cardContent = (
-      <div className="group relative min-h-[300px] md:min-h-[400px] flex flex-col justify-center items-center p-8 overflow-hidden">
-        {/* Background Image (optional) */}
-        {imageUrl && (
+      <div className="group relative aspect-square flex flex-col justify-center items-center p-6 md:p-8 overflow-hidden bg-black">
+        {/* Background Image (always fills) */}
+        {imageUrl ? (
           <>
             <Image
               src={imageUrl}
               alt={post.featuredImage?.alt || 'Quote background'}
               fill
-              className="object-cover opacity-30 group-hover:opacity-40 group-hover:scale-105 transition-all duration-700"
+              className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
               placeholder={blurDataUrl ? 'blur' : 'empty'}
               blurDataURL={blurDataUrl}
               onLoad={() => setImageLoaded(true)}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/50" />
           </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
         )}
         
-        {/* Quote Content */}
-        <div className="relative z-10 text-center max-w-lg">
-          {/* Quote Mark */}
-          <div className="text-6xl md:text-8xl font-heading text-black/10 leading-none mb-4">
-            &ldquo;
-          </div>
-          
-          {/* Quote Text (Title) */}
-          <blockquote className="font-heading text-xl md:text-2xl lg:text-3xl font-bold text-black leading-tight mb-6">
-            {post.title}
+        {/* Quote Content - Fills the entire area */}
+        <div className="relative z-10 flex flex-col justify-center items-center text-center w-full h-full px-4">
+          {/* Quote Text (Title) - Scales to fill */}
+          <blockquote className={`font-heading font-black text-white leading-[1.1] uppercase tracking-tight ${getFontSizeClass()}`}>
+            {quoteText}
           </blockquote>
           
-          {/* Attribution (Description) */}
+          {/* Attribution (Description) - Small at bottom */}
           {displayDescription && (
-            <cite className="font-body text-sm text-black/60 not-italic">
+            <cite className="absolute bottom-4 left-4 right-4 font-body text-xs md:text-sm text-white/60 not-italic text-center">
               — {displayDescription}
             </cite>
           )}
           
-          {/* CTA if link exists */}
+          {/* CTA if link exists - appears on hover */}
           {hasLink && (
-            <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="inline-block bg-black text-cream px-4 py-2 font-heading text-xs font-bold uppercase tracking-wider">
-                {post.ctaText || 'Learn More'}
+            <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <span className="inline-block bg-white text-black px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider">
+                {post.ctaText || 'Read'}
               </span>
             </div>
           )}
@@ -501,7 +513,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           href={post.ctaLink!}
           target={post.ctaLink!.startsWith('http') ? '_blank' : undefined}
           rel="noopener noreferrer"
-          className="block bg-cream hover:bg-cream/80 transition-colors"
+          className="block"
         >
           {cardContent}
         </Link>
@@ -510,7 +522,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
     // No link - just render the card (not clickable)
     return (
-      <div className="bg-cream">
+      <div>
         {cardContent}
       </div>
     );
