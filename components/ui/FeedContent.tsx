@@ -34,7 +34,7 @@ interface FeedContentProps {
 }
 
 const POSTS_PER_PAGE = 12;
-const BANNER_INTERVAL = 6; // Show banner every 6 posts
+const BANNER_INTERVAL = 15; // Show banner every 15 posts
 
 export default function FeedContent({ initialPosts, initialFilter, banners = [] }: FeedContentProps) {
   const searchParams = useSearchParams();
