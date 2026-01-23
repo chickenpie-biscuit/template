@@ -4,8 +4,10 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import FeedPostCard from './FeedPostCard';
 import SkeletonCard from './SkeletonCard';
+import AdBannerComponent from './AdBanner';
 import { client } from '@/sanity/lib/client';
 import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
+import { AdBanner } from '@/types/sanity';
 
 interface FeedPost {
   _id: string;
@@ -28,11 +30,13 @@ interface FeedPost {
 interface FeedContentProps {
   initialPosts: FeedPost[];
   initialFilter: string;
+  banners?: AdBanner[];
 }
 
 const POSTS_PER_PAGE = 12;
+const BANNER_INTERVAL = 6; // Show banner every 6 posts
 
-export default function FeedContent({ initialPosts, initialFilter }: FeedContentProps) {
+export default function FeedContent({ initialPosts, initialFilter, banners = [] }: FeedContentProps) {
   const searchParams = useSearchParams();
   const filter = searchParams.get('filter') || 'all';
   const [posts, setPosts] = useState<FeedPost[]>(initialPosts);
@@ -41,6 +45,9 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
   const [page, setPage] = useState(1);
   const observerTarget = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Get inline banners
+  const inlineBanners = banners.filter(b => b.placement === 'inline' && b.active);
 
   // CSS-based animation instead of GSAP for better performance
   useEffect(() => {
@@ -132,20 +139,62 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
     };
   }, [hasMore, loading, filter, loadMorePosts]);
 
+  // Create posts array with inline banners inserted
+  const postsWithBanners = () => {
+    if (inlineBanners.length === 0) return posts;
+    
+    const result: (FeedPost | { type: 'banner'; index: number })[] = [];
+    let bannerIndex = 0;
+    
+    posts.forEach((post, index) => {
+      result.push(post);
+      
+      // Insert banner after every BANNER_INTERVAL posts
+      if ((index + 1) % BANNER_INTERVAL === 0 && inlineBanners.length > 0) {
+        result.push({ type: 'banner', index: bannerIndex });
+        bannerIndex = (bannerIndex + 1) % inlineBanners.length;
+      }
+    });
+    
+    return result;
+  };
+
+  const contentItems = postsWithBanners();
+
   return (
     <div className="w-full px-4 md:px-6 lg:px-8 py-8" ref={containerRef}>
       {posts.length > 0 ? (
         <>
           {/* Masonry Grid - Tighter spacing for cohesive look */}
           <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5">
-            {posts.map((post) => (
-              <div 
-                key={post._id} 
-                className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
-              >
-                <FeedPostCard post={post} />
-              </div>
-            ))}
+            {contentItems.map((item, idx) => {
+              // Check if this is a banner placeholder
+              if ('type' in item && item.type === 'banner') {
+                return (
+                  <div 
+                    key={`banner-${item.index}-${idx}`} 
+                    className="break-inside-avoid mb-4 md:mb-5 col-span-full feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
+                    style={{ columnSpan: 'all' }}
+                  >
+                    <AdBannerComponent
+                      banners={[inlineBanners[item.index]]}
+                      variant="card"
+                    />
+                  </div>
+                );
+              }
+              
+              // Regular post
+              const post = item as FeedPost;
+              return (
+                <div 
+                  key={post._id} 
+                  className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
+                >
+                  <FeedPostCard post={post} />
+                </div>
+              );
+            })}
           </div>
 
           {/* Loading indicator with skeleton cards */}
@@ -186,4 +235,3 @@ export default function FeedContent({ initialPosts, initialFilter }: FeedContent
     </div>
   );
 }
-

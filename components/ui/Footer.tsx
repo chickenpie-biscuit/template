@@ -107,6 +107,11 @@ export default function Footer() {
                   Terms
                 </Link>
               </li>
+              <li>
+                <Link href="/affiliate-disclaimer" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                  Affiliate
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

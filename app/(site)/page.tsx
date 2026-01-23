@@ -1,8 +1,8 @@
 import { client } from '@/sanity/lib/client';
-import { getAllFeedPosts, getFeedPostsByCategory } from '@/sanity/lib/queries';
-import FeedPostCard from '@/components/ui/FeedPostCard';
+import { getAllFeedPosts, getFeedPostsByCategory, getActiveBanners } from '@/sanity/lib/queries';
 import FilterBar from '@/components/ui/FilterBar';
 import FeedContent from '@/components/ui/FeedContent';
+import { AdBanner } from '@/types/sanity';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -15,19 +15,25 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
   // Safe fetch with error handling
   let posts: any[] = [];
+  let banners: AdBanner[] = [];
+  
   try {
-    posts = filter === 'all'
-      ? await client?.fetch(getAllFeedPosts).catch(() => []) ?? []
-      : await client?.fetch(getFeedPostsByCategory, { category: filter }).catch(() => []) ?? [];
+    const [postsData, bannersData] = await Promise.all([
+      filter === 'all'
+        ? client?.fetch(getAllFeedPosts).catch(() => [])
+        : client?.fetch(getFeedPostsByCategory, { category: filter }).catch(() => []),
+      client?.fetch<AdBanner[]>(getActiveBanners).catch(() => []),
+    ]);
+    posts = postsData ?? [];
+    banners = bannersData ?? [];
   } catch (error) {
     console.error('Feed fetch error:', error);
-    posts = [];
   }
 
   return (
     <div className="min-h-screen bg-cream w-full">
       <FilterBar />
-      <FeedContent initialPosts={posts} initialFilter={filter} />
+      <FeedContent initialPosts={posts} initialFilter={filter} banners={banners} />
     </div>
   );
 }

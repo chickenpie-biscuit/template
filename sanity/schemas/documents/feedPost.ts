@@ -231,6 +231,15 @@ export default defineType({
       initialValue: 0,
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
+    defineField({
+      name: 'syncedProduct',
+      title: 'Synced Product',
+      type: 'reference',
+      to: [{ type: 'product' }],
+      description: 'Auto-linked product in the shop (created when you publish this merch drop)',
+      readOnly: true,
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
     // Finds specific fields
     defineField({
       name: 'findPrice',

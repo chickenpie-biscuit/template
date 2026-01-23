@@ -1,57 +1,270 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { AdBanner } from '@/types/sanity';
 import { urlFor } from '@/sanity/lib/image';
+import { X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 interface AdBannerProps {
   banners: AdBanner[];
-  placement?: string;
+  placement?: 'header' | 'sidebar' | 'footer' | 'inline';
+  variant?: 'full' | 'card' | 'sticky' | 'inline';
+  className?: string;
+  dismissible?: boolean;
 }
 
-export default function AdBannerComponent({ banners, placement }: AdBannerProps) {
-  if (!banners || banners.length === 0) return null;
+/**
+ * AdBanner Component
+ * 
+ * Banner display is controlled by Sanity CMS:
+ * 
+ * PLACEMENT (set in Sanity):
+ * - header  → Shows in sticky announcement bar (top of page)
+ * - footer  → Shows as full-width banner above footer
+ * - inline  → Shows between feed posts, on shop page, after blog content
+ * - sidebar → Shows as card-style banner after post content
+ * 
+ * REQUIREMENTS:
+ * - 'sticky' variant: Only needs title (text-only announcement bar)
+ * - All other variants: Requires an image to display
+ * 
+ * If no image is assigned (except for sticky), the banner will NOT render.
+ */
+export default function AdBannerComponent({ 
+  banners, 
+  placement, 
+  variant = 'full',
+  className = '',
+  dismissible = false,
+}: AdBannerProps) {
+  const [dismissed, setDismissed] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Filter by placement if provided
-  const filteredBanners = placement
-    ? banners.filter((banner) => banner.placement === placement)
-    : banners;
+  // Filter by placement if provided, then by active and date
+  const now = new Date();
+  const filteredBanners = banners
+    .filter((banner) => {
+      // Must be active
+      if (!banner.active) return false;
+      
+      // Must match placement if specified
+      if (placement && banner.placement !== placement) return false;
+      
+      // Check date range
+      if (banner.startDate && new Date(banner.startDate) > now) return false;
+      if (banner.endDate && new Date(banner.endDate) < now) return false;
+      
+      // For non-sticky variants, require an image
+      if (variant !== 'sticky' && !banner.image) return false;
+      
+      // Must have at least a title
+      if (!banner.title) return false;
+      
+      return true;
+    })
+    .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
 
-  if (filteredBanners.length === 0) return null;
+  // Rotate banners if multiple
+  useEffect(() => {
+    if (filteredBanners.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % filteredBanners.length);
+    }, 8000); // Rotate every 8 seconds
+    return () => clearInterval(interval);
+  }, [filteredBanners.length]);
 
-  // For now, show the first banner. Can be enhanced for rotation
-  const banner = filteredBanners[0];
-  const imageUrl = urlFor(banner.image as any).width(1200).height(400).url();
+  // Don't render if no valid banners or user dismissed
+  if (!filteredBanners.length || dismissed) return null;
 
-  if (banner.link) {
+  const banner = filteredBanners[currentIndex];
+  
+  // Generate image URL (may be null for sticky variant)
+  const imageUrl = banner.image 
+    ? urlFor(banner.image as any).width(1400).height(400).url() 
+    : null;
+
+  // Header/Announcement Bar Style - TEXT ONLY (no image required)
+  if (variant === 'sticky') {
     return (
-      <Link
-        href={banner.link}
-        className="block relative overflow-hidden rounded-lg"
-        rel="noopener noreferrer"
-      >
-        <div className="relative w-full aspect-[3/1] bg-gray-100">
+      <div className={`relative bg-black text-cream ${className}`}>
+        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-center gap-4">
+          {banner.link ? (
+            <Link 
+              href={banner.link} 
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+              target={banner.link.startsWith('http') ? '_blank' : undefined}
+              rel="noopener noreferrer"
+            >
+              <span className="font-heading font-bold uppercase text-xs tracking-wider text-goldenrod">
+                {banner.title}
+              </span>
+              <span className="font-body text-sm text-cream/80">→</span>
+            </Link>
+          ) : (
+            <span className="font-heading font-bold uppercase text-xs tracking-wider text-goldenrod">
+              {banner.title}
+            </span>
+          )}
+        </div>
+        {dismissible && (
+          <button
+            onClick={() => setDismissed(true)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-cream/60 hover:text-cream transition-colors"
+            aria-label="Dismiss banner"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  // For all other variants, image is required
+  if (!imageUrl) return null;
+
+  // Full Width Banner (for footer placements) - REQUIRES IMAGE
+  if (variant === 'full') {
+    const content = (
+      <div className={`relative w-full overflow-hidden ${className}`}>
+        <div className="relative w-full aspect-[4/1] md:aspect-[6/1] bg-black">
           <Image
             src={imageUrl}
-            alt={banner.image.alt || banner.title}
+            alt={banner.image?.alt || banner.title}
             fill
             className="object-cover"
             sizes="100vw"
           />
+          {/* Overlay with title */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/60 flex items-center justify-center">
+            <div className="text-center px-4">
+              <p className="font-heading font-bold uppercase text-lg md:text-2xl text-cream drop-shadow-lg">
+                {banner.title}
+              </p>
+            </div>
+          </div>
         </div>
-      </Link>
+        {/* Banner indicator dots */}
+        {filteredBanners.length > 1 && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+            {filteredBanners.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentIndex(i)}
+                className={`w-2 h-2 rounded-full transition-colors ${
+                  i === currentIndex ? 'bg-goldenrod' : 'bg-cream/40'
+                }`}
+                aria-label={`Go to banner ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     );
+
+    if (banner.link) {
+      return (
+        <Link
+          href={banner.link}
+          className="block"
+          target={banner.link.startsWith('http') ? '_blank' : undefined}
+          rel="noopener noreferrer"
+        >
+          {content}
+        </Link>
+      );
+    }
+    return content;
   }
 
-  return (
-    <div className="relative w-full aspect-[3/1] overflow-hidden rounded-lg bg-gray-100">
-      <Image
-        src={imageUrl}
-        alt={banner.image.alt || banner.title}
-        fill
-        className="object-cover"
-        sizes="100vw"
-      />
-    </div>
-  );
-}
+  // Card Style (for sidebar) - REQUIRES IMAGE
+  if (variant === 'card') {
+    const content = (
+      <div className={`relative overflow-hidden border-2 border-black bg-cream ${className}`}>
+        <div className="relative w-full aspect-[3/1] bg-black">
+          <Image
+            src={imageUrl}
+            alt={banner.image?.alt || banner.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </div>
+        <div className="p-4 bg-goldenrod">
+          <p className="font-heading font-bold uppercase text-sm text-black text-center">
+            {banner.title}
+          </p>
+        </div>
+        {/* Sponsored label */}
+        <div className="absolute top-2 right-2 px-2 py-1 bg-black/70 text-cream text-[10px] font-heading uppercase tracking-wider">
+          Sponsored
+        </div>
+      </div>
+    );
 
+    if (banner.link) {
+      return (
+        <Link
+          href={banner.link}
+          className="block hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow"
+          target={banner.link.startsWith('http') ? '_blank' : undefined}
+          rel="noopener noreferrer"
+        >
+          {content}
+        </Link>
+      );
+    }
+    return content;
+  }
+
+  // Inline Banner (between content) - REQUIRES IMAGE
+  if (variant === 'inline') {
+    const content = (
+      <div className={`relative overflow-hidden bg-black ${className}`}>
+        <div className="relative w-full aspect-[4/1] md:aspect-[5/1]">
+          <Image
+            src={imageUrl}
+            alt={banner.image?.alt || banner.title}
+            fill
+            className="object-cover opacity-90"
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-black/70 flex items-center">
+            <div className="px-6 md:px-12 w-full flex items-center justify-between">
+              <div>
+                <p className="font-heading font-bold uppercase text-xs tracking-wider text-goldenrod mb-1">
+                  Sponsored
+                </p>
+                <p className="font-heading font-bold uppercase text-lg md:text-xl text-cream">
+                  {banner.title}
+                </p>
+              </div>
+              {banner.link && (
+                <span className="hidden md:block px-4 py-2 bg-goldenrod text-black font-heading font-bold uppercase text-xs">
+                  Learn More →
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    if (banner.link) {
+      return (
+        <Link
+          href={banner.link}
+          className="block"
+          target={banner.link.startsWith('http') ? '_blank' : undefined}
+          rel="noopener noreferrer"
+        >
+          {content}
+        </Link>
+      );
+    }
+    return content;
+  }
+
+  return null;
+}

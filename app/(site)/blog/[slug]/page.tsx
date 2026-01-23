@@ -1,12 +1,13 @@
 import { client } from '@/sanity/lib/client';
-import { getPostBySlug, getFeaturedPosts } from '@/sanity/lib/queries';
-import { Post } from '@/types/sanity';
+import { getPostBySlug, getFeaturedPosts, getActiveBanners } from '@/sanity/lib/queries';
+import { Post, AdBanner } from '@/types/sanity';
 import { urlFor } from '@/sanity/lib/image';
 import { formatDate } from '@/lib/utils';
 import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import BlogCard from '@/components/ui/BlogCard';
 import PortableText from '@/components/sanity/PortableText';
+import AdBannerComponent from '@/components/ui/AdBanner';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -36,21 +37,25 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  const post = await (client
-    ?.fetch<Post | null>(getPostBySlug, { slug })
-    .catch(() => null) ?? Promise.resolve(null));
+  
+  // Fetch post, related posts, and banners in parallel
+  const [post, relatedPosts, banners] = await Promise.all([
+    client?.fetch<Post | null>(getPostBySlug, { slug }).catch(() => null) ?? Promise.resolve(null),
+    client?.fetch<Post[]>(getFeaturedPosts).catch(() => []) ?? Promise.resolve([]),
+    client?.fetch<AdBanner[]>(getActiveBanners).catch(() => []) ?? Promise.resolve([]),
+  ]);
 
   if (!post) {
     notFound();
   }
 
-  const relatedPosts = await (client
-    ?.fetch<Post[]>(getFeaturedPosts)
-    .catch(() => []) ?? Promise.resolve([]));
-
   const imageUrl = post.mainImage
     ? urlFor(post.mainImage as any).width(1200).height(600).url()
     : '/images/placeholder.jpg';
+
+  // Get sidebar banners
+  const sidebarBanners = banners?.filter(b => b.placement === 'sidebar' && b.active) || [];
+  const inlineBanners = banners?.filter(b => b.placement === 'inline' && b.active) || [];
 
   return (
     <div className="py-12">
@@ -107,6 +112,31 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
           )}
 
+          {/* Inline Banner - After Content */}
+          {inlineBanners.length > 0 && (
+            <div className="my-12">
+              <AdBannerComponent
+                banners={inlineBanners}
+                placement="inline"
+                variant="inline"
+              />
+            </div>
+          )}
+
+          {/* Sidebar Banner */}
+          {sidebarBanners.length > 0 && (
+            <div className="my-12 max-w-md mx-auto">
+              <p className="font-heading font-bold uppercase text-xs tracking-[0.2em] text-black/40 mb-4 text-center">
+                Sponsored
+              </p>
+              <AdBannerComponent
+                banners={sidebarBanners}
+                placement="sidebar"
+                variant="card"
+              />
+            </div>
+          )}
+
           {/* Related Posts */}
           {relatedPosts.length > 0 && (
             <section className="mt-16 border-t pt-12">
@@ -126,4 +156,3 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     </div>
   );
 }
-

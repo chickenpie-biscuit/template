@@ -1,10 +1,13 @@
 import { client } from '@/sanity/lib/client';
-import { getFeedPostBySlug } from '@/sanity/lib/queries';
+import { getFeedPostBySlug, getActiveBanners } from '@/sanity/lib/queries';
 import { urlFor } from '@/sanity/lib/image';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { AdBanner } from '@/types/sanity';
+import AdBannerComponent from '@/components/ui/AdBanner';
+import Container from '@/components/ui/Container';
 
 // Import Layout Components
 import ArtLayout from '@/components/layouts/ArtLayout';
@@ -113,7 +116,11 @@ export async function generateMetadata({
 }
 
 export default async function FeedPostPage({ params }: FeedPostPageProps) {
-  const post = await client?.fetch(getFeedPostBySlug, { slug: params.slug }).catch(() => null);
+  // Fetch post and banners in parallel
+  const [post, banners] = await Promise.all([
+    client?.fetch(getFeedPostBySlug, { slug: params.slug }).catch(() => null),
+    client?.fetch<AdBanner[]>(getActiveBanners).catch(() => []) ?? [],
+  ]);
 
   if (!post) {
     notFound();
@@ -142,6 +149,10 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
 
   // Hide back button on commerce pages (merch drops have their own navigation style)
   const showBackButton = post.category !== 'merch-drops';
+  
+  // Show sidebar banner on certain layouts
+  const showSidebarBanner = ['art', 'chronicles', 'prompt-week', 'tool-tuesday', 'solopreneur', 'sunday-swings'].includes(post.category);
+  const sidebarBanners = banners?.filter(b => b.placement === 'sidebar') || [];
 
   return (
     <>
@@ -164,6 +175,24 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
 
       {/* Render Specific Layout */}
       <LayoutComponent post={post} />
+
+      {/* Post-Content Banner Section */}
+      {sidebarBanners.length > 0 && showSidebarBanner && (
+        <section className="bg-cream py-12 border-t-2 border-black">
+          <Container>
+            <div className="max-w-4xl mx-auto">
+              <p className="font-heading font-bold uppercase text-xs tracking-[0.2em] text-black/40 mb-4 text-center">
+                You might also like
+              </p>
+              <AdBannerComponent
+                banners={sidebarBanners}
+                placement="sidebar"
+                variant="card"
+              />
+            </div>
+          </Container>
+        </section>
+      )}
     </>
   );
 }
