@@ -81,6 +81,7 @@ export async function POST(request: NextRequest) {
         _type: 'reference',
         _ref: feedPostId,
       },
+      images: undefined as any[] | undefined,
     };
 
     // Handle images
