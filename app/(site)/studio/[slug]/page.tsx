@@ -117,13 +117,13 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
 
       {/* Featured Image - Full Width */}
       {featuredImageUrl && (
-        <section className="relative">
-          <div className="aspect-[16/9] lg:aspect-[21/9] w-full relative overflow-hidden">
+        <section className="relative bg-cream">
+          <div className="min-h-[50vh] lg:min-h-[70vh] w-full relative overflow-hidden flex items-center justify-center py-8">
             <Image
               src={featuredImageUrl}
               alt={project.featuredImage?.alt || project.title}
               fill
-              className="object-cover"
+              className="object-contain"
               priority
             />
           </div>
@@ -189,7 +189,7 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
           <Container>
             <div className="space-y-8 lg:space-y-16">
               {project.gallery.map((image: any, index: number) => {
-                const imageUrl = urlFor(image).width(1920).height(1280).url();
+                const imageUrl = urlFor(image).width(1920).url();
                 // Create varied layouts
                 const isFullWidth = index === 0 || index % 4 === 0;
                 const isHalf = !isFullWidth && (index % 4 === 1 || index % 4 === 2);
@@ -198,13 +198,13 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                   return (
                     <div
                       key={index}
-                      className="aspect-[16/10] w-full relative overflow-hidden bg-black/5"
+                      className="min-h-[400px] lg:min-h-[600px] w-full relative overflow-hidden bg-cream"
                     >
                       <Image
                         src={imageUrl}
                         alt={image.alt || `${project.title} - Image ${index + 1}`}
                         fill
-                        className="object-cover"
+                        className="object-contain"
                       />
                     </div>
                   );
@@ -214,26 +214,26 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                 if (isHalf && index % 4 === 1) {
                   const nextImage = project.gallery[index + 1];
                   const nextImageUrl = nextImage
-                    ? urlFor(nextImage).width(960).height(720).url()
+                    ? urlFor(nextImage).width(960).url()
                     : null;
 
                   return (
                     <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16">
-                      <div className="aspect-[4/3] relative overflow-hidden bg-black/5">
+                      <div className="min-h-[300px] lg:min-h-[400px] relative overflow-hidden bg-cream">
                         <Image
                           src={imageUrl}
                           alt={image.alt || `${project.title} - Image ${index + 1}`}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                         />
                       </div>
                       {nextImageUrl && (
-                        <div className="aspect-[4/3] relative overflow-hidden bg-black/5">
+                        <div className="min-h-[300px] lg:min-h-[400px] relative overflow-hidden bg-cream">
                           <Image
                             src={nextImageUrl}
                             alt={nextImage.alt || `${project.title} - Image ${index + 2}`}
                             fill
-                            className="object-cover"
+                            className="object-contain"
                           />
                         </div>
                       )}
@@ -249,13 +249,13 @@ export default async function StudioProjectPage({ params }: StudioProjectPagePro
                 return (
                   <div
                     key={index}
-                    className="aspect-[16/10] w-full relative overflow-hidden bg-black/5"
+                    className="min-h-[400px] lg:min-h-[600px] w-full relative overflow-hidden bg-cream"
                   >
                     <Image
                       src={imageUrl}
                       alt={image.alt || `${project.title} - Image ${index + 1}`}
                       fill
-                      className="object-cover"
+                      className="object-contain"
                     />
                   </div>
                 );
