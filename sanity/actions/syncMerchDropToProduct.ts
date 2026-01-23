@@ -2,6 +2,17 @@ import { DocumentActionComponent, DocumentActionProps } from 'sanity';
 import { SyncIcon } from '@sanity/icons';
 import { useState } from 'react';
 
+interface FeedPostDoc {
+  _id: string;
+  _type: string;
+  title?: string;
+  slug?: { current?: string };
+  category?: string;
+  price?: number;
+  syncedProduct?: { _ref: string };
+  [key: string]: unknown;
+}
+
 /**
  * Document action to sync a merch-drop feedPost to a product in the shop
  * This creates or updates a product based on the feedPost data
@@ -16,7 +27,7 @@ export const syncMerchDropToProduct: DocumentActionComponent = (props: DocumentA
   }
 
   // Get the document data (prefer draft over published)
-  const doc = draft || published;
+  const doc = (draft || published) as FeedPostDoc | null;
   
   // Only show for merch-drops category
   if (!doc || doc.category !== 'merch-drops') {
