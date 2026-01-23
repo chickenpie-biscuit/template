@@ -56,7 +56,7 @@ export async function generateMetadata({
 
   // Generate OG image URL (prioritize SEO ogImage, then featuredImage)
   const ogImageUrl = post.seo?.ogImage
-    ? urlFor(post.seo.ogImage).width(1200).height(630).url()
+    ? urlFor(post.seo.ogImage as any).width(1200).height(630).url()
     : post.featuredImage 
     ? urlFor(post.featuredImage).width(1200).height(630).url()
     : null;

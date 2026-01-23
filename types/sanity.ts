@@ -21,8 +21,12 @@ export interface SanityImage {
 export interface SEO {
   metaTitle?: string;
   metaDescription?: string;
+  focusKeyword?: string;
+  keywords?: string[];
   ogImage?: SanityImage;
+  canonicalUrl?: string;
   noIndex?: boolean;
+  noFollow?: boolean;
 }
 
 export interface Category {
@@ -54,7 +58,10 @@ export interface Post {
   excerpt?: string;
   body?: PortableTextBlock[];
   categories?: Category[];
+  tags?: string[];
+  seo?: SEO;
   publishedAt?: string;
+  _updatedAt?: string;
   featured?: boolean;
 }
 
@@ -76,10 +83,22 @@ export interface Product {
   stock?: number;
   featured?: boolean;
   publishedAt?: string;
+  _updatedAt?: string;
   originalPrice?: number;
   sizes?: string[];
   limitedQuantity?: boolean;
   dropDate?: string;
+  seo?: SEO;
+  reviews?: Array<{
+    author: string;
+    rating: number;
+    title?: string;
+    comment: string;
+    date: string;
+    verified?: boolean;
+  }>;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export interface AdBanner {

@@ -1,16 +1,16 @@
-import { TextAreaInput } from 'sanity';
-import { Stack, Text } from '@sanity/ui';
-import { useState } from 'react';
+import { Stack, Text, TextArea } from '@sanity/ui';
+import { useState, useCallback } from 'react';
+import { StringInputProps, set, unset } from 'sanity';
 
-export function MetaDescriptionInput(props: any) {
-  const { value = '' } = props;
+export function MetaDescriptionInput(props: StringInputProps) {
+  const { value = '', onChange } = props;
   const [charCount, setCharCount] = useState(value?.length || 0);
 
-  const handleChange = (event: any) => {
-    const newValue = event.target.value;
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = event.currentTarget.value;
     setCharCount(newValue.length);
-    props.onChange(event);
-  };
+    onChange(newValue ? set(newValue) : unset());
+  }, [onChange]);
 
   // Determine color based on length
   let countColor = 'default';
@@ -24,7 +24,12 @@ export function MetaDescriptionInput(props: any) {
 
   return (
     <Stack space={2}>
-      <TextAreaInput {...props} onChange={handleChange} />
+      <TextArea 
+        value={value}
+        onChange={handleChange}
+        rows={4}
+        placeholder="Enter a compelling description for search engines..."
+      />
       <Text size={1} muted>
         <span style={{ 
           color: countColor === 'positive' ? '#43d675' : 

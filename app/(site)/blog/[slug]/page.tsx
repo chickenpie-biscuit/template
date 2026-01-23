@@ -35,7 +35,7 @@ export async function generateMetadata({
 
   // Generate OG image URL
   const ogImageUrl = post.seo?.ogImage 
-    ? urlFor(post.seo.ogImage).width(1200).height(630).url()
+    ? urlFor(post.seo.ogImage as any).width(1200).height(630).url()
     : post.mainImage
     ? urlFor(post.mainImage as any).width(1200).height(630).url()
     : null;
@@ -436,5 +436,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </section>
       )}
     </article>
+    </>
   );
 }

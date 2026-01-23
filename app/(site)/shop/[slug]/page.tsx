@@ -39,7 +39,7 @@ export async function generateMetadata({
   }
 
   const ogImageUrl = product.seo?.ogImage
-    ? urlFor(product.seo.ogImage).width(1200).height(630).url()
+    ? urlFor(product.seo.ogImage as any).width(1200).height(630).url()
     : product.images?.[0]
     ? urlFor(product.images[0] as any).width(1200).height(630).url()
     : null;
