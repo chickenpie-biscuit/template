@@ -35,7 +35,7 @@ interface FeedPostCardProps {
 }
 
 const categoryLabels: Record<string, string> = {
-  'design-work': 'CASE STUDY',
+  'design-work': 'DESIGN STUFF',
   'art': 'GALLERY',
   'merch-drops': 'DROP',
   'prompt-week': 'PROMPT OF THE WEEK',
@@ -657,72 +657,83 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
-  // DESIGN WORK - Case Study Card
+  // DESIGN WORK - Design Stuff Card (Improved)
   if (category === 'design-work') {
     return (
       <Link
         href={href}
-        className="group block border-2 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
+        className="group block bg-white hover:shadow-[12px_12px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-2 transition-all duration-300 overflow-hidden"
       >
-        {/* Hero Image */}
-        {imageUrl && (
-          <div className="relative w-full aspect-video overflow-hidden bg-black">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-cream-200 animate-pulse" />
-            )}
-            <Image
-              src={imageUrl}
-              alt={post.featuredImage?.alt || post.title}
-              fill
-              className="object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-              placeholder={blurDataUrl ? 'blur' : 'empty'}
-              blurDataURL={blurDataUrl}
-              onLoad={() => setImageLoaded(true)}
-            />
-            
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
-            
-            {/* Category Badge on Image */}
-            <div className="absolute top-4 left-4 flex items-center gap-2">
-              <div className="w-8 h-0.5 bg-goldenrod" />
-              <span className="font-heading text-[10px] font-bold uppercase tracking-[0.3em] text-goldenrod">
-                {categoryLabel}
-              </span>
+        {/* Hero Image - Larger, more prominent */}
+        <div className="relative w-full aspect-[4/3] overflow-hidden bg-gradient-to-br from-goldenrod/20 to-black/10">
+          {imageUrl ? (
+            <>
+              {!imageLoaded && (
+                <div className="absolute inset-0 bg-cream animate-pulse" />
+              )}
+              <Image
+                src={imageUrl}
+                alt={post.featuredImage?.alt || post.title}
+                fill
+                className="object-cover group-hover:scale-110 transition-transform duration-700"
+                placeholder={blurDataUrl ? 'blur' : 'empty'}
+                blurDataURL={blurDataUrl}
+                onLoad={() => setImageLoaded(true)}
+              />
+              
+              {/* Subtle gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-heading text-4xl text-goldenrod/30">✦</span>
             </div>
+          )}
+          
+          {/* Category Badge - Floating */}
+          <div className="absolute top-3 left-3 bg-goldenrod px-3 py-1">
+            <span className="font-heading text-[10px] font-black uppercase tracking-wider text-black">
+              {categoryLabel}
+            </span>
           </div>
-        )}
+        </div>
 
-        {/* Content */}
-        <div className="p-6 bg-white">
+        {/* Content - Clean and minimal */}
+        <div className="p-5 bg-white border-t-4 border-goldenrod">
           {/* Title */}
-          <h3 className="font-heading text-2xl font-bold uppercase text-black mb-3 leading-tight line-clamp-2 group-hover:text-goldenrod transition-colors">
+          <h3 className="font-heading text-lg md:text-xl font-bold text-black mb-2 leading-tight line-clamp-2 group-hover:text-goldenrod transition-colors">
             {truncatedTitle}
           </h3>
 
           {/* Description */}
           {displayDescription && (
-            <p className="font-body text-sm text-black/70 mb-4 line-clamp-3 leading-relaxed">
+            <p className="font-body text-sm text-black/60 mb-4 line-clamp-2 leading-relaxed">
               {displayDescription}
             </p>
           )}
 
-          {/* Meta Info (if client/year available) */}
-          <div className="flex items-center gap-4 text-xs font-heading uppercase tracking-wider text-black/40 mb-4">
-            {(post as any).client && (
-              <span>Client: {(post as any).client}</span>
-            )}
-            {(post as any).projectYear && (
-              <>
-                <span>•</span>
-                <span>{(post as any).projectYear}</span>
-              </>
-            )}
-          </div>
+          {/* Footer with CTA */}
+          <div className="flex items-center justify-between">
+            {/* Meta Info */}
+            <div className="flex items-center gap-2 text-[10px] font-heading uppercase tracking-wider text-black/40">
+              {(post as any).client && (
+                <span>{(post as any).client}</span>
+              )}
+              {(post as any).projectYear && (
+                <>
+                  <span>•</span>
+                  <span>{(post as any).projectYear}</span>
+                </>
+              )}
+            </div>
 
-          {/* CTA */}
-          <div className="inline-block px-4 py-2 border-2 border-goldenrod bg-goldenrod text-black font-heading text-xs font-bold uppercase group-hover:bg-black group-hover:text-goldenrod group-hover:border-black transition-colors">
-            View Case Study
+            {/* CTA Arrow */}
+            <div className="flex items-center gap-2 text-goldenrod group-hover:text-black transition-colors">
+              <span className="font-heading text-xs font-bold uppercase tracking-wider">Read Article</span>
+              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </div>
           </div>
         </div>
       </Link>
