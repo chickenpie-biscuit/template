@@ -173,12 +173,11 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
                 return (
                   <div 
                     key={`banner-${item.index}-${idx}`} 
-                    className="break-inside-avoid mb-4 md:mb-5 col-span-full feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
-                    style={{ columnSpan: 'all' }}
+                    className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
                   >
                     <AdBannerComponent
                       banners={[inlineBanners[item.index]]}
-                      variant="card"
+                      variant="feedpost"
                     />
                   </div>
                 );

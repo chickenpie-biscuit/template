@@ -16,6 +16,7 @@ const categories = [
   { label: 'Tools', value: 'tool-tuesday' },
   { label: 'Journey', value: 'solopreneur' },
   { label: 'Swings', value: 'sunday-swings' },
+  { label: 'Nom Nom', value: 'nom-nom' },
 ];
 
 export default function FilterBar() {

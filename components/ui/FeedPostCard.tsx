@@ -43,6 +43,7 @@ const categoryLabels: Record<string, string> = {
   'tool-tuesday': 'TOOL TUESDAY',
   'solopreneur': 'SOLOPRENEUR SUNDAYS',
   'sunday-swings': 'SUNDAY SWINGS',
+  'nom-nom': 'NOM NOM',
 };
 
 const categoryColors: Record<string, string> = {
@@ -54,6 +55,7 @@ const categoryColors: Record<string, string> = {
   'tool-tuesday': 'bg-teal',
   'solopreneur': 'bg-teal',
   'sunday-swings': 'bg-goldenrod',
+  'nom-nom': 'bg-orange-500',
 };
 
 function FeedPostCard({ post }: FeedPostCardProps) {
@@ -340,6 +342,90 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
+
+  // NOM NOM - Recipe Card (Food Blog Style)
+  if (category === 'nom-nom') {
+    return (
+      <Link
+        href={href}
+        className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(249,115,22,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      >
+        {/* Food Image */}
+        {imageUrl && (
+          <div className="relative w-full aspect-square overflow-hidden">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-orange-100 animate-pulse" />
+            )}
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+            
+            {/* Category Badge */}
+            <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1.5 border-2 border-black">
+              <span className="font-heading text-xs font-bold uppercase tracking-widest flex items-center gap-1">
+                🍳 {categoryLabel}
+              </span>
+            </div>
+
+            {/* Recipe Info Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <div className="flex items-center gap-3 text-white/90 text-xs font-heading uppercase tracking-wider">
+                {(post as any).prepTime && (
+                  <span className="flex items-center gap-1">
+                    ⏱️ {(post as any).prepTime}
+                  </span>
+                )}
+                {(post as any).difficulty && (
+                  <span className="bg-white/20 px-2 py-0.5 rounded">
+                    {(post as any).difficulty}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="p-5 bg-cream">
+          {/* Title */}
+          <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-black leading-tight mb-2 group-hover:text-orange-600 transition-colors">
+            {truncatedTitle}
+          </h3>
+
+          {/* Description */}
+          {displayDescription && (
+            <p className="font-body text-sm text-black/70 mb-4 line-clamp-2">
+              {displayDescription}
+            </p>
+          )}
+
+          {/* Meta row */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-black/50 font-heading text-[10px] uppercase tracking-wider">
+              {(post as any).cuisine && <span>{(post as any).cuisine}</span>}
+              {(post as any).servings && (
+                <>
+                  <span>•</span>
+                  <span>{(post as any).servings}</span>
+                </>
+              )}
+            </div>
+            <div className="bg-orange-500 text-white px-3 py-1.5 font-heading text-xs font-bold uppercase group-hover:bg-black transition-colors">
+              View Recipe
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
 
   // ART - Clean Gallery Card (Large Image, No Background)
   if (category === 'art') {

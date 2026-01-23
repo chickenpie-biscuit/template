@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 interface AdBannerProps {
   banners: AdBanner[];
   placement?: 'header' | 'sidebar' | 'footer' | 'inline';
-  variant?: 'full' | 'card' | 'sticky' | 'inline';
+  variant?: 'full' | 'card' | 'sticky' | 'inline' | 'feedpost';
   className?: string;
   dismissible?: boolean;
 }
@@ -26,9 +26,12 @@ interface AdBannerProps {
  * - inline  → Shows between feed posts, on shop page, after blog content
  * - sidebar → Shows as card-style banner after post content
  * 
- * REQUIREMENTS:
- * - 'sticky' variant: Only needs title (text-only announcement bar)
- * - All other variants: Requires an image to display
+ * VARIANTS:
+ * - 'sticky'   → Text-only announcement bar (no image required)
+ * - 'full'     → Full-width image banner with overlay
+ * - 'card'     → Card-style with image and title
+ * - 'inline'   → Horizontal banner with CTA
+ * - 'feedpost' → Looks like a FeedPostCard (blends with masonry feed)
  * 
  * If no image is assigned (except for sticky), the banner will NOT render.
  */
@@ -80,9 +83,13 @@ export default function AdBannerComponent({
 
   const banner = filteredBanners[currentIndex];
   
-  // Generate image URL (may be null for sticky variant)
+  // Generate image URLs for different sizes
   const imageUrl = banner.image 
     ? urlFor(banner.image as any).width(1400).height(400).url() 
+    : null;
+    
+  const feedpostImageUrl = banner.image
+    ? urlFor(banner.image as any).width(800).height(1200).url()
     : null;
 
   // Header/Announcement Bar Style - TEXT ONLY (no image required)
@@ -123,6 +130,69 @@ export default function AdBannerComponent({
 
   // For all other variants, image is required
   if (!imageUrl) return null;
+
+  // FEEDPOST VARIANT - Looks like a FeedPostCard (for masonry feed)
+  if (variant === 'feedpost') {
+    const content = (
+      <div className={`group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden ${className}`}>
+        {/* Image */}
+        <div className="relative w-full aspect-[3/4] overflow-hidden bg-black">
+          <Image
+            src={feedpostImageUrl || imageUrl}
+            alt={banner.image?.alt || banner.title}
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          />
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+          
+          {/* Sponsored Badge - styled to match but clearly marked */}
+          <div className="absolute top-3 left-3">
+            <div className="bg-goldenrod/90 backdrop-blur-sm text-black px-3 py-1.5 border border-black/20">
+              <span className="font-heading text-[10px] font-bold uppercase tracking-widest">
+                ✨ Sponsored
+              </span>
+            </div>
+          </div>
+
+          {/* Title overlay on image */}
+          <div className="absolute bottom-0 left-0 right-0 p-5">
+            <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-white leading-tight drop-shadow-lg line-clamp-2">
+              {banner.title}
+            </h3>
+          </div>
+        </div>
+
+        {/* Content section */}
+        <div className="p-5 bg-cream border-t-2 border-black">
+          {/* Footer with CTA */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-black/50 font-heading text-[10px] uppercase tracking-wider">
+              <span>Ad</span>
+            </div>
+            <div className="bg-black text-goldenrod px-3 py-1.5 font-heading text-xs font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
+              Learn More
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    if (banner.link) {
+      return (
+        <Link
+          href={banner.link}
+          className="block"
+          target={banner.link.startsWith('http') ? '_blank' : undefined}
+          rel="noopener noreferrer"
+        >
+          {content}
+        </Link>
+      );
+    }
+    return content;
+  }
 
   // Full Width Banner (for footer placements) - REQUIRES IMAGE
   if (variant === 'full') {

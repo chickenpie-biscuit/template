@@ -35,6 +35,7 @@ export default defineType({
           { title: 'Tool Tuesday', value: 'tool-tuesday' },
           { title: 'Solopreneur Sundays', value: 'solopreneur' },
           { title: 'Sunday Swings', value: 'sunday-swings' },
+          { title: 'Nom Nom', value: 'nom-nom' },
         ],
         layout: 'radio',
       },
@@ -409,6 +410,96 @@ export default defineType({
           title: 'Alternative Text',
         },
       ],
+    }),
+    // Nom Nom (Food Recipe) specific fields
+    defineField({
+      name: 'recipeGallery',
+      title: 'Recipe Gallery',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: { hotspot: true },
+          fields: [
+            { name: 'alt', type: 'string', title: 'Alt Text' },
+            { name: 'caption', type: 'string', title: 'Caption' },
+          ],
+        },
+      ],
+      description: 'For Nom Nom - photos of the dish and cooking process',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'recipeVideo',
+      title: 'Recipe Video URL',
+      type: 'url',
+      description: 'For Nom Nom - YouTube or Vimeo video link',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'ingredients',
+      title: 'Ingredients',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'amount', type: 'string', title: 'Amount (e.g., "2 cups")' },
+            { name: 'ingredient', type: 'string', title: 'Ingredient' },
+          ],
+          preview: {
+            select: { amount: 'amount', ingredient: 'ingredient' },
+            prepare({ amount, ingredient }) {
+              return { title: `${amount || ''} ${ingredient || ''}`.trim() };
+            },
+          },
+        },
+      ],
+      description: 'For Nom Nom - list of ingredients',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'prepTime',
+      title: 'Prep Time',
+      type: 'string',
+      description: 'For Nom Nom - e.g., "15 mins"',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'cookTime',
+      title: 'Cook Time',
+      type: 'string',
+      description: 'For Nom Nom - e.g., "30 mins"',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'servings',
+      title: 'Servings',
+      type: 'string',
+      description: 'For Nom Nom - e.g., "4 people"',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'difficulty',
+      title: 'Difficulty',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Easy', value: 'easy' },
+          { title: 'Medium', value: 'medium' },
+          { title: 'Hard', value: 'hard' },
+          { title: 'Expert', value: 'expert' },
+        ],
+      },
+      description: 'For Nom Nom - recipe difficulty level',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
+    }),
+    defineField({
+      name: 'cuisine',
+      title: 'Cuisine Type',
+      type: 'string',
+      description: 'For Nom Nom - e.g., "Filipino", "Italian", "Japanese"',
+      hidden: ({ document }) => document?.category !== 'nom-nom',
     }),
     defineField({
       name: 'ctaText',

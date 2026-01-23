@@ -19,6 +19,7 @@ import ChroniclesLayout from '@/components/layouts/ChroniclesLayout';
 import ToolTuesdayLayout from '@/components/layouts/ToolTuesdayLayout';
 import SolopreneurLayout from '@/components/layouts/SolopreneurLayout';
 import SundaySwingsLayout from '@/components/layouts/SundaySwingsLayout';
+import NomNomLayout from '@/components/layouts/NomNomLayout';
 
 interface FeedPostPageProps {
   params: { slug: string };
@@ -33,6 +34,7 @@ const categoryLabels: Record<string, string> = {
   'merch-drops': 'Merch Drop',
   'prompt-week': 'Prompt of the Week',
   'chronicles': 'Chicken Chronicles',
+  'nom-nom': 'Nom Nom Recipe',
   'tool-tuesday': 'Tool Tuesday',
   'solopreneur': 'Solopreneur Sundays',
   'sunday-swings': 'Sunday Swings',
@@ -145,13 +147,15 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     LayoutComponent = SolopreneurLayout;
   } else if (post.category === 'sunday-swings') {
     LayoutComponent = SundaySwingsLayout;
+  } else if (post.category === 'nom-nom') {
+    LayoutComponent = NomNomLayout;
   }
 
   // Hide back button on commerce pages (merch drops have their own navigation style)
   const showBackButton = post.category !== 'merch-drops';
   
   // Show sidebar banner on certain layouts
-  const showSidebarBanner = ['art', 'chronicles', 'prompt-week', 'tool-tuesday', 'solopreneur', 'sunday-swings'].includes(post.category);
+  const showSidebarBanner = ['art', 'chronicles', 'prompt-week', 'tool-tuesday', 'solopreneur', 'sunday-swings', 'nom-nom'].includes(post.category);
   const sidebarBanners = banners?.filter(b => b.placement === 'sidebar') || [];
 
   return (
