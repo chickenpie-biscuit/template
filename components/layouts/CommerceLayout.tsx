@@ -7,6 +7,7 @@ import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
 import { Zap, Package, Clock, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useCartStore } from '@/lib/store';
 
 interface CommerceLayoutProps {
   post: any;
@@ -21,6 +22,8 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
     : [];
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const addItem = useCartStore((state) => state.addItem);
   
   const activeImage = galleryImages[activeImageIndex];
   const imageUrl = activeImage
@@ -40,6 +43,25 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
   const isLimited = post.limitedQuantity;
   const stockLow = post.stock !== undefined && post.stock > 0 && post.stock <= 10;
   const soldOut = post.stock !== undefined && post.stock <= 0;
+
+  // Handle add to cart
+  const handleAddToCart = () => {
+    if (soldOut || isUpcoming) return;
+    
+    // If product has sizes and no size is selected, alert user
+    if (post.sizes && post.sizes.length > 0 && !selectedSize) {
+      alert('Please select a size');
+      return;
+    }
+    
+    addItem({
+      id: post._id,
+      name: post.title,
+      price: post.price,
+      image: imageUrl || '',
+      size: selectedSize || undefined,
+    });
+  };
 
   // Countdown timer
   useEffect(() => {
@@ -202,11 +224,16 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             {post.sizes && post.sizes.length > 0 && (
               <div className="mb-8">
                 <p className="font-heading text-xs uppercase tracking-widest text-white/60 mb-3">Select Size</p>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {post.sizes.map((size: string, index: number) => (
                     <button
                       key={index}
-                      className="px-5 py-3 border-2 border-white/30 text-white hover:border-goldenrod hover:bg-goldenrod hover:text-black transition-colors font-heading font-bold uppercase text-sm"
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-5 py-3 border-2 transition-colors font-heading font-bold uppercase text-sm ${
+                        selectedSize === size
+                          ? 'border-goldenrod bg-goldenrod text-black'
+                          : 'border-white/30 text-white hover:border-goldenrod hover:bg-goldenrod hover:text-black'
+                      }`}
                     >
                       {size}
                     </button>
@@ -246,7 +273,10 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                 </button>
               ) : (
                 <>
-                  <button className="w-full py-5 bg-white text-black hover:bg-goldenrod hover:text-black transition-colors border-2 border-white font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(218,165,32,0.3)] hover:-translate-y-0.5 transition-all">
+                  <button 
+                    onClick={handleAddToCart}
+                    className="w-full py-5 bg-white text-black hover:bg-goldenrod hover:text-black transition-colors border-2 border-white font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(218,165,32,0.3)] hover:-translate-y-0.5 transition-all"
+                  >
                     Add to Cart — ${post.price}
                   </button>
                   {post.ctaLink && (

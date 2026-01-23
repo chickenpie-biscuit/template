@@ -310,7 +310,17 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   cookTime,
   servings,
   difficulty,
-  cuisine
+  cuisine,
+  // Course Review fields
+  courseLocation,
+  coursePar,
+  courseRating,
+  courseDifficulty,
+  courseConditions,
+  courseMap,
+  courseWebsite,
+  coursePhone,
+  courseGallery
 }`;
 
 // Studio Project Queries - Only studioProject type (feedPost design-work stays in feed only)

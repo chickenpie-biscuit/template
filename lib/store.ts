@@ -7,6 +7,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   image?: string;
+  size?: string;
 }
 
 interface CartStore {
@@ -17,9 +18,10 @@ interface CartStore {
     name: string;
     price: number;
     image?: string;
+    size?: string;
   }) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  removeItem: (id: string, size?: string) => void;
+  updateQuantity: (id: string, quantity: number, size?: string) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
@@ -35,12 +37,15 @@ export const useCartStore = create<CartStore>()(
       isCartOpen: false,
       addItem: (product) => {
         const items = get().items;
-        const existingItem = items.find((item) => item.id === product.id);
+        // Check for same product AND size (if size is specified)
+        const existingItem = items.find((item) => 
+          item.id === product.id && item.size === product.size
+        );
 
         if (existingItem) {
           set({
             items: items.map((item) =>
-              item.id === product.id
+              item.id === product.id && item.size === product.size
                 ? { ...item, quantity: item.quantity + 1 }
                 : item
             ),
@@ -53,19 +58,21 @@ export const useCartStore = create<CartStore>()(
           });
         }
       },
-      removeItem: (id) => {
+      removeItem: (id, size) => {
         set({
-          items: get().items.filter((item) => item.id !== id),
+          items: get().items.filter((item) => 
+            !(item.id === id && item.size === size)
+          ),
         });
       },
-      updateQuantity: (id, quantity) => {
+      updateQuantity: (id, quantity, size) => {
         if (quantity <= 0) {
-          get().removeItem(id);
+          get().removeItem(id, size);
           return;
         }
         set({
           items: get().items.map((item) =>
-            item.id === id ? { ...item, quantity } : item
+            item.id === id && item.size === size ? { ...item, quantity } : item
           ),
         });
       },

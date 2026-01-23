@@ -17,6 +17,7 @@ const categories = [
   { label: 'Tools', value: 'tool-tuesday' },
   { label: 'Journey', value: 'solopreneur' },
   { label: 'Swings', value: 'sunday-swings' },
+  { label: 'Golf', value: 'course-review' },
   { label: 'Nom Nom', value: 'nom-nom' },
   { label: 'Quotes', value: 'quotes' },
 ];

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
 import { useState, memo, useMemo } from 'react';
+import { MapPin, Flag, Star } from 'lucide-react';
 
 interface FeedPost {
   _id: string;
@@ -28,6 +29,11 @@ interface FeedPost {
   limitedQuantity?: boolean;
   dropDate?: string;
   productType?: string;
+  // Course Review fields
+  courseLocation?: string;
+  courseRating?: number;
+  courseDifficulty?: number;
+  courseConditions?: number;
 }
 
 interface FeedPostCardProps {
@@ -45,6 +51,7 @@ const categoryLabels: Record<string, string> = {
   'sunday-swings': 'SUNDAY SWINGS',
   'nom-nom': 'NOM NOM',
   'quotes': 'QUOTE',
+  'course-review': 'COURSE REVIEW',
 };
 
 const categoryColors: Record<string, string> = {
@@ -58,6 +65,7 @@ const categoryColors: Record<string, string> = {
   'sunday-swings': 'bg-goldenrod',
   'nom-nom': 'bg-orange-500',
   'quotes': 'bg-black/80',
+  'course-review': 'bg-emerald-700',
 };
 
 function FeedPostCard({ post }: FeedPostCardProps) {
@@ -107,12 +115,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           <h3 className="font-heading text-2xl md:text-3xl font-bold uppercase text-black leading-tight mb-4 flex-1">
             {truncatedTitle}
           </h3>
-
+          
           {/* Description */}
-          {displayDescription && (
+            {displayDescription && (
             <p className="font-body text-sm text-black/70 mb-4 line-clamp-3">
-              {displayDescription}
-            </p>
+                {displayDescription}
+              </p>
           )}
 
           {/* Code Preview */}
@@ -355,6 +363,71 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     );
   }
 
+
+  // COURSE REVIEW - Golf Card
+  if (category === 'course-review') {
+    return (
+      <Link
+        href={href}
+        className="group block border-2 border-emerald-900 bg-emerald-50 hover:shadow-[8px_8px_0px_0px_rgba(6,78,59,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      >
+        {imageUrl && (
+          <div className="relative w-full aspect-video overflow-hidden">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-emerald-100 animate-pulse" />
+            )}
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+            
+            {/* Rating Badge */}
+            {post.courseRating && (
+              <div className="absolute top-4 right-4 bg-white text-emerald-900 px-3 py-1 border-2 border-emerald-900 font-heading font-bold flex items-center gap-1 shadow-md">
+                <Star className="w-3 h-3 fill-emerald-900" />
+                <span>{post.courseRating}/10</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="p-5">
+          <div className="flex items-center gap-2 mb-3">
+            <Flag className="w-4 h-4 text-emerald-700" />
+            <span className="font-heading text-xs font-bold uppercase tracking-widest text-emerald-900">
+              {categoryLabel}
+            </span>
+          </div>
+
+          <h3 className="font-heading text-xl font-bold uppercase text-black leading-tight mb-2">
+            {truncatedTitle}
+          </h3>
+
+          {post.courseLocation && (
+            <div className="flex items-center gap-2 mb-4 text-emerald-800/60 font-heading text-xs uppercase tracking-wider">
+              <MapPin className="w-3 h-3" />
+              {post.courseLocation}
+            </div>
+          )}
+
+          {displayDescription && (
+            <p className="font-body text-sm text-emerald-900/70 line-clamp-2 mb-4">
+              {displayDescription}
+            </p>
+          )}
+
+          <div className="bg-emerald-900 text-white px-4 py-2 text-center font-heading text-xs font-bold uppercase hover:bg-emerald-800 transition-colors">
+            Read Review
+          </div>
+        </div>
+      </Link>
+    );
+  }
 
   // NOM NOM - Recipe Card (Food Blog Style)
   if (category === 'nom-nom') {
@@ -626,8 +699,8 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           {/* Category Badge */}
           <div className="flex items-center justify-between mb-3">
             <span className={`${categoryColor} text-white px-2 py-1 font-heading text-[10px] font-bold uppercase tracking-widest`}>
-              {categoryLabel}
-            </span>
+                  {categoryLabel}
+                </span>
             {isLowStock && (
               <span className="text-red text-[10px] font-heading font-bold uppercase tracking-wider">
                 {post.stock} Left
@@ -638,26 +711,26 @@ function FeedPostCard({ post }: FeedPostCardProps) {
                 Sold Out
               </span>
             )}
-          </div>
+              </div>
 
           {/* Title */}
           <h3 className="font-heading text-lg md:text-xl font-bold uppercase text-white mb-2 line-clamp-2 leading-tight">
-            {truncatedTitle}
-          </h3>
-
-          {/* Price */}
-          {post.price && (
+                {truncatedTitle}
+              </h3>
+              
+              {/* Price */}
+              {post.price && (
             <div className="flex items-baseline gap-2 mb-3">
               <span className="font-heading text-2xl font-bold text-white">
                 ${post.price}
-              </span>
-              {post.originalPrice && (
+                  </span>
+                  {post.originalPrice && (
                 <span className="font-heading text-sm line-through text-white/40">
                   ${post.originalPrice}
-                </span>
+                    </span>
+                  )}
+                </div>
               )}
-            </div>
-          )}
 
           {/* Description */}
           {displayDescription && (
@@ -743,7 +816,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
                   <span>{(post as any).projectYear}</span>
                 </>
               )}
-            </div>
+              </div>
 
             {/* CTA Arrow */}
             <div className="flex items-center gap-2 text-goldenrod group-hover:text-black transition-colors">

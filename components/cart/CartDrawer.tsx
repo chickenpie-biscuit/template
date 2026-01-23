@@ -100,7 +100,7 @@ export default function CartDrawer() {
             <div className="space-y-4">
               {items.map((item) => (
                 <div
-                  key={item.id}
+                  key={`${item.id}-${item.size || 'no-size'}`}
                   className="flex gap-4 p-4 border-2 border-black bg-white"
                 >
                   {item.image && (
@@ -116,13 +116,18 @@ export default function CartDrawer() {
                   )}
                   <div className="flex-1">
                     <h3 className="font-heading font-bold uppercase text-sm">{item.name}</h3>
-                    <p className="text-sm text-black/60 font-body">
+                    {item.size && (
+                      <p className="text-xs text-black/40 font-heading uppercase mt-0.5">
+                        Size: {item.size}
+                      </p>
+                    )}
+                    <p className="text-sm text-black/60 font-body mt-1">
                       {formatPrice(item.price)}
                     </p>
                     <div className="flex items-center gap-2 mt-2">
                       <button
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
+                          updateQuantity(item.id, item.quantity - 1, item.size)
                         }
                         className="p-1 hover:bg-black hover:text-white transition-colors border border-black"
                         aria-label="Decrease quantity"
@@ -132,7 +137,7 @@ export default function CartDrawer() {
                       <span className="w-8 text-center font-heading font-bold">{item.quantity}</span>
                       <button
                         onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
+                          updateQuantity(item.id, item.quantity + 1, item.size)
                         }
                         className="p-1 hover:bg-black hover:text-white transition-colors border border-black"
                         aria-label="Increase quantity"
@@ -140,7 +145,7 @@ export default function CartDrawer() {
                         <Plus size={14} />
                       </button>
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.id, item.size)}
                         className="ml-auto p-1 text-red hover:bg-red hover:text-white transition-colors border border-red"
                         aria-label="Remove item"
                       >

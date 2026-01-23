@@ -20,6 +20,7 @@ import ToolTuesdayLayout from '@/components/layouts/ToolTuesdayLayout';
 import SolopreneurLayout from '@/components/layouts/SolopreneurLayout';
 import SundaySwingsLayout from '@/components/layouts/SundaySwingsLayout';
 import NomNomLayout from '@/components/layouts/NomNomLayout';
+import CourseReviewLayout from '@/components/layouts/CourseReviewLayout';
 
 interface FeedPostPageProps {
   params: { slug: string };
@@ -149,6 +150,8 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     LayoutComponent = SundaySwingsLayout;
   } else if (post.category === 'nom-nom') {
     LayoutComponent = NomNomLayout;
+  } else if (post.category === 'course-review') {
+    LayoutComponent = CourseReviewLayout;
   }
 
   // Hide back button on commerce pages (merch drops have their own navigation style)

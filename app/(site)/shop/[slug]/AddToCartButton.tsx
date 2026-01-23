@@ -9,9 +9,10 @@ import { ShoppingCart, Check } from 'lucide-react';
 
 interface AddToCartButtonProps {
   product: Product;
+  selectedSize?: string;
 }
 
-export default function AddToCartButton({ product }: AddToCartButtonProps) {
+export default function AddToCartButton({ product, selectedSize }: AddToCartButtonProps) {
   const addItem = useCartStore((state) => state.addItem);
   const [added, setAdded] = useState(false);
   
@@ -21,11 +22,19 @@ export default function AddToCartButton({ product }: AddToCartButtonProps) {
     : '/images/placeholder.jpg';
 
   const handleAddToCart = () => {
+    // Check if product has sizes and no size is selected
+    const hasSizes = (product as any).sizes && (product as any).sizes.length > 0;
+    if (hasSizes && !selectedSize) {
+      alert('Please select a size');
+      return;
+    }
+
     addItem({
       id: product._id,
       name: product.title,
       price: product.price,
       image: imageUrl,
+      size: selectedSize,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
