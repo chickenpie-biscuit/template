@@ -16,6 +16,7 @@ interface GalleryImage {
   asset?: any;
   alt?: string;
   caption?: string;
+  [key: string]: any; // Index signature for Sanity Image compatibility
 }
 
 interface NomNomPost {
