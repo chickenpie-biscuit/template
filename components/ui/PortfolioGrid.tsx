@@ -90,9 +90,9 @@ export default function PortfolioGrid({ projects }: PortfolioGridProps) {
                               src={imageUrl}
                               alt=""
                               fill
-                              className="object-cover"
+                              className="object-contain"
                             />
-                            <div className="absolute inset-0 bg-black/70" />
+                            <div className="absolute inset-0 bg-black/60" />
                           </motion.div>
                         )}
                       </AnimatePresence>
