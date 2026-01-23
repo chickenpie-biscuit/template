@@ -145,6 +145,20 @@ export default function SundaySwingsLayout({ post }: SundaySwingsLayoutProps) {
               </div>
             )}
 
+            {/* CTA Button */}
+            {post.ctaLink && (
+              <div className="mt-12 text-center px-8 lg:px-12">
+                <a
+                  href={post.ctaLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block px-10 py-4 bg-goldenrod text-black hover:bg-black hover:text-goldenrod border-2 border-goldenrod hover:border-black font-heading font-bold uppercase transition-colors shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                >
+                  {post.ctaText || 'Read More'}
+                </a>
+              </div>
+            )}
+
             {/* Footer Note */}
             <div className="mt-12 px-8 lg:px-12 py-8 bg-cream-50 border border-black/10">
               <p className="font-body text-center text-black/60 italic">

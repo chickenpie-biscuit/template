@@ -1,10 +1,12 @@
 'use client';
 
 import { X, Plus, Minus, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import { useCartStore, CartItem } from '@/lib/store';
 import { formatPrice } from '@/lib/utils';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
+import { getStripe } from '@/lib/stripe';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -17,6 +19,49 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const removeItem = useCartStore((state) => state.removeItem);
   const getTotal = useCartStore((state) => state.getTotal);
   const clearCart = useCartStore((state) => state.clearCart);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    setIsLoading(true);
+    try {
+      // Create checkout session
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ items }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        console.error('Checkout error:', data.error);
+        alert('Error creating checkout session. Please try again.');
+        return;
+      }
+
+      // Redirect to Stripe Checkout
+      const stripe = await getStripe();
+      if (!stripe) {
+        throw new Error('Stripe failed to load');
+      }
+
+      const { error } = await stripe.redirectToCheckout({
+        sessionId: data.sessionId,
+      });
+
+      if (error) {
+        console.error('Stripe redirect error:', error);
+        alert('Error redirecting to checkout. Please try again.');
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('An error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -108,12 +153,18 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <span>Total:</span>
               <span>{formatPrice(getTotal())}</span>
             </div>
-            <Button className="w-full" size="lg">
-              Checkout
+            <Button 
+              className="w-full" 
+              size="lg"
+              onClick={handleCheckout}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : 'Checkout with Stripe'}
             </Button>
             <button
               onClick={clearCart}
               className="w-full text-sm text-gray-600 hover:text-gray-900"
+              disabled={isLoading}
             >
               Clear Cart
             </button>

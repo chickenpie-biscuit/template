@@ -85,20 +85,25 @@ export const getAllProducts = groq`*[_type == "product" || (_type == "feedPost" 
   }
 }`;
 
-export const getProductBySlug = groq`*[_type == "product" && slug.current == $slug][0] {
+export const getProductBySlug = groq`*[(_type == "product" && slug.current == $slug) || (_type == "feedPost" && category == "merch-drops" && slug.current == $slug)][0] {
   _id,
+  _type,
   title,
   "slug": slug.current,
   price,
-  images,
-  description,
-  shortDescription,
+  "images": coalesce(images, productGallery, [featuredImage]),
+  "description": coalesce(description, body),
+  "shortDescription": coalesce(shortDescription, description),
   publishedAt,
   featured,
   stock,
   sku,
   productType,
   downloadUrl,
+  sizes,
+  originalPrice,
+  limitedQuantity,
+  dropDate,
   "category": category-> {
     _id,
     title,
@@ -186,7 +191,7 @@ export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | 
   featured
 }`;
 
-export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category == $category) || (_type == "post")] | order(publishedAt desc) {
+export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt desc) {
   _id,
   _type,
   title,
@@ -202,6 +207,8 @@ export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category ==
   originalPrice,
   findPrice,
   findHighlight,
+  productType,
+  stock,
   publishedAt,
   featured
 }`;

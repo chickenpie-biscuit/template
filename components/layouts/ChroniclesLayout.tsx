@@ -120,6 +120,20 @@ export default function ChroniclesLayout({ post }: ChroniclesLayoutProps) {
             </div>
           )}
 
+          {/* CTA Button */}
+          {post.ctaLink && (
+            <div className="mt-16 text-center">
+              <a
+                href={post.ctaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-10 py-4 bg-goldenrod text-black hover:bg-black hover:text-goldenrod border-4 border-black font-heading font-bold uppercase text-lg shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
+              >
+                {post.ctaText || 'Continue Reading'}
+              </a>
+            </div>
+          )}
+
           {/* Navigation Hint */}
           <div className="mt-16 flex items-center justify-between max-w-md mx-auto">
             <button className="flex items-center gap-2 font-heading text-sm uppercase tracking-wider text-black/40 hover:text-black transition-colors">

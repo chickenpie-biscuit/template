@@ -60,20 +60,25 @@ export interface Post {
 
 export interface Product {
   _id: string;
-  _type: 'product';
+  _type: 'product' | 'feedPost';
   title: string;
   slug: string;
   price: number;
   images?: SanityImage[];
+  featuredImage?: SanityImage;
   description?: PortableTextBlock[];
   shortDescription?: string;
   category?: Category;
-  productType?: 'physical' | 'digital';
+  productType?: 'physical' | 'digital' | string;
   downloadUrl?: string;
   sku?: string;
   stock?: number;
   featured?: boolean;
   publishedAt?: string;
+  originalPrice?: number;
+  sizes?: string[];
+  limitedQuantity?: boolean;
+  dropDate?: string;
 }
 
 export interface AdBanner {

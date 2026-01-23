@@ -51,8 +51,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
     ?.fetch<Product[]>(getFeaturedProducts)
     .catch(() => []) ?? Promise.resolve([]));
 
-  const mainImageUrl = product.images?.[0]
-    ? urlFor(product.images[0] as any).width(800).height(800).url()
+  // Handle both product and feedPost image structures
+  const mainImage = product.images?.[0] || product.featuredImage;
+  const mainImageUrl = mainImage
+    ? urlFor(mainImage as any).width(800).height(800).url()
     : '/images/placeholder.jpg';
 
   return (
@@ -92,6 +94,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 })}
               </div>
             )}
+            
+            {/* Show original price if available (for feedPost merch-drops) */}
+            {product.originalPrice && product.originalPrice > product.price && (
+              <div className="mt-4">
+                <span className="text-lg text-gray-400 line-through mr-2">
+                  {formatPrice(product.originalPrice)}
+                </span>
+                <span className="text-sm font-bold text-red-600">
+                  Save {formatPrice(product.originalPrice - product.price)}!
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Product Info */}
@@ -120,6 +134,28 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <p className="text-sm text-gray-500">
                   Type: {product.productType === 'digital' ? 'Digital' : 'Physical'}
                 </p>
+              )}
+              {product.sizes && product.sizes.length > 0 && (
+                <div className="mt-4">
+                  <p className="text-sm font-semibold text-gray-700 mb-2">Available Sizes:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {product.sizes.map((size, index) => (
+                      <span
+                        key={index}
+                        className="px-3 py-1 border-2 border-black bg-cream text-black font-heading font-bold uppercase text-xs hover:bg-black hover:text-cream transition-colors cursor-pointer"
+                      >
+                        {size}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {product.limitedQuantity && (
+                <div className="mt-2">
+                  <span className="inline-block px-3 py-1 bg-red-100 text-red-800 border-2 border-red-800 font-heading font-bold uppercase text-xs">
+                    Limited Edition
+                  </span>
+                </div>
               )}
             </div>
 

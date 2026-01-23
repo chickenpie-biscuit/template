@@ -168,6 +168,20 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
             </div>
           )}
 
+          {/* CTA Button */}
+          {post.ctaLink && (
+            <div className="mt-16 text-center">
+              <a
+                href={post.ctaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-10 py-4 bg-teal text-black hover:bg-goldenrod hover:text-black border-2 border-teal hover:border-goldenrod font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,221,221,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(218,165,32,0.3)] hover:-translate-y-0.5 transition-all"
+              >
+                {post.ctaText || 'Learn More'}
+              </a>
+            </div>
+          )}
+
           {/* Footer Note */}
           <div className="mt-12 pt-8 border-t-2 border-cream/10 text-center">
             <p className="font-body text-cream/60 italic">

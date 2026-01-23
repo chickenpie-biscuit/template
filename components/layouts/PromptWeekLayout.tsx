@@ -149,6 +149,20 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
               </p>
             </div>
           </div>
+
+          {/* CTA Button */}
+          {post.ctaLink && (
+            <div className="mt-12 text-center">
+              <a
+                href={post.ctaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-8 py-4 bg-goldenrod text-black hover:bg-black hover:text-goldenrod border-2 border-black font-heading font-bold uppercase transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
+              >
+                {post.ctaText || 'Try This Tool'}
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </article>

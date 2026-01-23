@@ -77,8 +77,8 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
   // Use excerpt if description is not available (for blog posts)
   const displayDescription = post.description || post.excerpt;
   
-  // Determine link based on type
-  const href = post.ctaLink || (post._type === 'post' ? `/blog/${post.slug}` : `/feed/${post.slug}`);
+  // Always link to post detail page (CTA links will be shown inside the post)
+  const href = post._type === 'post' ? `/blog/${post.slug}` : `/feed/${post.slug}`;
   
   // Truncate title for display
   const truncatedTitle = post.title.length > 60 ? post.title.substring(0, 60) + '...' : post.title;
@@ -144,16 +144,21 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
         </div>
 
         {imageUrl && (
-          <div className="relative w-full aspect-[4/3] overflow-hidden bg-white">
+          <div className="relative w-full aspect-[4/3] overflow-hidden bg-cream-100">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-goldenrod/10 animate-pulse" />
+            )}
             <Image
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
               fill
-              className="object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
               placeholder={blurDataUrl ? 'blur' : 'empty'}
               blurDataURL={blurDataUrl}
               onLoad={() => setImageLoaded(true)}
             />
+            {/* Subtle vignette for depth */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5" />
           </div>
         )}
 
@@ -272,46 +277,59 @@ export default function FeedPostCard({ post }: FeedPostCardProps) {
     return (
       <Link
         href={href}
-        className="group block border border-black/20 bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+        className="group block bg-white hover:shadow-2xl transition-all duration-500 overflow-hidden"
       >
         {imageUrl && (
-          <div className="relative w-full aspect-video overflow-hidden bg-cream-100">
+          <div className="relative w-full aspect-[16/10] overflow-hidden bg-cream-100">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-cream-200 animate-pulse" />
+            )}
             <Image
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-700"
+              className="object-cover group-hover:scale-110 transition-transform duration-1000 ease-out"
               placeholder={blurDataUrl ? 'blur' : 'empty'}
               blurDataURL={blurDataUrl}
               onLoad={() => setImageLoaded(true)}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Subtle darkening on hover for text contrast */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
           </div>
         )}
 
-        <div className="p-8">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-1 h-8 bg-goldenrod" />
-            <span className="font-heading text-xs font-bold uppercase tracking-[0.2em] text-black/60">
+        <div className="p-10 lg:p-12 border-t border-black/5">
+          {/* Category with accent line */}
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-[2px] bg-goldenrod" />
+            <span className="font-heading text-[10px] font-bold uppercase tracking-[0.25em] text-goldenrod">
               {categoryLabel}
             </span>
           </div>
 
-          <h3 className="font-heading text-3xl font-bold text-black leading-[1.1] mb-4">
+          {/* Title - Magazine style */}
+          <h3 className="font-heading text-3xl lg:text-4xl font-bold text-black leading-[1.15] mb-5 group-hover:text-goldenrod transition-colors duration-300">
             {truncatedTitle}
           </h3>
 
+          {/* Description - Editorial excerpt */}
           {displayDescription && (
-            <p className="font-body text-lg text-black/70 mb-6 italic line-clamp-3 leading-relaxed">
+            <p className="font-body text-xl text-black/60 mb-8 line-clamp-3 leading-[1.7]">
               {displayDescription}
             </p>
           )}
 
-          <div className="flex items-center gap-3 text-black/50 font-body text-sm">
-            <span>5 min read</span>
-            <span>•</span>
+          {/* Meta info - minimalist */}
+          <div className="flex items-center gap-4 text-black/40 font-body text-xs uppercase tracking-wider">
             <span>Essay</span>
+            <span className="w-1 h-1 rounded-full bg-black/20" />
+            <span>5 min</span>
+            <span className="w-1 h-1 rounded-full bg-black/20" />
+            <span>Reflection</span>
           </div>
+
+          {/* Subtle hover indicator */}
+          <div className="w-0 group-hover:w-16 h-[2px] bg-goldenrod mt-8 transition-all duration-500 ease-out" />
         </div>
       </Link>
     );
