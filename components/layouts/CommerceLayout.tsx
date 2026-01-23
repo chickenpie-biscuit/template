@@ -1,10 +1,11 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
 import Container from '@/components/ui/Container';
 import PortableText from '@/components/sanity/PortableText';
-import { Zap, Package, Clock, AlertCircle } from 'lucide-react';
+import { Zap, Package, Clock, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 interface CommerceLayoutProps {
@@ -68,9 +69,9 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
 
   return (
     <article className="min-h-screen bg-black text-white">
-      {/* Alert Banner */}
+      {/* Alert Banner - not sticky to avoid conflict with main header */}
       {isLimited && (
-        <div className="bg-red text-white text-center py-3 px-4 border-b-2 border-white/20 sticky top-0 z-50 backdrop-blur-sm bg-red/95">
+        <div className="bg-red text-white text-center py-3 px-4 border-b-2 border-white/20">
           <div className="flex items-center justify-center gap-2 font-heading text-xs font-bold uppercase tracking-widest">
             <Zap className="w-4 h-4 animate-pulse" />
             <span>LIMITED EDITION DROP</span>
@@ -82,6 +83,18 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         {/* Left: Product Image Gallery with Pagination */}
         <div className="relative h-[70vh] lg:h-screen bg-white flex flex-col items-center justify-center lg:sticky lg:top-0 border-r-0 lg:border-r-2 border-white/20">
+          {/* Back Button */}
+          <Link 
+            href="/shop"
+            className="absolute top-6 left-6 z-20 flex items-center gap-2 group"
+          >
+            <div className="w-10 h-10 rounded-full border-2 border-black bg-white flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300 shadow-lg">
+              <ArrowLeft size={16} />
+            </div>
+            <span className="font-heading font-bold uppercase text-xs tracking-widest text-black opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+              Shop
+            </span>
+          </Link>
           {/* Main Image - Full Width, No Padding */}
           <div className="relative w-full h-full flex items-center justify-center">
             {imageUrl && (

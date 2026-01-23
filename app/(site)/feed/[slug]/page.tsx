@@ -1,5 +1,6 @@
 import { client } from '@/sanity/lib/client';
 import { getFeedPostBySlug } from '@/sanity/lib/queries';
+import { urlFor } from '@/sanity/lib/image';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -22,6 +23,18 @@ interface FeedPostPageProps {
 
 export const revalidate = 60;
 
+// Category labels for SEO
+const categoryLabels: Record<string, string> = {
+  'design-work': 'Design Work',
+  'art': 'Art',
+  'merch-drops': 'Merch Drop',
+  'prompt-week': 'Prompt of the Week',
+  'chronicles': 'Chicken Chronicles',
+  'tool-tuesday': 'Tool Tuesday',
+  'solopreneur': 'Solopreneur Sundays',
+  'sunday-swings': 'Sunday Swings',
+};
+
 export async function generateMetadata({
   params,
 }: FeedPostPageProps): Promise<Metadata> {
@@ -33,9 +46,69 @@ export async function generateMetadata({
     };
   }
 
+  // Generate OG image URL from featured image
+  const ogImageUrl = post.featuredImage 
+    ? urlFor(post.featuredImage).width(1200).height(630).url()
+    : null;
+  
+  const categoryLabel = categoryLabels[post.category] || post.category;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const postUrl = `${siteUrl}/feed/${post.slug}`;
+
   return {
     title: `${post.title} | Chickenpie`,
-    description: post.description,
+    description: post.description || `${categoryLabel} - Creative content from Chickenpie`,
+    keywords: [categoryLabel, 'Chickenpie', 'creative', 'design', post.title].filter(Boolean),
+    authors: [{ name: 'Chickenpie' }],
+    creator: 'Chickenpie',
+    publisher: 'Chickenpie',
+    
+    // Canonical URL
+    alternates: {
+      canonical: postUrl,
+    },
+    
+    // Open Graph
+    openGraph: {
+      type: 'article',
+      title: post.title,
+      description: post.description || `${categoryLabel} - Creative content from Chickenpie`,
+      url: postUrl,
+      siteName: 'Chickenpie',
+      locale: 'en_US',
+      publishedTime: post.publishedAt,
+      authors: ['Chickenpie'],
+      images: ogImageUrl ? [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ] : [],
+    },
+    
+    // Twitter Card
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description || `${categoryLabel} - Creative content from Chickenpie`,
+      images: ogImageUrl ? [ogImageUrl] : [],
+      creator: '@chickenpie',
+    },
+    
+    // Robots
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
   };
 }
 
@@ -67,22 +140,27 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     LayoutComponent = SundaySwingsLayout;
   }
 
+  // Hide back button on commerce pages (merch drops have their own navigation style)
+  const showBackButton = post.category !== 'merch-drops';
+
   return (
     <>
-      {/* Global Back Button (Sticky) */}
-      <div className="fixed top-24 left-6 z-50 hidden lg:block mix-blend-difference text-white">
-        <Link 
-          href="/" 
-          className="flex items-center gap-2 group"
-        >
-          <div className="w-10 h-10 rounded-full border border-white flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300">
-            <ArrowLeft size={16} />
-          </div>
-          <span className="font-heading font-bold uppercase text-xs tracking-widest opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-            Back
-          </span>
-        </Link>
-      </div>
+      {/* Global Back Button (Sticky) - Hidden on commerce layouts */}
+      {showBackButton && (
+        <div className="fixed top-28 left-6 z-40 hidden lg:block">
+          <Link 
+            href="/" 
+            className="flex items-center gap-2 group"
+          >
+            <div className="w-10 h-10 rounded-full border-2 border-black bg-cream flex items-center justify-center group-hover:bg-black group-hover:text-cream transition-all duration-300 shadow-lg">
+              <ArrowLeft size={16} />
+            </div>
+            <span className="font-heading font-bold uppercase text-xs tracking-widest text-black opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+              Back
+            </span>
+          </Link>
+        </div>
+      )}
 
       {/* Render Specific Layout */}
       <LayoutComponent post={post} />
