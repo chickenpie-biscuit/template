@@ -10,6 +10,19 @@ const config: Config = {
     extend: {
       colors: {
         // Vintage poster aesthetic color palette
+        primary: {
+          DEFAULT: "#000000",
+          50: "#999999",
+          100: "#808080",
+          200: "#666666",
+          300: "#4d4d4d",
+          400: "#333333",
+          500: "#1a1a1a",
+          600: "#000000",
+          700: "#000000",
+          800: "#000000",
+          900: "#000000",
+        },
         cream: {
           DEFAULT: "#F5F1E8",
           50: "#FDFCFA",

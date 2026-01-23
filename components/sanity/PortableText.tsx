@@ -10,6 +10,7 @@ interface PortableTextProps {
 const components: PortableTextComponents = {
   types: {
     image: ({ value }: { value: any }) => {
+      // ... existing image code ...
       // Check for asset reference
       if (!value?.asset) {
         console.warn('PortableText image missing asset:', value);
@@ -43,6 +44,10 @@ const components: PortableTextComponents = {
         return null;
       }
     },
+  },
+  unknownType: ({ value }) => {
+    console.warn('Unknown PortableText type:', value._type);
+    return null;
   },
   block: {
     h2: ({ children }) => (
