@@ -16,7 +16,30 @@ export interface SanityImage {
     };
   };
   alt?: string;
+  caption?: string;
 }
+
+export interface SanityVideo {
+  _type: 'file';
+  asset: {
+    _ref?: string;
+    _type?: 'reference';
+    _id?: string;
+    url?: string;
+  };
+  alt?: string;
+  caption?: string;
+}
+
+export interface VideoEmbed {
+  _type: 'videoEmbed';
+  url: string;
+  caption?: string;
+}
+
+export type MediaType = 'image' | 'video' | 'external-video';
+
+export type GalleryItem = SanityImage | SanityVideo;
 
 export interface SEO {
   metaTitle?: string;
@@ -72,8 +95,11 @@ export interface Product {
   slug: string;
   price: number;
   images?: SanityImage[];
-  productGallery?: SanityImage[];
+  productGallery?: GalleryItem[];
   featuredImage?: SanityImage;
+  featuredVideo?: SanityVideo;
+  videoUrl?: string;
+  mediaType?: MediaType;
   description?: PortableTextBlock[];
   shortDescription?: string;
   category?: Category;

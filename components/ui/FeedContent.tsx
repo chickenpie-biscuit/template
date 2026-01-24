@@ -16,6 +16,9 @@ interface FeedPost {
   slug: string;
   category?: string;
   featuredImage?: any;
+  featuredVideo?: any;
+  videoUrl?: string;
+  mediaType?: 'image' | 'video' | 'external-video';
   mainImage?: any;
   description?: string;
   excerpt?: string;

@@ -59,6 +59,48 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'featuredVideo',
+      title: 'Featured Video',
+      type: 'file',
+      options: {
+        accept: 'video/*',
+      },
+      description: 'Upload a video file (MP4, WebM, MOV). This will be used instead of the featured image if provided.',
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Video Description',
+          description: 'Describe the video for accessibility',
+        },
+      ],
+    }),
+    defineField({
+      name: 'videoUrl',
+      title: 'External Video URL',
+      type: 'url',
+      description: 'YouTube or Vimeo video URL. Use this OR upload a video above, not both.',
+      validation: (Rule) =>
+        Rule.uri({
+          scheme: ['http', 'https'],
+        }),
+    }),
+    defineField({
+      name: 'mediaType',
+      title: 'Primary Media Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Image', value: 'image' },
+          { title: 'Uploaded Video', value: 'video' },
+          { title: 'External Video (YouTube/Vimeo)', value: 'external-video' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'image',
+      description: 'Choose which media to display as the primary content',
+    }),
+    defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
@@ -87,6 +129,57 @@ export default defineType({
               title: 'Alternative Text',
             },
           ],
+        },
+        {
+          type: 'file',
+          name: 'video',
+          title: 'Video',
+          options: {
+            accept: 'video/*',
+          },
+          fields: [
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Video Description',
+            },
+          ],
+        },
+        {
+          type: 'object',
+          name: 'videoEmbed',
+          title: 'Video Embed (YouTube/Vimeo)',
+          fields: [
+            {
+              name: 'url',
+              type: 'url',
+              title: 'Video URL',
+              description: 'YouTube or Vimeo URL',
+              validation: (Rule) =>
+                Rule.uri({
+                  scheme: ['http', 'https'],
+                }),
+            },
+            {
+              name: 'caption',
+              type: 'string',
+              title: 'Caption',
+            },
+          ],
+          preview: {
+            select: { url: 'url', caption: 'caption' },
+            prepare({ url, caption }) {
+              return {
+                title: caption || 'Video Embed',
+                subtitle: url,
+              };
+            },
+          },
         },
       ],
     }),
@@ -150,8 +243,18 @@ export default defineType({
             { name: 'caption', type: 'string', title: 'Caption' },
           ],
         },
+        {
+          type: 'file',
+          name: 'video',
+          title: 'Video',
+          options: { accept: 'video/*' },
+          fields: [
+            { name: 'alt', type: 'string', title: 'Video Description' },
+            { name: 'caption', type: 'string', title: 'Caption' },
+          ],
+        },
       ],
-      description: 'For Design Work - additional project images',
+      description: 'For Design Work - additional project images and videos',
       hidden: ({ document }) => document?.category !== 'design-work',
     }),
     // Merch Drops specific fields
@@ -167,8 +270,17 @@ export default defineType({
             { name: 'alt', type: 'string', title: 'Alt Text' },
           ],
         },
+        {
+          type: 'file',
+          name: 'video',
+          title: 'Product Video',
+          options: { accept: 'video/*' },
+          fields: [
+            { name: 'alt', type: 'string', title: 'Video Description' },
+          ],
+        },
       ],
-      description: 'For Merch Drops - multiple product images (first image will be featured if featuredImage is empty)',
+      description: 'For Merch Drops - product images and videos (first image will be featured if featuredImage is empty)',
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
     defineField({
@@ -427,8 +539,18 @@ export default defineType({
             { name: 'caption', type: 'string', title: 'Caption' },
           ],
         },
+        {
+          type: 'file',
+          name: 'video',
+          title: 'Cooking Video',
+          options: { accept: 'video/*' },
+          fields: [
+            { name: 'alt', type: 'string', title: 'Video Description' },
+            { name: 'caption', type: 'string', title: 'Caption' },
+          ],
+        },
       ],
-      description: 'For Nom Nom - photos of the dish and cooking process',
+      description: 'For Nom Nom - photos and videos of the dish and cooking process',
       hidden: ({ document }) => document?.category !== 'nom-nom',
     }),
     defineField({
@@ -568,6 +690,15 @@ export default defineType({
         {
           type: 'image',
           options: { hotspot: true },
+          fields: [
+            { name: 'caption', type: 'string', title: 'Caption' },
+          ],
+        },
+        {
+          type: 'file',
+          name: 'video',
+          title: 'Course Video',
+          options: { accept: 'video/*' },
           fields: [
             { name: 'caption', type: 'string', title: 'Caption' },
           ],
