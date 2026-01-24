@@ -44,7 +44,7 @@ export async function generateMetadata({
     ? urlFor(product.images[0] as any).width(1200).height(630).url()
     : null;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const productUrl = `${siteUrl}/shop/${slug}`;
 
   return {
@@ -118,7 +118,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     : 0;
 
   // SEO data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const productUrl = `${siteUrl}/shop/${slug}`;
   const mainImage = product.images?.[0];
   const imageUrl = mainImage

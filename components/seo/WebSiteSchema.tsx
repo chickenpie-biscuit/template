@@ -1,6 +1,6 @@
 import Script from 'next/script';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
 
 export default function WebSiteSchema() {
   const schema = {

@@ -138,7 +138,7 @@ As you type, see exactly how your page will look in Google search results:
 ```
 ┌─────────────────────────────────────────┐
 │ Your Page Title | Chickenpie          │
-│ https://chickenpie.com/your-page        │
+│ https://chickenpie.co/your-page        │
 │ Your meta description appears here      │
 │ exactly as it will in Google...         │
 └─────────────────────────────────────────┘

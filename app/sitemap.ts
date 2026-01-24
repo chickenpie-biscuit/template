@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { groq } from 'next-sanity';
 import { client } from '@/sanity/lib/client';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
 
 // Queries for sitemap
 const sitemapFeedPostsQuery = groq`*[_type == "feedPost" && defined(slug.current)] | order(publishedAt desc) {

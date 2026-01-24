@@ -19,8 +19,44 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Chickenpie - Spreading love, chickens & art',
+  metadataBase: new URL('https://chickenpie.co'),
+  title: {
+    default: 'Chickenpie - Spreading love, chickens & art',
+    template: '%s | Chickenpie',
+  },
   description: 'A creative universe that functions as both a design studio and lifestyle brand. Design services, merchandise, food content, and original art.',
+  keywords: ['chickenpie', 'design studio', 'creative', 'art', 'merchandise', 'lifestyle brand'],
+  authors: [{ name: 'Chickenpie' }],
+  creator: 'Chickenpie',
+  publisher: 'Chickenpie',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://chickenpie.co',
+    siteName: 'Chickenpie',
+    title: 'Chickenpie - Spreading love, chickens & art',
+    description: 'A creative universe that functions as both a design studio and lifestyle brand. Design services, merchandise, food content, and original art.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Chickenpie - Spreading love, chickens & art',
+    description: 'A creative universe that functions as both a design studio and lifestyle brand.',
+    creator: '@chickenpie',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://chickenpie.co',
+  },
 };
 
 export default function RootLayout({

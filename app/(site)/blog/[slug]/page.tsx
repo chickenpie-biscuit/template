@@ -40,7 +40,7 @@ export async function generateMetadata({
     ? urlFor(post.mainImage as any).width(1200).height(630).url()
     : null;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const postUrl = `${siteUrl}/blog/${slug}`;
 
   return {
@@ -113,7 +113,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const wordCount = post.body ? JSON.stringify(post.body).split(/\s+/).length : 0;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const postUrl = `${siteUrl}/blog/${slug}`;
 
   return (

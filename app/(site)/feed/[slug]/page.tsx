@@ -62,7 +62,7 @@ export async function generateMetadata({
     : null;
   
   const categoryLabel = categoryLabels[post.category] || post.category;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const postUrl = `${siteUrl}/feed/${post.slug}`;
   
   // Combine SEO keywords with category
@@ -176,7 +176,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
   const sidebarBanners = banners?.filter(b => b.placement === 'sidebar') || [];
 
   // SEO data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const postUrl = `${siteUrl}/feed/${params.slug}`;
   const categoryLabel = categoryLabels[post.category] || post.category;
   const imageUrl = post.featuredImage 
