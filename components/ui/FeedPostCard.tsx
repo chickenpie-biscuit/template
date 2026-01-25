@@ -765,14 +765,14 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     return <div>{cardContent}</div>;
   }
 
-  // ART - Clean Gallery Card (Large Image, No Background)
+  // ART - Clean Gallery Card (Full Artwork, No Cropping)
   if (category === 'art') {
     return (
       <Link
         href={href}
         className="group block hover:-translate-y-2 transition-all duration-500 relative"
       >
-        {/* Large Art Media - Video or Image */}
+        {/* Large Art Media - Video or Image (object-contain to show full artwork) */}
         {showVideo && (videoSrc || externalEmbedUrl) ? (
           <div className="relative w-full aspect-[3/4] mb-4 overflow-hidden rounded-sm shadow-2xl">
             <VideoThumbnail aspectClass="aspect-[3/4]" />
@@ -786,7 +786,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
               fill
-              className="object-cover drop-shadow-2xl group-hover:drop-shadow-[0_25px_50px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] transition-all duration-700 ease-out"
+              className="object-contain drop-shadow-2xl group-hover:drop-shadow-[0_25px_50px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] transition-all duration-700 ease-out"
               placeholder={blurDataUrl ? 'blur' : 'empty'}
               blurDataURL={blurDataUrl}
               onLoad={() => setImageLoaded(true)}
