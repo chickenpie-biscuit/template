@@ -36,7 +36,7 @@ interface FeedContentProps {
   banners?: AdBanner[];
 }
 
-const POSTS_PER_PAGE = 24;
+const POSTS_PER_PAGE = 30; // Load more posts per batch for smoother scrolling
 const BANNER_INTERVAL = 15; // Show banner every 15 posts
 
 export default function FeedContent({ initialPosts, initialFilter, banners = [] }: FeedContentProps) {
@@ -44,11 +44,13 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
   const filter = searchParams.get('filter') || 'all';
   const sort = searchParams.get('sort') || 'newest';
   const [posts, setPosts] = useState<FeedPost[]>(initialPosts);
+  const [allPostsCache, setAllPostsCache] = useState<FeedPost[]>([]); // Cache all posts to avoid refetching
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(initialPosts.length >= POSTS_PER_PAGE);
+  const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const observerTarget = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isLoadingRef = useRef(false); // Prevent duplicate loads
 
   // Get inline banners
   const inlineBanners = banners.filter(b => b.placement === 'inline' && b.active);
@@ -70,10 +72,12 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
     });
   }, [posts]);
 
-  // Reset when filter or sort changes
+  // Reset when filter or sort changes - fetch ALL posts and cache them
   useEffect(() => {
-    const fetchFilteredPosts = async () => {
+    const fetchAllPosts = async () => {
       setLoading(true);
+      isLoadingRef.current = true;
+      
       try {
         let query;
         if (filter === 'all') {
@@ -83,87 +87,68 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
         }
         
         const params = filter === 'all' ? {} : { category: filter };
-        const newPosts = await client?.fetch(query, params).catch(() => []) ?? [];
-        setPosts(newPosts.slice(0, POSTS_PER_PAGE));
+        const fetchedPosts = await client?.fetch(query, params).catch(() => []) ?? [];
+        
+        // Cache all posts for infinite scroll
+        setAllPostsCache(fetchedPosts);
+        
+        // Show first batch
+        setPosts(fetchedPosts.slice(0, POSTS_PER_PAGE));
         setPage(1);
-        setHasMore(newPosts.length >= POSTS_PER_PAGE);
+        setHasMore(fetchedPosts.length > POSTS_PER_PAGE);
       } catch (error) {
         console.error('Error fetching posts:', error);
       } finally {
         setLoading(false);
+        isLoadingRef.current = false;
       }
     };
 
-    // If initial load matches params, don't refetch
-    // But since we can't easily know if initialPosts are sorted correctly without checking params,
-    // we should fetch if sort or filter changed from initial props.
-    // However, initialPosts are server-fetched and might not respect the client-side params immediately if page is cached?
-    // Actually, on first render with matching params, we should use initialPosts.
-    // But if user clicks sort, we need to fetch.
-    
-    if (filter === initialFilter && sort === 'newest') { // Assuming initial is always newest
-        // Check if we need to set posts back to initial if coming back to default state?
-        // Simpler approach: Fetch if params differ from defaults or if we navigated.
-        // Actually, let's just fetch if the current state doesn't match the desired filter/sort
-        // Optimization: if filter/sort match initial props, reset to initialPosts?
-        // But initialPosts is static from server time.
-        
-        // Let's just always fetch if it's NOT the first render or if params changed.
-        // But useEffect runs on mount. 
-        // We'll skip fetch if it matches initial state AND we haven't fetched yet?
-        // Let's stick to the existing logic pattern: fetch if filter changes. Now also if sort changes.
-    }
+    fetchAllPosts();
+  }, [filter, sort]);
 
-    // Refetching logic
-    fetchFilteredPosts();
+  const loadMorePosts = useCallback(() => {
+    // Prevent duplicate loads
+    if (isLoadingRef.current || loading || !hasMore) return;
     
-  }, [filter, sort, initialFilter, initialPosts]);
-
-  const loadMorePosts = useCallback(async () => {
-    if (loading) return;
+    isLoadingRef.current = true;
     setLoading(true);
 
-    try {
-      let query;
-      if (filter === 'all') {
-        query = sort === 'oldest' ? getAllFeedPostsAsc : getAllFeedPosts;
-      } else {
-        query = sort === 'oldest' ? getFeedPostsByCategoryAsc : getFeedPostsByCategory;
-      }
+    // Use cached posts instead of refetching
+    const nextPage = page + 1;
+    const endIndex = nextPage * POSTS_PER_PAGE;
+    const newPosts = allPostsCache.slice(0, endIndex);
 
-      const params = filter === 'all' ? {} : { category: filter };
-      const allPosts = await client?.fetch(query, params).catch(() => []) ?? [];
-      const nextPage = page + 1;
-      const startIndex = nextPage * POSTS_PER_PAGE;
-      const endIndex = startIndex + POSTS_PER_PAGE;
-      const newPosts = allPosts.slice(startIndex, endIndex);
-
-      if (newPosts.length > 0) {
-        setPosts((prev) => [...prev, ...newPosts]);
-        setPage(nextPage);
-        setHasMore(endIndex < allPosts.length);
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error('Error loading more posts:', error);
-    } finally {
-      setLoading(false);
+    if (newPosts.length > posts.length) {
+      setPosts(newPosts);
+      setPage(nextPage);
+      setHasMore(endIndex < allPostsCache.length);
+    } else {
+      setHasMore(false);
     }
-  }, [filter, sort, loading, page]);
 
-  // Infinite scroll
+    // Small delay to prevent rapid-fire loading
+    setTimeout(() => {
+      setLoading(false);
+      isLoadingRef.current = false;
+    }, 100);
+  }, [allPostsCache, loading, page, posts.length, hasMore]);
+
+  // Infinite scroll - trigger earlier for smoother experience
   useEffect(() => {
     const currentTarget = observerTarget.current;
     if (!currentTarget) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !loading) {
+        if (entries[0].isIntersecting && hasMore && !isLoadingRef.current) {
           loadMorePosts();
         }
       },
-      { threshold: 0.1 }
+      { 
+        threshold: 0,
+        rootMargin: '400px' // Start loading before user reaches the end
+      }
     );
 
     observer.observe(currentTarget);
@@ -171,7 +156,7 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
     return () => {
       observer.unobserve(currentTarget);
     };
-  }, [hasMore, loading, filter, loadMorePosts]);
+  }, [hasMore, loadMorePosts]);
 
   // Create posts array with inline banners inserted
   const postsWithBanners = () => {
@@ -230,19 +215,43 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
             })}
           </div>
 
-          {/* Loading indicator with skeleton cards */}
+          {/* Loading indicator */}
           {loading && (
-            <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5 mt-4 md:mt-5">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="break-inside-avoid mb-4 md:mb-5">
-                  <SkeletonCard />
-                </div>
-              ))}
+            <div className="flex justify-center items-center py-8">
+              <div className="flex items-center gap-3 bg-cream border-2 border-black px-6 py-3">
+                <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                <span className="font-heading text-sm uppercase tracking-wider">Loading more...</span>
+              </div>
             </div>
           )}
 
           {/* Observer target for infinite scroll */}
-          <div ref={observerTarget} className="h-4" />
+          <div ref={observerTarget} className="h-20" />
+          
+          {/* Load more button as fallback */}
+          {hasMore && !loading && (
+            <div className="flex justify-center py-8">
+              <button
+                onClick={loadMorePosts}
+                className="bg-black text-cream px-8 py-4 font-heading font-bold uppercase text-sm tracking-wider border-2 border-black hover:bg-goldenrod hover:text-black transition-colors shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)]"
+              >
+                Load More Posts
+              </button>
+            </div>
+          )}
+          
+          {/* End of feed indicator */}
+          {!hasMore && posts.length > 0 && (
+            <div className="flex justify-center py-12">
+              <div className="text-center">
+                <div className="inline-block bg-cream border-2 border-black/20 px-6 py-3">
+                  <span className="font-heading text-sm uppercase tracking-wider text-black/50">
+                    ✦ You&apos;ve seen it all ✦
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       ) : loading ? (
         // Initial loading state

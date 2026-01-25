@@ -160,24 +160,24 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
         </div>
 
         {/* Right: Product Details */}
-        <div className="flex flex-col justify-center p-8 lg:p-16 bg-black">
+        <div className="flex flex-col justify-center p-8 lg:p-16 bg-cream">
           <div className="max-w-xl mx-auto w-full">
             {/* Product Type Badge */}
             <div className="flex items-center gap-3 mb-6">
               <Package className="w-5 h-5 text-goldenrod" />
-              <span className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-goldenrod">
+              <span className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-black/60">
                 {post.productType || 'Merch Drop'}
               </span>
             </div>
 
             {/* Product Title */}
-            <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-8 leading-[0.9] text-white">
+            <h1 className="text-5xl lg:text-7xl font-heading font-bold uppercase mb-8 leading-[0.9] text-black">
               {post.title}
             </h1>
 
             {/* Countdown or Stock Warning */}
             {isUpcoming && timeUntilDrop && (
-              <div className="bg-goldenrod text-black p-6 mb-8 border-2 border-goldenrod">
+              <div className="bg-goldenrod text-black p-6 mb-8 border-2 border-black">
                 <div className="flex items-center gap-3 mb-2">
                   <Clock className="w-6 h-6" />
                   <span className="font-heading text-xs font-bold uppercase tracking-wider">Drops In:</span>
@@ -201,29 +201,29 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             {post.price && (
               <div className="mb-8">
                 <div className="flex items-baseline gap-4 mb-2">
-                  <span className="text-5xl font-heading font-bold text-white">
+                  <span className="text-5xl font-heading font-bold text-black">
                     ${post.price}
                   </span>
                   {post.originalPrice && (
-                    <span className="text-2xl font-heading text-white/40 line-through">
+                    <span className="text-2xl font-heading text-black/40 line-through">
                       ${post.originalPrice}
                     </span>
                   )}
                 </div>
                 {post.originalPrice && (
-                  <p className="text-sm font-heading text-goldenrod font-bold uppercase">
+                  <p className="text-sm font-heading text-red font-bold uppercase">
                     Save ${(post.originalPrice - post.price).toFixed(2)}
                   </p>
                 )}
               </div>
             )}
 
-            <div className="h-px bg-white/20 w-full mb-8" />
+            <div className="h-px bg-black/20 w-full mb-8" />
 
             {/* Size Selector */}
             {post.sizes && post.sizes.length > 0 && (
               <div className="mb-8">
-                <p className="font-heading text-xs uppercase tracking-widest text-white/60 mb-3">Select Size</p>
+                <p className="font-heading text-xs uppercase tracking-widest text-black/60 mb-3">Select Size</p>
                 <div className="flex flex-wrap gap-2">
                   {post.sizes.map((size: string, index: number) => (
                     <button
@@ -231,8 +231,8 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                       onClick={() => setSelectedSize(size)}
                       className={`px-5 py-3 border-2 transition-colors font-heading font-bold uppercase text-sm ${
                         selectedSize === size
-                          ? 'border-goldenrod bg-goldenrod text-black'
-                          : 'border-white/30 text-white hover:border-goldenrod hover:bg-goldenrod hover:text-black'
+                          ? 'border-black bg-black text-cream'
+                          : 'border-black/30 text-black hover:border-black hover:bg-black hover:text-cream'
                       }`}
                     >
                       {size}
@@ -244,19 +244,19 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
 
             {/* Description */}
             {post.description && (
-              <p className="text-xl text-white/80 leading-relaxed mb-8 font-body">
+              <p className="text-xl text-black/80 leading-relaxed mb-8 font-body">
                 {post.description}
               </p>
             )}
 
             {/* Details */}
             {post.body && (
-              <div className="prose prose-invert prose-lg max-w-none font-body mb-12
-                prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase
-                prose-p:text-white/70 prose-p:leading-relaxed
+              <div className="prose prose-lg max-w-none font-body mb-12
+                prose-headings:font-heading prose-headings:font-bold prose-headings:uppercase prose-headings:text-black
+                prose-p:text-black/70 prose-p:leading-relaxed
                 prose-a:text-teal prose-a:font-bold hover:prose-a:underline
-                prose-strong:text-white prose-strong:font-bold
-                prose-ul:text-white/70">
+                prose-strong:text-black prose-strong:font-bold
+                prose-ul:text-black/70">
                 <PortableText content={post.body} />
               </div>
             )}
@@ -264,18 +264,18 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             {/* CTA Buttons */}
             <div className="space-y-4">
               {soldOut ? (
-                <button disabled className="w-full py-5 bg-white/10 text-white/40 font-heading font-bold uppercase cursor-not-allowed border-2 border-white/20">
+                <button disabled className="w-full py-5 bg-black/10 text-black/40 font-heading font-bold uppercase cursor-not-allowed border-2 border-black/20">
                   Sold Out
                 </button>
               ) : isUpcoming ? (
-                <button className="w-full py-5 bg-goldenrod text-black hover:bg-white hover:text-black transition-colors border-2 border-goldenrod font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(218,165,32,0.3)]">
+                <button className="w-full py-5 bg-goldenrod text-black hover:bg-black hover:text-cream transition-colors border-2 border-black font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
                   Notify Me When Available
                 </button>
               ) : (
                 <>
                   <button 
                     onClick={handleAddToCart}
-                    className="w-full py-5 bg-white text-black hover:bg-goldenrod hover:text-black transition-colors border-2 border-white font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(218,165,32,0.3)] hover:-translate-y-0.5 transition-all"
+                    className="w-full py-5 bg-black text-cream hover:bg-goldenrod hover:text-black transition-colors border-2 border-black font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all"
                   >
                     Add to Cart — ${post.price}
                   </button>
@@ -284,7 +284,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                       href={post.ctaLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full py-4 text-center border-2 border-white/30 text-white hover:border-goldenrod hover:bg-goldenrod/10 transition-colors font-heading font-bold uppercase"
+                      className="block w-full py-4 text-center border-2 border-black/30 text-black hover:border-black hover:bg-black/10 transition-colors font-heading font-bold uppercase"
                     >
                       Learn More
                     </a>

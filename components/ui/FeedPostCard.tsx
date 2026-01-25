@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
-import { useState, memo, useMemo } from 'react';
+import { useState, memo, useRef } from 'react';
 import { MapPin, Flag, Star } from 'lucide-react';
 
 interface FeedPost {
@@ -13,7 +13,7 @@ interface FeedPost {
   slug: string;
   category?: string;
   featuredImage?: any;
-  featuredVideo?: any;
+  featuredVideo?: string; // URL from GROQ query
   videoUrl?: string;
   mediaType?: 'image' | 'video' | 'external-video';
   mainImage?: any;
@@ -38,6 +38,23 @@ interface FeedPost {
   courseDifficulty?: number;
   courseConditions?: number;
 }
+
+// Helper to get YouTube/Vimeo embed URL
+const getEmbedUrl = (url: string): string | null => {
+  // YouTube
+  const youtubeMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/);
+  if (youtubeMatch) {
+    return `https://www.youtube.com/embed/${youtubeMatch[1]}?autoplay=1&mute=1&loop=1&playlist=${youtubeMatch[1]}&controls=0&showinfo=0`;
+  }
+  
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1&muted=1&loop=1&background=1`;
+  }
+  
+  return null;
+};
 
 interface FeedPostCardProps {
   post: FeedPost;
@@ -73,6 +90,7 @@ const categoryColors: Record<string, string> = {
 
 function FeedPostCard({ post }: FeedPostCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   
   // Handle both feedPost (featuredImage) and regular post (mainImage)
   const image = post.featuredImage || post.mainImage;
@@ -83,6 +101,15 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   const blurDataUrl = image
     ? urlFor(image).width(20).height(20).blur(10).url()
     : undefined;
+
+  // Determine if we should show video instead of image
+  const hasUploadedVideo = !!post.featuredVideo;
+  const hasExternalVideo = !!post.videoUrl;
+  const showVideo = post.mediaType === 'video' || post.mediaType === 'external-video' || hasUploadedVideo || hasExternalVideo;
+  
+  // Get video URL
+  const videoSrc = post.featuredVideo || null;
+  const externalEmbedUrl = post.videoUrl ? getEmbedUrl(post.videoUrl) : null;
 
   // For blog posts, default category to 'thoughts'
   const category = post.category || 'thoughts';
@@ -97,6 +124,42 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   
   // Truncate title for display
   const truncatedTitle = post.title.length > 60 ? post.title.substring(0, 60) + '...' : post.title;
+
+  // Video thumbnail component
+  const VideoThumbnail = ({ className = '', aspectClass = 'aspect-[4/3]' }: { className?: string; aspectClass?: string }) => {
+    if (videoSrc) {
+      // Uploaded video - autoplay muted loop
+      return (
+        <div className={`relative w-full ${aspectClass} overflow-hidden ${className}`}>
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </div>
+      );
+    }
+    
+    if (externalEmbedUrl) {
+      // External video (YouTube/Vimeo) - iframe embed
+      return (
+        <div className={`relative w-full ${aspectClass} overflow-hidden ${className}`}>
+          <iframe
+            src={externalEmbedUrl}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; encrypted-media"
+            frameBorder="0"
+          />
+        </div>
+      );
+    }
+    
+    return null;
+  };
 
   // PROMPT OF THE WEEK - Clean Tech Aesthetic
   if (category === 'prompt-week') {
@@ -158,7 +221,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </span>
         </div>
 
-        {imageUrl && (
+        {/* Media - Video or Image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-[4/3] overflow-hidden bg-cream-100">
+            <VideoThumbnail aspectClass="aspect-[4/3]" />
+          </div>
+        ) : imageUrl ? (
           <div className="relative w-full aspect-[4/3] overflow-hidden bg-cream-100">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-goldenrod/10 animate-pulse" />
@@ -175,7 +243,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             {/* Subtle vignette for depth */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/5" />
           </div>
-        )}
+        ) : null}
 
         <div className="p-6 bg-cream">
           <h3 className="font-heading text-2xl font-bold uppercase text-black leading-tight mb-3">
@@ -201,7 +269,18 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
-        {imageUrl && (
+        {/* Media - Video or Image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-[4/3] overflow-hidden bg-black border-b-4 border-black">
+            <VideoThumbnail aspectClass="aspect-[4/3]" />
+            {/* Category Badge on video */}
+            <div className="absolute top-4 left-4 bg-teal text-black px-3 py-1.5 border-2 border-black z-10">
+              <span className="font-heading text-xs font-bold uppercase tracking-wider">
+                {categoryLabel}
+              </span>
+            </div>
+          </div>
+        ) : imageUrl ? (
           <div className="relative w-full aspect-[4/3] overflow-hidden bg-black border-b-4 border-black">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-teal/10 animate-pulse" />
@@ -225,7 +304,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               </span>
             </div>
           </div>
-        )}
+        ) : null}
 
         <div className="p-5 bg-cream">
           <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-black leading-tight mb-2 group-hover:text-teal transition-colors">
@@ -305,8 +384,30 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
-        {/* Image with overlay text effect */}
-        {imageUrl && (
+        {/* Media with overlay text effect - Video or Image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-[4/3] overflow-hidden">
+            <VideoThumbnail aspectClass="aspect-[4/3]" />
+            {/* Gradient overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent pointer-events-none" />
+            
+            {/* Category badge */}
+            <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+              <div className="bg-goldenrod px-3 py-1.5 border-2 border-black">
+                <span className="font-heading text-xs font-bold uppercase tracking-widest text-black">
+                  {categoryLabel}
+                </span>
+              </div>
+            </div>
+
+            {/* Title overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+              <h3 className="font-heading text-2xl font-bold uppercase text-white leading-tight drop-shadow-lg">
+                {truncatedTitle}
+              </h3>
+            </div>
+          </div>
+        ) : imageUrl ? (
           <div className="relative w-full aspect-[4/3] overflow-hidden">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-cream-200 animate-pulse" />
@@ -339,7 +440,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               </h3>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Content section */}
         <div className="p-5 bg-cream border-t-4 border-black">
@@ -374,7 +475,20 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         href={href}
         className="group block border-2 border-emerald-900 bg-emerald-50 hover:shadow-[8px_8px_0px_0px_rgba(6,78,59,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
-        {imageUrl && (
+        {/* Media - Video or Image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-video overflow-hidden">
+            <VideoThumbnail aspectClass="aspect-video" />
+            
+            {/* Rating Badge */}
+            {post.courseRating && (
+              <div className="absolute top-4 right-4 bg-white text-emerald-900 px-3 py-1 border-2 border-emerald-900 font-heading font-bold flex items-center gap-1 shadow-md z-10">
+                <Star className="w-3 h-3 fill-emerald-900" />
+                <span>{post.courseRating}/10</span>
+              </div>
+            )}
+          </div>
+        ) : imageUrl ? (
           <div className="relative w-full aspect-video overflow-hidden">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-emerald-100 animate-pulse" />
@@ -397,7 +511,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               </div>
             )}
           </div>
-        )}
+        ) : null}
 
         <div className="p-5">
           <div className="flex items-center gap-2 mb-3">
@@ -439,8 +553,37 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(249,115,22,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
       >
-        {/* Food Image */}
-        {imageUrl && (
+        {/* Food Media - Video or Image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-square overflow-hidden">
+            <VideoThumbnail aspectClass="aspect-square" />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+            
+            {/* Category Badge */}
+            <div className="absolute top-4 left-4 bg-orange-500 text-white px-3 py-1.5 border-2 border-black z-10">
+              <span className="font-heading text-xs font-bold uppercase tracking-widest flex items-center gap-1">
+                🍳 {categoryLabel}
+              </span>
+            </div>
+
+            {/* Recipe Info Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
+              <div className="flex items-center gap-3 text-white/90 text-xs font-heading uppercase tracking-wider">
+                {(post as any).prepTime && (
+                  <span className="flex items-center gap-1">
+                    ⏱️ {(post as any).prepTime}
+                  </span>
+                )}
+                {(post as any).difficulty && (
+                  <span className="bg-white/20 px-2 py-0.5 rounded">
+                    {(post as any).difficulty}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : imageUrl ? (
           <div className="relative w-full aspect-square overflow-hidden">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-orange-100 animate-pulse" />
@@ -480,7 +623,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               </div>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Content */}
         <div className="p-5 bg-cream">
@@ -629,8 +772,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         href={href}
         className="group block hover:-translate-y-2 transition-all duration-500 relative"
       >
-        {/* Large Art Image - No Background, Full Size */}
-        {imageUrl && (
+        {/* Large Art Media - Video or Image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-[3/4] mb-4 overflow-hidden rounded-sm shadow-2xl">
+            <VideoThumbnail aspectClass="aspect-[3/4]" />
+          </div>
+        ) : imageUrl ? (
           <div className="relative w-full aspect-[3/4] mb-4">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-transparent animate-pulse" />
@@ -639,13 +786,13 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               src={imageUrl}
               alt={post.featuredImage?.alt || post.title}
               fill
-              className="object-contain drop-shadow-2xl group-hover:drop-shadow-[0_25px_50px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] transition-all duration-700 ease-out"
+              className="object-cover drop-shadow-2xl group-hover:drop-shadow-[0_25px_50px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] transition-all duration-700 ease-out"
               placeholder={blurDataUrl ? 'blur' : 'empty'}
               blurDataURL={blurDataUrl}
               onLoad={() => setImageLoaded(true)}
             />
           </div>
-        )}
+        ) : null}
         
         {/* Centered Title Below */}
         <div className="text-center px-2">
@@ -677,25 +824,27 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         )}
 
-        {/* Product Image on White BG */}
-        {imageUrl && (
-          <div className="relative w-full aspect-square bg-white flex items-center justify-center p-8 border-b-2 border-black">
+        {/* Product Media - Video or Image on White BG */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <div className="relative w-full aspect-square bg-white border-b-2 border-black overflow-hidden">
+            <VideoThumbnail aspectClass="aspect-square" />
+          </div>
+        ) : imageUrl ? (
+          <div className="relative w-full aspect-square bg-white border-b-2 border-black overflow-hidden">
             {!imageLoaded && (
               <div className="absolute inset-0 bg-cream-200 animate-pulse" />
             )}
-            <div className="relative w-full h-full">
-              <Image
-                src={imageUrl}
-                alt={post.featuredImage?.alt || post.title}
-                fill
-                className="object-contain group-hover:scale-105 transition-transform duration-500"
-                placeholder={blurDataUrl ? 'blur' : 'empty'}
-                blurDataURL={blurDataUrl}
-                onLoad={() => setImageLoaded(true)}
-              />
-            </div>
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
           </div>
-        )}
+        ) : null}
 
         {/* Product Details on Black BG */}
         <div className="p-6 bg-black text-white">
@@ -758,9 +907,19 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         href={href}
         className="group block bg-white hover:shadow-[12px_12px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-2 transition-all duration-300 overflow-hidden"
       >
-        {/* Hero Image - Larger, more prominent */}
+        {/* Hero Media - Video or Image */}
         <div className="relative w-full aspect-[4/3] overflow-hidden bg-gradient-to-br from-goldenrod/20 to-black/10">
-          {imageUrl ? (
+          {showVideo && (videoSrc || externalEmbedUrl) ? (
+            <>
+              <VideoThumbnail aspectClass="aspect-[4/3]" />
+              {/* Category Badge - Floating */}
+              <div className="absolute top-3 left-3 bg-goldenrod px-3 py-1 z-10">
+                <span className="font-heading text-[10px] font-black uppercase tracking-wider text-black">
+                  {categoryLabel}
+                </span>
+              </div>
+            </>
+          ) : imageUrl ? (
             <>
               {!imageLoaded && (
                 <div className="absolute inset-0 bg-cream animate-pulse" />
@@ -777,19 +936,19 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               
               {/* Subtle gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              {/* Category Badge - Floating */}
+              <div className="absolute top-3 left-3 bg-goldenrod px-3 py-1">
+                <span className="font-heading text-[10px] font-black uppercase tracking-wider text-black">
+                  {categoryLabel}
+                </span>
+              </div>
             </>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="font-heading text-4xl text-goldenrod/30">✦</span>
             </div>
           )}
-          
-          {/* Category Badge - Floating */}
-          <div className="absolute top-3 left-3 bg-goldenrod px-3 py-1">
-            <span className="font-heading text-[10px] font-black uppercase tracking-wider text-black">
-              {categoryLabel}
-            </span>
-          </div>
         </div>
 
         {/* Content - Clean and minimal */}
@@ -840,7 +999,10 @@ function FeedPostCard({ post }: FeedPostCardProps) {
       href={href}
       className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
     >
-      {imageUrl && (
+      {/* Show video if available, otherwise image */}
+      {showVideo && (videoSrc || externalEmbedUrl) ? (
+        <VideoThumbnail className="bg-black" aspectClass="aspect-[3/4]" />
+      ) : imageUrl ? (
         <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
           {!imageLoaded && (
             <div className="absolute inset-0 bg-cream-200 animate-pulse" />
@@ -855,7 +1017,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             onLoad={() => setImageLoaded(true)}
           />
         </div>
-      )}
+      ) : null}
       <div className="p-6">
         <h3 className="font-heading text-xl font-bold uppercase mb-2">{truncatedTitle}</h3>
         {displayDescription && (
