@@ -6,6 +6,7 @@ import { urlFor } from '@/sanity/lib/image';
 import { useState, memo, useRef } from 'react';
 import { MapPin, Flag, Star, Heart } from 'lucide-react';
 import LikeButton from './LikeButton';
+import CardHoverPreview from './CardHoverPreview';
 
 interface FeedPost {
   _id: string;
@@ -20,6 +21,7 @@ interface FeedPost {
   mainImage?: any;
   description?: string;
   excerpt?: string;
+  body?: any[]; // For reading time estimation
   ctaText?: string;
   ctaLink?: string;
   price?: number;
@@ -171,6 +173,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   // PROMPT OF THE WEEK - Clean Tech Aesthetic
   if (category === 'prompt-week') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -191,7 +194,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           
           {/* Description */}
             {displayDescription && (
-            <p className="font-body text-sm text-black/70 mb-4 line-clamp-3">
+            <p className="font-body text-xs text-black/70 mb-4 line-clamp-3">
                 {displayDescription}
               </p>
           )}
@@ -212,12 +215,14 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // CHICKEN CHRONICLES - Storybook Card
   if (category === 'chronicles') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -257,21 +262,23 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             {truncatedTitle}
           </h3>
           {displayDescription && (
-            <p className="font-body text-black/70 mb-4 line-clamp-3">
+            <p className="font-body text-xs text-black/70 mb-4 line-clamp-3">
               {displayDescription}
             </p>
           )}
-          <div className="bg-black text-goldenrod px-4 py-2 inline-block border-2 border-black font-heading text-sm font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
+          <div className="bg-black text-goldenrod px-4 py-2 inline-block border-2 border-black font-heading text-xs font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
             READ STORY
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // TOOL TUESDAY - Product Review Card
   if (category === 'tool-tuesday') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -319,7 +326,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </h3>
 
           {displayDescription && (
-            <p className="font-body text-sm text-black/70 mb-4 line-clamp-2">
+            <p className="font-body text-xs text-black/70 mb-4 line-clamp-2">
               {displayDescription}
             </p>
           )}
@@ -334,12 +341,14 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // SOLOPRENEUR SUNDAYS - Metrics/Dashboard Card
   if (category === 'solopreneur') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-2 border-teal bg-black hover:shadow-[8px_8px_0px_0px_rgba(0,221,221,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -359,7 +368,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
           {/* Description */}
           {displayDescription && (
-            <p className="font-body text-cream/70 mb-6 line-clamp-3">
+            <p className="font-body text-xs text-cream/70 mb-6 line-clamp-3">
               {displayDescription}
             </p>
           )}
@@ -376,17 +385,19 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             </div>
           </div>
 
-          <div className="bg-teal text-black px-4 py-2 inline-block border-2 border-teal font-heading text-sm font-bold uppercase group-hover:bg-cream group-hover:border-cream transition-colors">
+          <div className="bg-teal text-black px-4 py-2 inline-block border-2 border-teal font-heading text-xs font-bold uppercase group-hover:bg-cream group-hover:border-cream transition-colors">
             VIEW UPDATE
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // SUNDAY SWINGS - Editorial/Essay Card
   if (category === 'sunday-swings') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -453,7 +464,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         <div className="p-5 bg-cream border-t-4 border-black">
           {/* Description */}
           {displayDescription && (
-            <p className="font-body text-black/70 mb-4 line-clamp-2 text-sm leading-relaxed">
+            <p className="font-body text-xs text-black/70 mb-4 line-clamp-2 leading-relaxed">
               {displayDescription}
             </p>
           )}
@@ -471,6 +482,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
@@ -478,6 +490,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   // COURSE REVIEW - Golf Card
   if (category === 'course-review') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-2 border-emerald-900 bg-emerald-50 hover:shadow-[8px_8px_0px_0px_rgba(6,78,59,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -540,7 +553,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           )}
 
           {displayDescription && (
-            <p className="font-body text-sm text-emerald-900/70 line-clamp-2 mb-4">
+            <p className="font-body text-xs text-emerald-900/70 line-clamp-2 mb-4">
               {displayDescription}
             </p>
           )}
@@ -550,12 +563,14 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // NOM NOM - Recipe Card (Food Blog Style)
   if (category === 'nom-nom') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(249,115,22,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -641,7 +656,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
           {/* Description */}
           {displayDescription && (
-            <p className="font-body text-sm text-black/70 mb-4 line-clamp-2">
+            <p className="font-body text-xs text-black/70 mb-4 line-clamp-2">
               {displayDescription}
             </p>
           )}
@@ -663,6 +678,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
@@ -856,6 +872,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     const isSoldOut = post.stock !== undefined && post.stock <= 0;
     
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-2 border-black bg-black hover:shadow-[8px_8px_0px_0px_rgba(255,0,0,0.8)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
@@ -940,12 +957,14 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // DESIGN WORK - Design Stuff Card (Improved)
   if (category === 'design-work') {
     return (
+      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block bg-white hover:shadow-[12px_12px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-2 transition-all duration-300 overflow-hidden"
@@ -1003,7 +1022,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
           {/* Description */}
           {displayDescription && (
-            <p className="font-body text-sm text-black/60 mb-4 line-clamp-2 leading-relaxed">
+            <p className="font-body text-xs text-black/60 mb-4 line-clamp-2 leading-relaxed">
               {displayDescription}
             </p>
           )}
@@ -1033,11 +1052,13 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
+      </CardHoverPreview>
     );
   }
 
   // DEFAULT (fallback) - Simple Card
   return (
+    <CardHoverPreview post={post}>
     <div className="group relative">
       <Link
         href={href}
@@ -1065,7 +1086,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         <div className="p-6">
           <h3 className="font-heading text-xl font-bold uppercase mb-2">{truncatedTitle}</h3>
           {displayDescription && (
-            <p className="font-body text-sm text-black/70 line-clamp-3">{displayDescription}</p>
+            <p className="font-body text-xs text-black/70 line-clamp-3">{displayDescription}</p>
           )}
         </div>
       </Link>
@@ -1080,6 +1101,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         />
       </div>
     </div>
+    </CardHoverPreview>
   );
 }
 
