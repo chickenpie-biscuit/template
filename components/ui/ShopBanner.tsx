@@ -24,7 +24,7 @@ export default function ShopBannerComponent({ banners, className = '' }: ShopBan
 
   // Get the first active banner (or could implement rotation)
   const banner = activeBanners[0];
-  const imageUrl = banner.image ? urlFor(banner.image).url() : null;
+  const imageUrl = banner.image ? urlFor(banner.image as any).url() : null;
 
   if (!imageUrl) return null;
 
