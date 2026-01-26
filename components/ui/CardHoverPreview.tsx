@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import { Clock, ArrowRight, Eye } from 'lucide-react';
@@ -68,8 +69,14 @@ export default function CardHoverPreview({ post, children, disabled = false }: C
   const [isHovering, setIsHovering] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [showPreview, setShowPreview] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // For SSR compatibility - only render portal on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const image = post.featuredImage || post.mainImage;
   const imageUrl = image
@@ -145,6 +152,83 @@ export default function CardHoverPreview({ post, children, disabled = false }: C
   const noPreviewCategories = ['quotes', 'art'];
   const shouldShowPreview = !noPreviewCategories.includes(category) && !disabled;
 
+  // Preview content to be portaled
+  const previewContent = shouldShowPreview && showPreview && isHovering && (
+    <div
+      className="fixed z-[9999] pointer-events-none animate-in fade-in zoom-in-95 duration-200"
+      style={{
+        left: position.x,
+        top: position.y,
+      }}
+    >
+      <div className="w-80 bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+        {/* Preview Image */}
+        {imageUrl && (
+          <div className="relative w-full aspect-[3/2] overflow-hidden bg-cream">
+            <Image
+              src={imageUrl}
+              alt={post.title}
+              fill
+              className="object-cover"
+              sizes="320px"
+            />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            
+            {/* Category badge on image */}
+            <div className="absolute top-3 left-3 bg-goldenrod px-2 py-1">
+              <span className="font-heading text-[10px] font-bold uppercase tracking-wider text-black">
+                {categoryLabel}
+              </span>
+            </div>
+            
+            {/* Quick View indicator */}
+            <div className="absolute top-3 right-3 bg-black/60 px-2 py-1 flex items-center gap-1">
+              <Eye className="w-3 h-3 text-white" />
+              <span className="font-heading text-[10px] font-bold uppercase text-white">
+                Preview
+              </span>
+            </div>
+          </div>
+        )}
+        
+        {/* Preview Content */}
+        <div className="p-4 bg-white">
+          {/* Title */}
+          <h4 className="font-heading text-base font-bold uppercase text-black leading-tight mb-2 line-clamp-2">
+            {post.title}
+          </h4>
+          
+          {/* Description */}
+          {truncatedDescription && (
+            <p className="font-body text-xs text-black/70 mb-3 line-clamp-3 leading-relaxed">
+              {truncatedDescription}
+            </p>
+          )}
+          
+          {/* Footer */}
+          <div className="flex items-center justify-between pt-3 border-t border-black/10">
+            {/* Reading time */}
+            <div className="flex items-center gap-1 text-black/50">
+              <Clock className="w-3 h-3" />
+              <span className="font-heading text-[10px] uppercase tracking-wider">
+                {readingTime} min read
+              </span>
+            </div>
+            
+            {/* CTA */}
+            <div className="flex items-center gap-1 bg-black text-goldenrod px-3 py-1.5">
+              <span className="font-heading text-[10px] font-bold uppercase">
+                Read More
+              </span>
+              <ArrowRight className="w-3 h-3" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div
       ref={containerRef}
@@ -155,82 +239,8 @@ export default function CardHoverPreview({ post, children, disabled = false }: C
     >
       {children}
       
-      {/* Hover Preview Portal */}
-      {shouldShowPreview && showPreview && isHovering && (
-        <div
-          className="fixed z-[9999] pointer-events-none animate-in fade-in zoom-in-95 duration-200"
-          style={{
-            left: position.x,
-            top: position.y,
-          }}
-        >
-          <div className="w-80 bg-white border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
-            {/* Preview Image */}
-            {imageUrl && (
-              <div className="relative w-full aspect-[3/2] overflow-hidden bg-cream">
-                <Image
-                  src={imageUrl}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                  sizes="320px"
-                />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                
-                {/* Category badge on image */}
-                <div className="absolute top-3 left-3 bg-goldenrod px-2 py-1">
-                  <span className="font-heading text-[10px] font-bold uppercase tracking-wider text-black">
-                    {categoryLabel}
-                  </span>
-                </div>
-                
-                {/* Quick View indicator */}
-                <div className="absolute top-3 right-3 bg-black/60 px-2 py-1 flex items-center gap-1">
-                  <Eye className="w-3 h-3 text-white" />
-                  <span className="font-heading text-[10px] font-bold uppercase text-white">
-                    Preview
-                  </span>
-                </div>
-              </div>
-            )}
-            
-            {/* Preview Content */}
-            <div className="p-4 bg-white">
-              {/* Title */}
-              <h4 className="font-heading text-base font-bold uppercase text-black leading-tight mb-2 line-clamp-2">
-                {post.title}
-              </h4>
-              
-              {/* Description */}
-              {truncatedDescription && (
-                <p className="font-body text-xs text-black/70 mb-3 line-clamp-3 leading-relaxed">
-                  {truncatedDescription}
-                </p>
-              )}
-              
-              {/* Footer */}
-              <div className="flex items-center justify-between pt-3 border-t border-black/10">
-                {/* Reading time */}
-                <div className="flex items-center gap-1 text-black/50">
-                  <Clock className="w-3 h-3" />
-                  <span className="font-heading text-[10px] uppercase tracking-wider">
-                    {readingTime} min read
-                  </span>
-                </div>
-                
-                {/* CTA */}
-                <div className="flex items-center gap-1 bg-black text-goldenrod px-3 py-1.5">
-                  <span className="font-heading text-[10px] font-bold uppercase">
-                    Read More
-                  </span>
-                  <ArrowRight className="w-3 h-3" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Render preview via portal to escape stacking context */}
+      {isMounted && previewContent && createPortal(previewContent, document.body)}
     </div>
   );
 }
