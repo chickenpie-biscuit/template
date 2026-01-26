@@ -4,7 +4,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { urlFor } from '@/sanity/lib/image';
 import { useState, memo, useRef } from 'react';
-import { MapPin, Flag, Star } from 'lucide-react';
+import { MapPin, Flag, Star, Heart } from 'lucide-react';
+import LikeButton from './LikeButton';
 
 interface FeedPost {
   _id: string;
@@ -24,6 +25,7 @@ interface FeedPost {
   price?: number;
   originalPrice?: number;
   author?: string;
+  likes?: number;
   // Design Work fields
   client?: string;
   projectYear?: string;
@@ -703,6 +705,15 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             blurDataURL={blurDataUrl}
             onLoad={() => setImageLoaded(true)}
           />
+          {/* Like Button Overlay */}
+          <div className="absolute bottom-3 right-3 z-10">
+            <LikeButton 
+              postId={post._id} 
+              initialLikes={post.likes || 0} 
+              variant="card" 
+              size="sm"
+            />
+          </div>
         </div>
       );
       
@@ -749,6 +760,16 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             </div>
           )}
         </div>
+        
+        {/* Like Button */}
+        <div className="absolute top-3 right-3 z-10">
+          <LikeButton 
+            postId={post._id} 
+            initialLikes={post.likes || 0} 
+            variant="card" 
+            size="sm"
+          />
+        </div>
       </div>
     );
 
@@ -773,42 +794,59 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   // ART - Clean Gallery Card (Full Artwork, No Cropping)
   if (category === 'art') {
     return (
-      <Link
-        href={href}
-        className="group block hover:-translate-y-2 transition-all duration-500 relative"
-      >
-        {/* Large Art Media - Video or Image (object-contain to show full artwork) */}
-        {showVideo && (videoSrc || externalEmbedUrl) ? (
-          <div className="relative w-full aspect-[3/4] mb-4 overflow-hidden rounded-sm shadow-2xl">
-            <VideoThumbnail aspectClass="aspect-[3/4]" />
+      <div className="group relative">
+        <Link
+          href={href}
+          className="block hover:-translate-y-2 transition-all duration-500"
+        >
+          {/* Large Art Media - Video or Image (object-contain to show full artwork) */}
+          {showVideo && (videoSrc || externalEmbedUrl) ? (
+            <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-sm shadow-2xl bg-cream">
+              <VideoThumbnail aspectClass="aspect-square" />
+            </div>
+          ) : imageUrl ? (
+            <div className="relative w-full mb-4 bg-cream rounded-sm overflow-hidden shadow-2xl group-hover:shadow-[0_25px_50px_rgba(0,0,0,0.3)] transition-shadow duration-500">
+              {!imageLoaded && (
+                <div className="absolute inset-0 bg-cream animate-pulse aspect-square" />
+              )}
+              {/* Use natural image sizing with max constraints */}
+              <div className="relative w-full" style={{ minHeight: '200px' }}>
+                <Image
+                  src={imageUrl}
+                  alt={post.featuredImage?.alt || post.title}
+                  width={800}
+                  height={800}
+                  className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  placeholder={blurDataUrl ? 'blur' : 'empty'}
+                  blurDataURL={blurDataUrl}
+                  onLoad={() => setImageLoaded(true)}
+                  style={{ maxHeight: '600px', objectFit: 'contain' }}
+                />
+              </div>
+            </div>
+          ) : null}
+          
+          {/* Centered Title Below */}
+          <div className="text-center px-2">
+            <h3 className="font-heading text-lg md:text-xl uppercase tracking-wide text-black font-bold group-hover:text-black/60 transition-colors">
+              {post.title}
+            </h3>
+            <p className="font-heading text-[10px] uppercase tracking-widest text-black/40 mt-1">
+              {categoryLabel}
+            </p>
           </div>
-        ) : imageUrl ? (
-          <div className="relative w-full aspect-[3/4] mb-4">
-            {!imageLoaded && (
-              <div className="absolute inset-0 bg-transparent animate-pulse" />
-            )}
-            <Image
-              src={imageUrl}
-              alt={post.featuredImage?.alt || post.title}
-              fill
-              className="object-contain drop-shadow-2xl group-hover:drop-shadow-[0_25px_50px_rgba(0,0,0,0.4)] group-hover:scale-[1.02] transition-all duration-700 ease-out"
-              placeholder={blurDataUrl ? 'blur' : 'empty'}
-              blurDataURL={blurDataUrl}
-              onLoad={() => setImageLoaded(true)}
-            />
-          </div>
-        ) : null}
+        </Link>
         
-        {/* Centered Title Below */}
-        <div className="text-center px-2">
-          <h3 className="font-heading text-lg md:text-xl uppercase tracking-wide text-black font-bold group-hover:text-black/60 transition-colors">
-            {post.title}
-          </h3>
-          <p className="font-heading text-[10px] uppercase tracking-widest text-black/40 mt-1">
-            {categoryLabel}
-          </p>
+        {/* Like Button - positioned outside the link */}
+        <div className="flex justify-center mt-3">
+          <LikeButton 
+            postId={post._id} 
+            initialLikes={post.likes || 0} 
+            variant="minimal" 
+            size="sm"
+          />
         </div>
-      </Link>
+      </div>
     );
   }
 
@@ -1000,36 +1038,48 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
   // DEFAULT (fallback) - Simple Card
   return (
-    <Link
-      href={href}
-      className="group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
-    >
-      {/* Show video if available, otherwise image */}
-      {showVideo && (videoSrc || externalEmbedUrl) ? (
-        <VideoThumbnail className="bg-black" aspectClass="aspect-[3/4]" />
-      ) : imageUrl ? (
-        <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
-          {!imageLoaded && (
-            <div className="absolute inset-0 bg-cream-200 animate-pulse" />
+    <div className="group relative">
+      <Link
+        href={href}
+        className="block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      >
+        {/* Show video if available, otherwise image */}
+        {showVideo && (videoSrc || externalEmbedUrl) ? (
+          <VideoThumbnail className="bg-black" aspectClass="aspect-[3/4]" />
+        ) : imageUrl ? (
+          <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-cream-200 animate-pulse" />
+            )}
+            <Image
+              src={imageUrl}
+              alt={post.featuredImage?.alt || post.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              placeholder={blurDataUrl ? 'blur' : 'empty'}
+              blurDataURL={blurDataUrl}
+              onLoad={() => setImageLoaded(true)}
+            />
+          </div>
+        ) : null}
+        <div className="p-6">
+          <h3 className="font-heading text-xl font-bold uppercase mb-2">{truncatedTitle}</h3>
+          {displayDescription && (
+            <p className="font-body text-sm text-black/70 line-clamp-3">{displayDescription}</p>
           )}
-          <Image
-            src={imageUrl}
-            alt={post.featuredImage?.alt || post.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            placeholder={blurDataUrl ? 'blur' : 'empty'}
-            blurDataURL={blurDataUrl}
-            onLoad={() => setImageLoaded(true)}
-          />
         </div>
-      ) : null}
-      <div className="p-6">
-        <h3 className="font-heading text-xl font-bold uppercase mb-2">{truncatedTitle}</h3>
-        {displayDescription && (
-          <p className="font-body text-sm text-black/70 line-clamp-3">{displayDescription}</p>
-        )}
+      </Link>
+      
+      {/* Like Button - positioned at bottom right */}
+      <div className="absolute bottom-3 right-3 z-10">
+        <LikeButton 
+          postId={post._id} 
+          initialLikes={post.likes || 0} 
+          variant="minimal" 
+          size="sm"
+        />
       </div>
-    </Link>
+    </div>
   );
 }
 

@@ -4,6 +4,7 @@ import Script from 'next/script';
 import './globals.css';
 import CartProvider from '@/components/cart/CartProvider';
 import SmoothScroll from '@/components/providers/SmoothScroll';
+import ContentProtection from '@/components/providers/ContentProtection';
 import OrganizationSchema from '@/components/seo/OrganizationSchema';
 
 const spaceGrotesk = Space_Grotesk({
@@ -92,7 +93,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         
         <SmoothScroll>
           <CartProvider>
-            {children}
+            <ContentProtection>
+              {children}
+            </ContentProtection>
           </CartProvider>
         </SmoothScroll>
       </body>

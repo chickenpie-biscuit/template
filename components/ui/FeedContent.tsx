@@ -28,6 +28,7 @@ interface FeedPost {
   originalPrice?: number;
   findPrice?: string;
   findHighlight?: string;
+  likes?: number;
   // Merch Drops fields (synced with Product schema)
   shortDescription?: string;
   stock?: number;

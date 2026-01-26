@@ -767,6 +767,14 @@ export default defineType({
       initialValue: false,
       description: 'Show in featured section',
     }),
+    defineField({
+      name: 'likes',
+      title: 'Likes Count',
+      type: 'number',
+      initialValue: 0,
+      description: 'Number of likes this post has received',
+      readOnly: true,
+    }),
   ],
   preview: {
     select: {

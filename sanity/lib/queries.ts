@@ -202,7 +202,8 @@ export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | 
   dropDate,
   downloadUrl,
   publishedAt,
-  featured
+  featured,
+  likes
 }`;
 
 export const getAllFeedPostsAsc = groq`*[_type == "feedPost" || _type == "post"] | order(publishedAt asc) {
@@ -233,7 +234,8 @@ export const getAllFeedPostsAsc = groq`*[_type == "feedPost" || _type == "post"]
   dropDate,
   downloadUrl,
   publishedAt,
-  featured
+  featured,
+  likes
 }`;
 
 export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt desc) {
@@ -264,7 +266,8 @@ export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category ==
   dropDate,
   downloadUrl,
   publishedAt,
-  featured
+  featured,
+  likes
 }`;
 
 export const getFeedPostsByCategoryAsc = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt asc) {
@@ -295,7 +298,8 @@ export const getFeedPostsByCategoryAsc = groq`*[(_type == "feedPost" && category
   dropDate,
   downloadUrl,
   publishedAt,
-  featured
+  featured,
+  likes
 }`;
 
 export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $slug][0] {
