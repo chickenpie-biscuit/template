@@ -799,24 +799,24 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           href={href}
           className="block hover:-translate-y-2 transition-all duration-500"
         >
-          {/* Large Art Media - Video or Image (object-contain to show full artwork) */}
+          {/* Large Art Media - Video or Image (transparent background for PNGs) */}
           {showVideo && (videoSrc || externalEmbedUrl) ? (
-            <div className="relative w-full aspect-square mb-4 overflow-hidden rounded-sm shadow-2xl bg-cream">
+            <div className="relative w-full aspect-square mb-4 overflow-hidden">
               <VideoThumbnail aspectClass="aspect-square" />
             </div>
           ) : imageUrl ? (
-            <div className="relative w-full mb-4 bg-cream rounded-sm overflow-hidden shadow-2xl group-hover:shadow-[0_25px_50px_rgba(0,0,0,0.3)] transition-shadow duration-500">
+            <div className="relative w-full mb-4 overflow-hidden">
               {!imageLoaded && (
-                <div className="absolute inset-0 bg-cream animate-pulse aspect-square" />
+                <div className="absolute inset-0 bg-black/5 animate-pulse aspect-square" />
               )}
-              {/* Use natural image sizing with max constraints */}
+              {/* Use natural image sizing - no background for transparent PNGs */}
               <div className="relative w-full" style={{ minHeight: '200px' }}>
                 <Image
                   src={imageUrl}
                   alt={post.featuredImage?.alt || post.title}
                   width={800}
                   height={800}
-                  className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                  className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-700 ease-out drop-shadow-lg group-hover:drop-shadow-2xl"
                   placeholder={blurDataUrl ? 'blur' : 'empty'}
                   blurDataURL={blurDataUrl}
                   onLoad={() => setImageLoaded(true)}
