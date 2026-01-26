@@ -56,12 +56,12 @@ export default function ToolTuesdayLayout({ post }: ToolTuesdayLayoutProps) {
               {/* Tool Image */}
               <div className="lg:col-span-2">
                 {imageUrl ? (
-                  <div className="relative w-full aspect-square bg-white border-2 border-black p-6 flex items-center justify-center">
+                  <div className="relative w-full aspect-square bg-white border-2 border-black overflow-hidden">
                     <Image
                       src={imageUrl}
                       alt={post.toolName || post.title}
                       fill
-                      className="object-contain p-4"
+                      className="object-cover"
                       sizes="(max-width: 1024px) 100vw, 400px"
                     />
                   </div>

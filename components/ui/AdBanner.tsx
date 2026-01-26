@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 interface AdBannerProps {
   banners: AdBanner[];
   placement?: 'header' | 'sidebar' | 'footer' | 'inline';
-  variant?: 'full' | 'card' | 'sticky' | 'inline' | 'feedpost';
+  variant?: 'full' | 'card' | 'sticky' | 'inline' | 'feedpost' | 'shop';
   className?: string;
   dismissible?: boolean;
 }
@@ -314,6 +314,54 @@ export default function AdBannerComponent({
         <Link
           href={banner.link}
           className="block"
+          target={banner.link.startsWith('http') ? '_blank' : undefined}
+          rel="noopener noreferrer"
+        >
+          {content}
+        </Link>
+      );
+    }
+    return content;
+  }
+
+  // SHOP BANNER - Clean wide banner for shop page (5:1 ratio, 1400x280px recommended)
+  // Full image display with minimal footer underneath
+  if (variant === 'shop') {
+    const content = (
+      <div className={`relative overflow-hidden border-2 border-black ${className}`}>
+        {/* Full Image - No overlays */}
+        <div className="relative w-full aspect-[4/1] md:aspect-[5/1] bg-cream">
+          <Image
+            src={imageUrl}
+            alt={banner.image?.alt || banner.title}
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+        
+        {/* Minimal Footer - Sponsored left, Learn More right */}
+        <div className="flex items-center justify-between px-4 py-2.5 bg-cream border-t-2 border-black">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-goldenrod"></div>
+            <span className="font-heading text-[10px] font-bold uppercase tracking-wider text-black/50">
+              Sponsored
+            </span>
+          </div>
+          {banner.link && (
+            <span className="font-heading text-[10px] font-bold uppercase tracking-wider text-black hover:text-goldenrod transition-colors">
+              Learn More →
+            </span>
+          )}
+        </div>
+      </div>
+    );
+
+    if (banner.link) {
+      return (
+        <Link
+          href={banner.link}
+          className="block hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow"
           target={banner.link.startsWith('http') ? '_blank' : undefined}
           rel="noopener noreferrer"
         >

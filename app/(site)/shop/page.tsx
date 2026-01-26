@@ -168,14 +168,14 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         </div>
       )}
 
-      {/* Inline Banner - Shop Promotion */}
+      {/* Shop Banner - Clean promotional banner above product grid */}
       {banners.filter(b => b.placement === 'inline').length > 0 && selectedCategory === 'all' && (
-        <div className="bg-cream py-4">
+        <div className="bg-cream py-6">
           <Container>
             <AdBannerComponent
               banners={banners}
               placement="inline"
-              variant="inline"
+              variant="shop"
             />
           </Container>
         </div>

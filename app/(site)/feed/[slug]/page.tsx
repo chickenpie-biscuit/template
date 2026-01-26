@@ -206,17 +206,17 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
         ]}
       />
       
-      {/* Global Back Button (Fixed) - Hidden on commerce layouts, z-[45] to be above layout elements */}
+      {/* Global Back Button (Fixed) - Positioned below header areas to avoid overlap */}
       {showBackButton && (
-        <div className="fixed top-28 left-6 z-[45] hidden lg:block">
+        <div className="fixed top-40 left-6 z-[45] hidden lg:block">
           <Link 
             href="/" 
             className="flex items-center gap-2 group"
           >
-            <div className="w-12 h-12 rounded-full border-2 border-black bg-cream flex items-center justify-center group-hover:bg-black group-hover:text-cream transition-all duration-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-              <ArrowLeft size={18} />
+            <div className="w-12 h-12 rounded-full border-2 border-black bg-white flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-300 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+              <ArrowLeft size={20} />
             </div>
-            <span className="font-heading font-bold uppercase text-xs tracking-widest text-black opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 bg-cream px-2 py-1">
+            <span className="font-heading font-bold uppercase text-xs tracking-widest text-black opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300 bg-white px-3 py-1.5 border border-black/10 shadow-sm">
               Back
             </span>
           </Link>
