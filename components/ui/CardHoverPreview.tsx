@@ -158,7 +158,7 @@ export default function CardHoverPreview({ post, children, disabled = false }: C
       {/* Hover Preview Portal */}
       {shouldShowPreview && showPreview && isHovering && (
         <div
-          className="fixed z-[200] pointer-events-none animate-in fade-in zoom-in-95 duration-200"
+          className="fixed z-[9999] pointer-events-none animate-in fade-in zoom-in-95 duration-200"
           style={{
             left: position.x,
             top: position.y,
