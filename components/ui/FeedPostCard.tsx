@@ -27,11 +27,16 @@ interface FeedPost {
   // Design Work fields
   client?: string;
   projectYear?: string;
-  // Merch Drops fields
+  // Merch Drops fields (synced with Product schema)
+  shortDescription?: string;
   stock?: number;
   limitedQuantity?: boolean;
   dropDate?: string;
   productType?: string;
+  sizes?: string[];
+  sku?: string;
+  downloadUrl?: string;
+  productGallery?: any[];
   // Course Review fields
   courseLocation?: string;
   courseRating?: number;

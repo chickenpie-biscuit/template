@@ -131,48 +131,36 @@ export default function AdBannerComponent({
   // For all other variants, image is required
   if (!imageUrl) return null;
 
-  // FEEDPOST VARIANT - Looks like a FeedPostCard (for masonry feed)
+  // FEEDPOST VARIANT - Clean ad display for masonry feed
+  // Shows full artwork without overlays, with sponsored badge and CTA below
   if (variant === 'feedpost') {
     const content = (
       <div className={`group block border-2 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden ${className}`}>
-        {/* Image */}
-        <div className="relative w-full aspect-[3/4] overflow-hidden bg-black">
+        {/* Full Image - NO overlays, shows complete artwork */}
+        <div className="relative w-full aspect-[3/4] overflow-hidden bg-cream">
           <Image
             src={feedpostImageUrl || imageUrl}
             alt={banner.image?.alt || banner.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="object-contain group-hover:scale-[1.02] transition-transform duration-500"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          
-          {/* Sponsored Badge - styled to match but clearly marked */}
-          <div className="absolute top-3 left-3">
-            <div className="bg-goldenrod/90 backdrop-blur-sm text-black px-3 py-1.5 border border-black/20">
-              <span className="font-heading text-[10px] font-bold uppercase tracking-widest">
-                ✨ Sponsored
-              </span>
-            </div>
-          </div>
-
-          {/* Title overlay on image */}
-          <div className="absolute bottom-0 left-0 right-0 p-5">
-            <h3 className="font-heading text-xl md:text-2xl font-bold uppercase text-white leading-tight drop-shadow-lg line-clamp-2">
-              {banner.title}
-            </h3>
-          </div>
         </div>
 
-        {/* Content section */}
-        <div className="p-5 bg-cream border-t-2 border-black">
-          {/* Footer with CTA */}
+        {/* Minimal footer - Sponsored badge + Learn More only */}
+        <div className="px-4 py-3 bg-cream border-t-2 border-black">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-black/50 font-heading text-[10px] uppercase tracking-wider">
-              <span>Ad</span>
+            {/* Sponsored Badge */}
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-goldenrod"></div>
+              <span className="font-heading text-[10px] font-bold uppercase tracking-wider text-black/60">
+                Sponsored
+              </span>
             </div>
-            <div className="bg-black text-goldenrod px-3 py-1.5 font-heading text-xs font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
-              Learn More
+            
+            {/* Learn More CTA */}
+            <div className="bg-black text-cream px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider group-hover:bg-goldenrod group-hover:text-black transition-colors">
+              Learn More →
             </div>
           </div>
         </div>

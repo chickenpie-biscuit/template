@@ -28,6 +28,16 @@ interface FeedPost {
   originalPrice?: number;
   findPrice?: string;
   findHighlight?: string;
+  // Merch Drops fields (synced with Product schema)
+  shortDescription?: string;
+  stock?: number;
+  limitedQuantity?: boolean;
+  dropDate?: string;
+  productType?: string;
+  sizes?: string[];
+  sku?: string;
+  downloadUrl?: string;
+  productGallery?: any[];
 }
 
 interface FeedContentProps {

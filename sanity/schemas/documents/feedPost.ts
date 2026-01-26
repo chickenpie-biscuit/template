@@ -284,6 +284,14 @@ export default defineType({
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
     defineField({
+      name: 'shortDescription',
+      title: 'Short Description',
+      type: 'text',
+      rows: 3,
+      description: 'For Merch Drops - brief product summary for cards and previews',
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
       name: 'dropDate',
       title: 'Drop Date',
       type: 'datetime',
@@ -292,7 +300,7 @@ export default defineType({
     }),
     defineField({
       name: 'limitedQuantity',
-      title: 'Limited Quantity',
+      title: 'Limited Edition',
       type: 'boolean',
       description: 'For Merch Drops - is this a limited edition?',
       initialValue: true,
@@ -305,6 +313,8 @@ export default defineType({
       description: 'For Merch Drops - type of product',
       options: {
         list: [
+          { title: 'Physical', value: 'physical' },
+          { title: 'Digital', value: 'digital' },
           { title: 'T-Shirts', value: 't-shirts' },
           { title: 'Prints', value: 'prints' },
           { title: 'Accessories', value: 'accessories' },
@@ -314,6 +324,7 @@ export default defineType({
           { title: 'Other', value: 'other' },
         ],
       },
+      initialValue: 'physical',
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
     defineField({
@@ -335,7 +346,14 @@ export default defineType({
       name: 'originalPrice',
       title: 'Original Price',
       type: 'number',
-      description: 'For Merch Drops - crossed out price (optional)',
+      description: 'For Merch Drops - crossed out price for discounts (optional)',
+      hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
+      name: 'sku',
+      title: 'SKU',
+      type: 'string',
+      description: 'For Merch Drops - product SKU/identifier',
       hidden: ({ document }) => document?.category !== 'merch-drops',
     }),
     defineField({
@@ -345,6 +363,13 @@ export default defineType({
       description: 'For Merch Drops - available quantity',
       initialValue: 0,
       hidden: ({ document }) => document?.category !== 'merch-drops',
+    }),
+    defineField({
+      name: 'downloadUrl',
+      title: 'Download URL',
+      type: 'url',
+      description: 'For Merch Drops - download link for digital products',
+      hidden: ({ document }) => document?.category !== 'merch-drops' || document?.productType !== 'digital',
     }),
     defineField({
       name: 'syncedProduct',

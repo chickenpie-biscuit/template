@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Fetch the feedPost document
+    // Fetch the feedPost document with all merch-drop fields
     const feedPost = await client.fetch(
       `*[_type == "feedPost" && _id == $id][0]{
         _id,
@@ -29,19 +29,26 @@ export async function POST(request: NextRequest) {
         slug,
         category,
         description,
+        shortDescription,
         body,
         featuredImage,
+        featuredVideo,
+        videoUrl,
+        mediaType,
         productGallery,
         price,
         originalPrice,
         productType,
         sizes,
+        sku,
+        downloadUrl,
         limitedQuantity,
         dropDate,
         stock,
         featured,
         publishedAt,
-        syncedProduct
+        syncedProduct,
+        seo
       }`,
       { id: feedPostId }
     );
@@ -61,22 +68,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Build product data
+    // Build product data - syncing all matching fields
     const productData = {
       _type: 'product' as const,
       title: feedPost.title,
       slug: feedPost.slug,
       price: feedPost.price || 0,
       originalPrice: feedPost.originalPrice,
-      shortDescription: feedPost.description,
+      shortDescription: feedPost.shortDescription || feedPost.description,
       description: feedPost.body,
       productType: feedPost.productType || 'other',
       sizes: feedPost.sizes,
+      sku: feedPost.sku,
+      downloadUrl: feedPost.downloadUrl,
       limitedQuantity: feedPost.limitedQuantity || false,
       dropDate: feedPost.dropDate,
       stock: feedPost.stock || 0,
       featured: feedPost.featured || false,
       publishedAt: feedPost.publishedAt || new Date().toISOString(),
+      seo: feedPost.seo, // Sync SEO settings too
       syncedFromFeedPost: {
         _type: 'reference',
         _ref: feedPostId,
@@ -84,17 +94,19 @@ export async function POST(request: NextRequest) {
       images: undefined as any[] | undefined,
     };
 
-    // Handle images
+    // Handle images and videos in gallery
     const images: any[] = [];
     
     if (feedPost.productGallery && feedPost.productGallery.length > 0) {
-      feedPost.productGallery.forEach((img: any) => {
-        if (img.asset) {
+      feedPost.productGallery.forEach((item: any) => {
+        if (item.asset) {
+          // Handle both images and videos
+          const isVideo = item._type === 'file' || item._type === 'video';
           images.push({
-            _type: 'image',
-            _key: img._key || Math.random().toString(36).substring(7),
-            asset: img.asset,
-            alt: img.alt || feedPost.title,
+            _type: isVideo ? 'file' : 'image',
+            _key: item._key || Math.random().toString(36).substring(7),
+            asset: item.asset,
+            alt: item.alt || feedPost.title,
           });
         }
       });
@@ -104,6 +116,16 @@ export async function POST(request: NextRequest) {
         _key: Math.random().toString(36).substring(7),
         asset: feedPost.featuredImage.asset,
         alt: feedPost.featuredImage.alt || feedPost.title,
+      });
+    }
+    
+    // Also add featured video if present and no gallery
+    if (images.length === 0 && feedPost.featuredVideo?.asset) {
+      images.push({
+        _type: 'file',
+        _key: Math.random().toString(36).substring(7),
+        asset: feedPost.featuredVideo.asset,
+        alt: feedPost.featuredVideo.alt || feedPost.title,
       });
     }
     

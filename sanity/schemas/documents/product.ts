@@ -35,7 +35,7 @@ export default defineType({
     }),
     defineField({
       name: 'images',
-      title: 'Images',
+      title: 'Product Gallery',
       type: 'array',
       of: [
         {
@@ -48,6 +48,21 @@ export default defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
+            },
+          ],
+        },
+        {
+          type: 'file',
+          name: 'video',
+          title: 'Product Video',
+          options: {
+            accept: 'video/*',
+          },
+          fields: [
+            {
+              name: 'alt',
+              type: 'string',
+              title: 'Video Description',
             },
           ],
         },
