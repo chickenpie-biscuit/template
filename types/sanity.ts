@@ -140,3 +140,14 @@ export interface AdBanner {
   endDate?: string;
 }
 
+export interface ShopBanner {
+  _id: string;
+  _type: 'shopBanner';
+  title: string;
+  image: SanityImage;
+  link?: string;
+  active?: boolean;
+  displayOrder?: number;
+  startDate?: string;
+  endDate?: string;
+}

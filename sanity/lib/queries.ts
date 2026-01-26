@@ -173,6 +173,18 @@ export const getActiveBanners = groq`*[_type == "adBanner" && active == true] | 
   active
 }`;
 
+// Shop Banner Queries - Separate from feed ad banners (5:1 ratio, 1400x280px)
+export const getActiveShopBanners = groq`*[_type == "shopBanner" && active == true] | order(displayOrder asc) {
+  _id,
+  title,
+  image,
+  link,
+  displayOrder,
+  startDate,
+  endDate,
+  active
+}`;
+
 // Feed Post Queries - Includes both feedPost and regular blog posts
 export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | order(publishedAt desc) {
   _id,

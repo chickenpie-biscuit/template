@@ -3,6 +3,7 @@ import page from './documents/page';
 import product from './documents/product';
 import category from './documents/category';
 import adBanner from './documents/adBanner';
+import shopBanner from './documents/shopBanner';
 import feedPost from './documents/feedPost';
 import studioProject from './documents/studioProject';
 import contactSubmission from './documents/contactSubmission';
@@ -19,6 +20,7 @@ export const schemaTypes = [
   product,
   category,
   adBanner,
+  shopBanner,
   feedPost,
   studioProject,
   contactSubmission,

@@ -1,11 +1,11 @@
 import { client } from '@/sanity/lib/client';
-import { getAllProducts, getAllCategories, getActiveBanners } from '@/sanity/lib/queries';
-import { Product, Category, AdBanner } from '@/types/sanity';
+import { getAllProducts, getAllCategories, getActiveShopBanners } from '@/sanity/lib/queries';
+import { Product, Category, ShopBanner } from '@/types/sanity';
 import ProductCard from '@/components/ui/ProductCard';
 import Container from '@/components/ui/Container';
 import ShopHero from '@/components/ui/ShopHero';
 import ShopFilterBar from '@/components/ui/ShopFilterBar';
-import AdBannerComponent from '@/components/ui/AdBanner';
+import ShopBannerComponent from '@/components/ui/ShopBanner';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { Flame, Gift, ArrowRight, Sparkles } from 'lucide-react';
@@ -30,17 +30,17 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   
   let allProducts: Product[] = [];
   let categories: Category[] = [];
-  let banners: AdBanner[] = [];
+  let shopBanners: ShopBanner[] = [];
 
   try {
-    const [productsData, categoriesData, bannersData] = await Promise.all([
+    const [productsData, categoriesData, shopBannersData] = await Promise.all([
       client?.fetch<Product[]>(getAllProducts).catch(() => []),
       client?.fetch<Category[]>(getAllCategories).catch(() => []),
-      client?.fetch<AdBanner[]>(getActiveBanners).catch(() => []),
+      client?.fetch<ShopBanner[]>(getActiveShopBanners).catch(() => []),
     ]);
     allProducts = productsData || [];
     categories = categoriesData || [];
-    banners = bannersData || [];
+    shopBanners = shopBannersData || [];
   } catch (error) {
     console.error('Shop page data fetch error:', error);
   }
@@ -169,14 +169,10 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       )}
 
       {/* Shop Banner - Clean promotional banner above product grid */}
-      {banners.filter(b => b.placement === 'inline').length > 0 && selectedCategory === 'all' && (
+      {shopBanners.length > 0 && selectedCategory === 'all' && (
         <div className="bg-cream py-6">
           <Container>
-            <AdBannerComponent
-              banners={banners}
-              placement="inline"
-              variant="shop"
-            />
+            <ShopBannerComponent banners={shopBanners} />
           </Container>
         </div>
       )}
