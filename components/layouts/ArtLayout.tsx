@@ -16,6 +16,10 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
     ? urlFor(post.featuredImage).url()
     : null;
 
+  // Check for video content
+  const hasVideo = post.featuredVideo || post.videoUrl;
+  const videoUrl = post.featuredVideo || post.videoUrl;
+
   return (
     <article className="min-h-screen bg-cream">
       {/* Minimal Header - z-30 to stay below global back button */}
@@ -33,7 +37,7 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
       <Container>
         <div className="py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           
-          {/* Gallery Image (Museum Frame) */}
+          {/* Gallery Media (Museum Frame) - Video or Image */}
           <div className="lg:col-span-8 order-2 lg:order-1">
             {/* Frame with shadow */}
             <div className="relative">
@@ -41,7 +45,22 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
               <div className="bg-gradient-to-br from-black via-black/90 to-black/80 p-3 md:p-6 shadow-2xl">
                 {/* Inner white matte */}
                 <div className="bg-white p-4 md:p-8">
-                  {imageUrl ? (
+                  {hasVideo ? (
+                    <div className="relative bg-black">
+                      <video
+                        src={videoUrl}
+                        className="w-full h-auto block"
+                        controls
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        poster={imageUrl || undefined}
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  ) : imageUrl ? (
                     <div className="relative bg-cream-50">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -52,7 +71,7 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
                     </div>
                   ) : (
                     <div className="aspect-[4/5] w-full bg-cream-200 flex items-center justify-center">
-                      <span className="font-heading text-black/20 uppercase">No Image</span>
+                      <span className="font-heading text-black/20 uppercase">No Media</span>
                     </div>
                   )}
                 </div>
@@ -60,14 +79,23 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
               
               {/* Gallery Label Plaque */}
               <div className="mt-6 bg-white border border-black/20 p-4 shadow-md max-w-md">
-                <p className="font-heading text-sm uppercase tracking-wider text-black/80">
-                  {post.title}
-                </p>
-                {post.publishedAt && (
-                  <p className="font-body text-xs text-black/50 mt-1">
-                    {new Date(post.publishedAt).getFullYear()}
-                  </p>
-                )}
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-heading text-sm uppercase tracking-wider text-black/80">
+                      {post.title}
+                    </p>
+                    {post.publishedAt && (
+                      <p className="font-body text-xs text-black/50 mt-1">
+                        {new Date(post.publishedAt).getFullYear()}
+                      </p>
+                    )}
+                  </div>
+                  {hasVideo && (
+                    <span className="px-2 py-1 bg-black text-cream font-heading text-[10px] font-bold uppercase tracking-wider">
+                      Video
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

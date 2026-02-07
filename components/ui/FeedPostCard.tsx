@@ -809,6 +809,10 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
   // ART - Clean Gallery Card (Full Artwork, No Cropping)
   if (category === 'art') {
+    // Check if post has video (either uploaded or external)
+    const hasVideo = (post as any).featuredVideo || (post as any).videoUrl;
+    const videoUrl = (post as any).featuredVideo || (post as any).videoUrl;
+    
     return (
       <div className="group relative">
         <Link
