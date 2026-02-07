@@ -6,7 +6,6 @@ import { urlFor } from '@/sanity/lib/image';
 import { useState, memo, useRef } from 'react';
 import { MapPin, Flag, Star, Heart } from 'lucide-react';
 import LikeButton from './LikeButton';
-import CardHoverPreview from './CardHoverPreview';
 
 interface FeedPost {
   _id: string;
@@ -173,7 +172,6 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   // PROMPT OF THE WEEK - Clean Tech Aesthetic
   if (category === 'prompt-week') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -215,14 +213,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // CHICKEN CHRONICLES - Storybook Card
   if (category === 'chronicles') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-cream hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -271,14 +267,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // TOOL TUESDAY - Product Review Card
   if (category === 'tool-tuesday') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -341,14 +335,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // SOLOPRENEUR SUNDAYS - Metrics/Dashboard Card
   if (category === 'solopreneur') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-2 border-teal bg-black hover:shadow-[8px_8px_0px_0px_rgba(0,221,221,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -390,14 +382,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // SUNDAY SWINGS - Editorial/Essay Card
   if (category === 'sunday-swings') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -482,7 +472,6 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
@@ -490,7 +479,6 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   // COURSE REVIEW - Golf Card
   if (category === 'course-review') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-2 border-emerald-900 bg-emerald-50 hover:shadow-[8px_8px_0px_0px_rgba(6,78,59,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -563,14 +551,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // NOM NOM - Recipe Card (Food Blog Style)
   if (category === 'nom-nom') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-4 border-black bg-white hover:shadow-[8px_8px_0px_0px_rgba(249,115,22,1)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
@@ -678,7 +664,6 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
@@ -876,7 +861,6 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     const isSoldOut = post.stock !== undefined && post.stock <= 0;
     
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block border-2 border-black bg-black hover:shadow-[8px_8px_0px_0px_rgba(255,0,0,0.8)] hover:-translate-y-1 transition-all duration-300 overflow-hidden relative"
@@ -961,14 +945,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // DESIGN WORK - Design Stuff Card (Improved)
   if (category === 'design-work') {
     return (
-      <CardHoverPreview post={post}>
       <Link
         href={href}
         className="group block bg-white hover:shadow-[12px_12px_0px_0px_rgba(218,165,32,1)] hover:-translate-y-2 transition-all duration-300 overflow-hidden"
@@ -1056,13 +1038,11 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           </div>
         </div>
       </Link>
-      </CardHoverPreview>
     );
   }
 
   // DEFAULT (fallback) - Simple Card
   return (
-    <CardHoverPreview post={post}>
     <div className="group relative">
       <Link
         href={href}
@@ -1105,7 +1085,6 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         />
       </div>
     </div>
-    </CardHoverPreview>
   );
 }
 
