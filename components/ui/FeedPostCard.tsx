@@ -120,7 +120,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   const externalEmbedUrl = post.videoUrl ? getEmbedUrl(post.videoUrl) : null;
 
   // For blog posts, default category to 'thoughts'
-  const category = post.category || 'thoughts';
+  const category = typeof post.category === 'string' ? post.category : 'thoughts';
   const categoryLabel = categoryLabels[category] || category.toUpperCase();
   const categoryColor = categoryColors[category] || 'bg-black';
   
