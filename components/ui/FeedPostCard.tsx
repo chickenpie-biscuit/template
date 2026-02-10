@@ -792,40 +792,40 @@ function FeedPostCard({ post }: FeedPostCardProps) {
     return <div>{cardContent}</div>;
   }
 
-  // ART - Clean Gallery Card (Full Artwork, No Cropping)
+  // ART - Clean Gallery Card (Full Artwork, No Cropping, No Frames)
   if (category === 'art') {
     // Check if post has video (either uploaded or external)
     const hasVideo = (post as any).featuredVideo || (post as any).videoUrl;
     const videoUrl = (post as any).featuredVideo || (post as any).videoUrl;
     
     return (
-      <div className="group relative">
+      <div className="group relative border-0">
         <Link
           href={href}
-          className="block hover:-translate-y-2 transition-all duration-500"
+          className="block hover:-translate-y-2 transition-all duration-500 border-0"
         >
-          {/* Large Art Media - Video or Image (transparent background for PNGs) */}
+          {/* Large Art Media - Video or Image (NO background, NO borders, NO frames for clean gallery look) */}
           {showVideo && (videoSrc || externalEmbedUrl) ? (
-            <div className="relative w-full aspect-square mb-4 overflow-hidden">
+            <div className="relative w-full aspect-square mb-4 overflow-hidden border-0">
               <VideoThumbnail aspectClass="aspect-square" />
             </div>
           ) : imageUrl ? (
-            <div className="relative w-full mb-4 overflow-hidden">
+            <div className="relative w-full mb-4 overflow-hidden border-0">
               {!imageLoaded && (
-                <div className="absolute inset-0 bg-black/5 animate-pulse aspect-square" />
+                <div className="absolute inset-0 animate-pulse aspect-square" style={{ background: 'transparent' }} />
               )}
-              {/* Use natural image sizing - no background for transparent PNGs */}
-              <div className="relative w-full" style={{ minHeight: '200px' }}>
+              {/* Use natural image sizing - completely transparent background for PNGs, no frames */}
+              <div className="relative w-full border-0" style={{ minHeight: '200px', background: 'transparent' }}>
                 <Image
                   src={imageUrl}
                   alt={post.featuredImage?.alt || post.title}
                   width={800}
                   height={800}
-                  className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-700 ease-out drop-shadow-lg group-hover:drop-shadow-2xl"
+                  className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-700 ease-out drop-shadow-lg group-hover:drop-shadow-2xl border-0"
                   placeholder={blurDataUrl ? 'blur' : 'empty'}
                   blurDataURL={blurDataUrl}
                   onLoad={() => setImageLoaded(true)}
-                  style={{ maxHeight: '600px', objectFit: 'contain' }}
+                  style={{ maxHeight: '600px', objectFit: 'contain', background: 'transparent' }}
                 />
               </div>
             </div>
