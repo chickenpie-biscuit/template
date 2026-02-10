@@ -578,12 +578,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             {/* Recipe Info Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4 z-10">
               <div className="flex items-center gap-3 text-white/90 text-xs font-heading uppercase tracking-wider">
-                {(post as any).prepTime && (
+                {(post as any).prepTime && typeof (post as any).prepTime === 'string' && (
                   <span className="flex items-center gap-1">
                     ⏱️ {(post as any).prepTime}
                   </span>
                 )}
-                {(post as any).difficulty && (
+                {(post as any).difficulty && typeof (post as any).difficulty === 'string' && (
                   <span className="bg-white/20 px-2 py-0.5 rounded">
                     {(post as any).difficulty}
                   </span>
@@ -618,12 +618,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             {/* Recipe Info Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <div className="flex items-center gap-3 text-white/90 text-xs font-heading uppercase tracking-wider">
-                {(post as any).prepTime && (
+                {(post as any).prepTime && typeof (post as any).prepTime === 'string' && (
                   <span className="flex items-center gap-1">
                     ⏱️ {(post as any).prepTime}
                   </span>
                 )}
-                {(post as any).difficulty && (
+                {(post as any).difficulty && typeof (post as any).difficulty === 'string' && (
                   <span className="bg-white/20 px-2 py-0.5 rounded">
                     {(post as any).difficulty}
                   </span>
@@ -650,8 +650,8 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           {/* Meta row */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-black/50 font-heading text-[10px] uppercase tracking-wider">
-              {(post as any).cuisine && <span>{(post as any).cuisine}</span>}
-              {(post as any).servings && (
+              {(post as any).cuisine && typeof (post as any).cuisine === 'string' && <span>{(post as any).cuisine}</span>}
+              {(post as any).servings && (typeof (post as any).servings === 'string' || typeof (post as any).servings === 'number') && (
                 <>
                   <span>•</span>
                   <span>{(post as any).servings}</span>
@@ -1017,10 +1017,10 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           <div className="flex items-center justify-between">
             {/* Meta Info */}
             <div className="flex items-center gap-2 text-[10px] font-heading uppercase tracking-wider text-black/40">
-              {(post as any).client && (
+              {(post as any).client && typeof (post as any).client === 'string' && (
                 <span>{(post as any).client}</span>
               )}
-              {(post as any).projectYear && (
+              {(post as any).projectYear && typeof (post as any).projectYear === 'string' && (
                 <>
                   <span>•</span>
                   <span>{(post as any).projectYear}</span>
