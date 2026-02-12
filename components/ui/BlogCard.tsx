@@ -90,7 +90,7 @@ export default function BlogCard({ post, variant = 'light' }: BlogCardProps) {
 
           {/* Footer */}
           <div className="flex items-center justify-between pt-3 border-t border-black/10">
-            {post.author && (
+            {post.author && typeof post.author === 'string' && (
               <span className={`font-heading text-[10px] uppercase tracking-wider ${
                 isDark ? 'text-cream/50' : 'text-black/50'
               }`}>

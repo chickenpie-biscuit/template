@@ -96,9 +96,11 @@ export default function ProductReviews({ reviews = [], averageRating }: ProductR
                 <div className="flex items-start justify-between mb-3">
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-heading font-bold text-black">
-                        {review.author}
-                      </span>
+                      {review.author && typeof review.author === 'string' && (
+                        <span className="font-heading font-bold text-black">
+                          {review.author}
+                        </span>
+                      )}
                       {review.verified && (
                         <span className="px-2 py-0.5 bg-teal text-black text-[10px] font-heading font-bold uppercase">
                           Verified
