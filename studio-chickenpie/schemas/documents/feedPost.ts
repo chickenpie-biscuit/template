@@ -174,9 +174,13 @@ export default defineType({
       media: 'featuredImage',
     },
     prepare({ title, category, media }) {
+      const categoryText = typeof category === 'string' 
+        ? category.replace('-', ' ').toUpperCase() 
+        : 'No category';
+      
       return {
         title,
-        subtitle: category ? category.replace('-', ' ').toUpperCase() : 'No category',
+        subtitle: categoryText,
         media,
       };
     },
