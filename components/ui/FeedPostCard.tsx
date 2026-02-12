@@ -489,7 +489,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             <VideoThumbnail aspectClass="aspect-video" />
             
             {/* Rating Badge */}
-            {post.courseRating && (
+            {post.courseRating && typeof post.courseRating === 'number' && (
               <div className="absolute top-4 right-4 bg-white text-emerald-900 px-3 py-1 border-2 border-emerald-900 font-heading font-bold flex items-center gap-1 shadow-md z-10">
                 <Star className="w-3 h-3 fill-emerald-900" />
                 <span>{post.courseRating}/10</span>
@@ -512,7 +512,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             />
             
             {/* Rating Badge */}
-            {post.courseRating && (
+            {post.courseRating && typeof post.courseRating === 'number' && (
               <div className="absolute top-4 right-4 bg-white text-emerald-900 px-3 py-1 border-2 border-emerald-900 font-heading font-bold flex items-center gap-1 shadow-md">
                 <Star className="w-3 h-3 fill-emerald-900" />
                 <span>{post.courseRating}/10</span>
@@ -533,7 +533,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             {truncatedTitle}
           </h3>
 
-          {post.courseLocation && (
+          {post.courseLocation && typeof post.courseLocation === 'string' && (
             <div className="flex items-center gap-2 mb-4 text-emerald-800/60 font-heading text-xs uppercase tracking-wider">
               <MapPin className="w-3 h-3" />
               {post.courseLocation}
@@ -756,7 +756,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           {hasLink && (
             <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <span className="inline-block px-3 py-1.5 font-heading text-[10px] font-bold uppercase tracking-wider bg-black text-white">
-                {post.ctaText || 'Read'}
+                {(typeof post.ctaText === 'string' ? post.ctaText : null) || 'Read'}
               </span>
             </div>
           )}
