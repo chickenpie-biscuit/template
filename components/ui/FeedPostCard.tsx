@@ -120,8 +120,9 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   const externalEmbedUrl = post.videoUrl ? getEmbedUrl(post.videoUrl) : null;
 
   // For blog posts, default category to 'thoughts'
-  const category = typeof post.category === 'string' ? post.category : 'thoughts';
-  const categoryLabel = categoryLabels[category] || category.toUpperCase();
+  // If no category, use empty string to fall through to default card without breaking
+  const category = typeof post.category === 'string' ? post.category : '';
+  const categoryLabel = categoryLabels[category] || (category ? category.toUpperCase() : 'UNCATEGORIZED');
   const categoryColor = categoryColors[category] || 'bg-black';
   
   // Use excerpt if description is not available (for blog posts)
@@ -804,30 +805,28 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           href={href}
           className="block hover:-translate-y-2 transition-all duration-500 border-0"
         >
-          {/* Large Art Media - Video or Image (NO background, NO borders, NO frames for clean gallery look) */}
+          {/* Large Art Media - Video or Image (NO background, NO borders, NO frames, NO CROPPING - natural sizing) */}
           {showVideo && (videoSrc || externalEmbedUrl) ? (
-            <div className="relative w-full aspect-square mb-4 overflow-hidden border-0">
-              <VideoThumbnail aspectClass="aspect-square" />
+            <div className="relative w-full mb-4 overflow-visible border-0">
+              <VideoThumbnail aspectClass="" />
             </div>
           ) : imageUrl ? (
-            <div className="relative w-full mb-4 overflow-hidden border-0">
+            <div className="relative w-full mb-4 overflow-visible border-0">
               {!imageLoaded && (
-                <div className="absolute inset-0 animate-pulse aspect-square" style={{ background: 'transparent' }} />
+                <div className="w-full h-4 animate-pulse" style={{ background: 'transparent' }} />
               )}
-              {/* Use natural image sizing - completely transparent background for PNGs, no frames */}
-              <div className="relative w-full border-0" style={{ minHeight: '200px', background: 'transparent' }}>
-                <Image
-                  src={imageUrl}
-                  alt={post.featuredImage?.alt || post.title}
-                  width={800}
-                  height={800}
-                  className="w-full h-auto object-contain group-hover:scale-[1.02] transition-transform duration-700 ease-out drop-shadow-lg group-hover:drop-shadow-2xl border-0"
-                  placeholder={blurDataUrl ? 'blur' : 'empty'}
-                  blurDataURL={blurDataUrl}
-                  onLoad={() => setImageLoaded(true)}
-                  style={{ maxHeight: '600px', objectFit: 'contain', background: 'transparent' }}
-                />
-              </div>
+              {/* Natural image sizing - NO aspect ratio constraints, NO cropping, completely transparent */}
+              <Image
+                src={imageUrl}
+                alt={post.featuredImage?.alt || post.title}
+                width={800}
+                height={800}
+                className="w-full h-auto object-contain group-hover:scale-[1.01] transition-transform duration-700 ease-out drop-shadow-lg group-hover:drop-shadow-2xl border-0"
+                placeholder={blurDataUrl ? 'blur' : 'empty'}
+                blurDataURL={blurDataUrl}
+                onLoad={() => setImageLoaded(true)}
+                style={{ background: 'transparent' }}
+              />
             </div>
           ) : null}
           
