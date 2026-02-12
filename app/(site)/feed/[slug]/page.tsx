@@ -191,7 +191,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
         description={post.description || categoryLabel}
         datePublished={post.publishedAt || new Date().toISOString()}
         dateModified={post._updatedAt || post.publishedAt || new Date().toISOString()}
-        author={post.author || 'Chickenpie'}
+        author={typeof post.author === 'string' ? post.author : 'Chickenpie'}
         imageUrl={imageUrl || undefined}
         url={postUrl}
         category={categoryLabel}
