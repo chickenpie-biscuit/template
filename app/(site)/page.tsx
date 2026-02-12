@@ -19,16 +19,33 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   let banners: AdBanner[] = [];
   
   try {
-    const [postsData, bannersData] = await Promise.all([
-      filter === 'all'
-        ? client?.fetch(getAllFeedPosts).catch(() => [])
-        : client?.fetch(getFeedPostsByCategory, { category: filter }).catch(() => []),
-      client?.fetch<AdBanner[]>(getActiveBanners).catch(() => []),
-    ]);
-    posts = postsData ?? [];
-    banners = bannersData ?? [];
-  } catch (error) {
-    console.error('Feed fetch error:', error);
+    if (!client) {
+      console.error('Sanity client not configured');
+      posts = [];
+      banners = [];
+    } else {
+      const [postsData, bannersData] = await Promise.all([
+        filter === 'all'
+          ? client.fetch(getAllFeedPosts).catch((err) => {
+              console.error('Failed to fetch all posts:', err.message || err);
+              return [];
+            })
+          : client.fetch(getFeedPostsByCategory, { category: filter }).catch((err) => {
+              console.error('Failed to fetch posts by category:', err.message || err);
+              return [];
+            }),
+        client.fetch<AdBanner[]>(getActiveBanners).catch((err) => {
+          console.error('Failed to fetch banners:', err.message || err);
+          return [];
+        }),
+      ]);
+      posts = postsData ?? [];
+      banners = bannersData ?? [];
+    }
+  } catch (error: any) {
+    console.error('Feed fetch error:', error?.message || error);
+    posts = [];
+    banners = [];
   }
 
   return (
