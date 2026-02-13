@@ -165,13 +165,15 @@ export default function DesignWorkLayout({ post }: DesignWorkLayoutProps) {
             {post.services && post.services.length > 0 && (
               <div className="mt-12 pt-8 border-t border-black/10">
                 <div className="flex flex-wrap gap-2">
-                  {post.services.map((service: string, index: number) => (
-                    <span
-                      key={index}
-                      className="font-heading text-xs uppercase tracking-wider px-3 py-1.5 bg-black/5 text-black/60"
-                    >
-                      {service}
-                    </span>
+                  {post.services.map((service: any, index: number) => (
+                    typeof service === 'string' && (
+                      <span
+                        key={index}
+                        className="font-heading text-xs uppercase tracking-wider px-3 py-1.5 bg-black/5 text-black/60"
+                      >
+                        {service}
+                      </span>
+                    )
                   ))}
                 </div>
               </div>

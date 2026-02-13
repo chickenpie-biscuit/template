@@ -225,18 +225,20 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
               <div className="mb-8">
                 <p className="font-heading text-xs uppercase tracking-widest text-black/60 mb-3">Select Size</p>
                 <div className="flex flex-wrap gap-2">
-                  {post.sizes.map((size: string, index: number) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-5 py-3 border-2 transition-colors font-heading font-bold uppercase text-sm ${
-                        selectedSize === size
-                          ? 'border-black bg-black text-cream'
-                          : 'border-black/30 text-black hover:border-black hover:bg-black hover:text-cream'
-                      }`}
-                    >
-                      {size}
-                    </button>
+                  {post.sizes.map((size: any, index: number) => (
+                    typeof size === 'string' && (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-5 py-3 border-2 transition-colors font-heading font-bold uppercase text-sm ${
+                          selectedSize === size
+                            ? 'border-black bg-black text-cream'
+                            : 'border-black/30 text-black hover:border-black hover:bg-black hover:text-cream'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    )
                   ))}
                 </div>
               </div>

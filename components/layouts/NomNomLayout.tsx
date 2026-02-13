@@ -168,14 +168,14 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
                 
                 {post.ingredients && post.ingredients.length > 0 ? (
                   <ul className="space-y-3">
-                    {post.ingredients.map((item, index) => (
+                    {post.ingredients.map((item: any, index: number) => (
                       <li key={index} className="flex items-start gap-3 group">
                         <span className="w-2 h-2 bg-orange-500 mt-2 flex-shrink-0 group-hover:bg-black transition-colors" />
                         <span className="font-body text-black/80">
-                          {item.amount && (
+                          {item.amount && typeof item.amount === 'string' && (
                             <span className="font-bold text-black">{item.amount} </span>
                           )}
-                          {item.ingredient}
+                          {typeof item.ingredient === 'string' ? item.ingredient : ''}
                         </span>
                       </li>
                     ))}

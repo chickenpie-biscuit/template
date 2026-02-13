@@ -140,10 +140,10 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
                       className={`bg-cream border-4 border-black p-8 ${color.shadow} hover:-translate-y-1 transition-transform`}
                     >
                       <p className="font-heading uppercase text-xs tracking-[0.2em] text-black/60 mb-4 font-bold">
-                        {metric.label}
+                        {typeof metric.label === 'string' ? metric.label : ''}
                       </p>
                       <p className="text-5xl font-heading font-bold text-black mb-3">
-                        {metric.value}
+                        {typeof metric.value === 'string' || typeof metric.value === 'number' ? metric.value : ''}
                       </p>
                       {changeInfo && (
                         <div className={`inline-flex items-center gap-2 text-sm font-heading font-bold px-3 py-1 ${
@@ -176,13 +176,15 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
                   </h3>
                 </div>
                 <ul className="space-y-5">
-                  {post.wins.map((win: string, i: number) => (
-                    <li key={i} className="flex items-start gap-4 group">
-                      <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-goldenrod transition-colors">
-                        <Target className="w-4 h-4 text-cream" />
-                      </div>
-                      <span className="font-body text-lg text-black leading-relaxed">{win}</span>
-                    </li>
+                  {post.wins.map((win: any, i: number) => (
+                    typeof win === 'string' && (
+                      <li key={i} className="flex items-start gap-4 group">
+                        <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-goldenrod transition-colors">
+                          <Target className="w-4 h-4 text-cream" />
+                        </div>
+                        <span className="font-body text-lg text-black leading-relaxed">{win}</span>
+                      </li>
+                    )
                   ))}
                 </ul>
               </div>
@@ -200,13 +202,15 @@ export default function SolopreneurLayout({ post }: SolopreneurLayoutProps) {
                   </h3>
                 </div>
                 <ul className="space-y-5">
-                  {post.losses.map((loss: string, i: number) => (
-                    <li key={i} className="flex items-start gap-4 group">
-                      <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-red transition-colors">
-                        <Coffee className="w-4 h-4 text-cream" />
-                      </div>
-                      <span className="font-body text-lg text-black leading-relaxed">{loss}</span>
-                    </li>
+                  {post.losses.map((loss: any, i: number) => (
+                    typeof loss === 'string' && (
+                      <li key={i} className="flex items-start gap-4 group">
+                        <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-red transition-colors">
+                          <Coffee className="w-4 h-4 text-cream" />
+                        </div>
+                        <span className="font-body text-lg text-black leading-relaxed">{loss}</span>
+                      </li>
+                    )
                   ))}
                 </ul>
               </div>

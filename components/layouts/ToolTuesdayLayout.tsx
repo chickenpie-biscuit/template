@@ -136,11 +136,13 @@ export default function ToolTuesdayLayout({ post }: ToolTuesdayLayoutProps) {
                       </h2>
                     </div>
                     <ul className="space-y-3">
-                      {post.toolPros.map((pro: string, i: number) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <span className="w-2 h-2 bg-teal rounded-full mt-2 flex-shrink-0" />
-                          <span className="font-body text-lg text-black/80">{pro}</span>
-                        </li>
+                      {post.toolPros.map((pro: any, i: number) => (
+                        typeof pro === 'string' && (
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="w-2 h-2 bg-teal rounded-full mt-2 flex-shrink-0" />
+                            <span className="font-body text-lg text-black/80">{pro}</span>
+                          </li>
+                        )
                       ))}
                     </ul>
                   </div>
@@ -156,11 +158,13 @@ export default function ToolTuesdayLayout({ post }: ToolTuesdayLayoutProps) {
                       </h2>
                     </div>
                     <ul className="space-y-3">
-                      {post.toolCons.map((con: string, i: number) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <span className="w-2 h-2 bg-red rounded-full mt-2 flex-shrink-0" />
-                          <span className="font-body text-lg text-black/80">{con}</span>
-                        </li>
+                      {post.toolCons.map((con: any, i: number) => (
+                        typeof con === 'string' && (
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="w-2 h-2 bg-red rounded-full mt-2 flex-shrink-0" />
+                            <span className="font-body text-lg text-black/80">{con}</span>
+                          </li>
+                        )
                       ))}
                     </ul>
                   </div>
