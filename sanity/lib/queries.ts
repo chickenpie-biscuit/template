@@ -191,7 +191,10 @@ export const getAllFeedPosts = groq`*[_type == "feedPost" || _type == "post"] | 
   _type,
   title,
   "slug": slug.current,
-  category,
+  "category": select(
+    defined(category._ref) => category->slug.current,
+    category
+  ),
   featuredImage,
   "featuredVideo": featuredVideo.asset->url,
   videoUrl,
@@ -223,7 +226,10 @@ export const getAllFeedPostsAsc = groq`*[_type == "feedPost" || _type == "post"]
   _type,
   title,
   "slug": slug.current,
-  category,
+  "category": select(
+    defined(category._ref) => category->slug.current,
+    category
+  ),
   featuredImage,
   "featuredVideo": featuredVideo.asset->url,
   videoUrl,
@@ -250,12 +256,15 @@ export const getAllFeedPostsAsc = groq`*[_type == "feedPost" || _type == "post"]
   likes
 }`;
 
-export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt desc) {
+export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && (category == $category || category->slug.current == $category)) || (_type == "post" && $category == "blog")] | order(publishedAt desc) {
   _id,
   _type,
   title,
   "slug": slug.current,
-  category,
+  "category": select(
+    defined(category._ref) => category->slug.current,
+    category
+  ),
   featuredImage,
   "featuredVideo": featuredVideo.asset->url,
   videoUrl,
@@ -282,12 +291,15 @@ export const getFeedPostsByCategory = groq`*[(_type == "feedPost" && category ==
   likes
 }`;
 
-export const getFeedPostsByCategoryAsc = groq`*[(_type == "feedPost" && category == $category) || (_type == "post" && $category == "blog")] | order(publishedAt asc) {
+export const getFeedPostsByCategoryAsc = groq`*[(_type == "feedPost" && (category == $category || category->slug.current == $category)) || (_type == "post" && $category == "blog")] | order(publishedAt asc) {
   _id,
   _type,
   title,
   "slug": slug.current,
-  category,
+  "category": select(
+    defined(category._ref) => category->slug.current,
+    category
+  ),
   featuredImage,
   "featuredVideo": featuredVideo.asset->url,
   videoUrl,
@@ -318,7 +330,10 @@ export const getFeedPostBySlug = groq`*[_type == "feedPost" && slug.current == $
   _id,
   title,
   "slug": slug.current,
-  category,
+  "category": select(
+    defined(category._ref) => category->slug.current,
+    category
+  ),
   "author": author->name,
   featuredImage,
   "featuredVideo": featuredVideo.asset->url,
