@@ -36,13 +36,13 @@ export default function ChroniclesLayout({ post }: ChroniclesLayoutProps) {
               </span>
             </div>
             
-            {post.episodeNumber && (
+            {post.episodeNumber && (typeof post.episodeNumber === 'number' || typeof post.episodeNumber === 'string') && (
               <p className="font-heading text-black/60 text-lg mb-2">
                 Episode {post.episodeNumber}
               </p>
             )}
 
-            {post.characterName && (
+            {post.characterName && typeof post.characterName === 'string' && (
               <div className="inline-block px-6 py-2 bg-black text-goldenrod font-heading font-bold uppercase tracking-wider text-sm border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)]">
                 Featuring: {post.characterName}
               </div>
@@ -114,14 +114,14 @@ export default function ChroniclesLayout({ post }: ChroniclesLayoutProps) {
                   <div className="w-8 h-0.5 bg-black" />
                 </div>
                 <p className="mt-4 font-heading text-xs uppercase tracking-widest text-black/40">
-                  End of Episode {post.episodeNumber || ''}
+                  End of Episode {(typeof post.episodeNumber === 'number' || typeof post.episodeNumber === 'string') ? post.episodeNumber : ''}
                 </p>
               </div>
             </div>
           )}
 
           {/* CTA Button */}
-          {post.ctaLink && (
+          {post.ctaLink && typeof post.ctaLink === 'string' && (
             <div className="mt-16 text-center">
               <a
                 href={post.ctaLink}
@@ -129,7 +129,7 @@ export default function ChroniclesLayout({ post }: ChroniclesLayoutProps) {
                 rel="noopener noreferrer"
                 className="inline-block px-10 py-4 bg-goldenrod text-black hover:bg-black hover:text-goldenrod border-4 border-black font-heading font-bold uppercase text-lg shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 transition-all"
               >
-                {post.ctaText || 'Continue Reading'}
+                {typeof post.ctaText === 'string' ? post.ctaText : 'Continue Reading'}
               </a>
             </div>
           )}

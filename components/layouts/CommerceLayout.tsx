@@ -166,7 +166,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             <div className="flex items-center gap-3 mb-6">
               <Package className="w-5 h-5 text-goldenrod" />
               <span className="font-heading text-xs font-bold uppercase tracking-[0.3em] text-black/60">
-                {post.productType || 'Merch Drop'}
+                {typeof post.productType === 'string' ? post.productType : 'Merch Drop'}
               </span>
             </div>
 

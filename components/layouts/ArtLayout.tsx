@@ -140,7 +140,7 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
               )}
 
               {/* Purchase CTA */}
-              {post.ctaLink && (
+              {post.ctaLink && typeof post.ctaLink === 'string' && (
                 <div className="space-y-3">
                   <a
                     href={post.ctaLink}
@@ -148,7 +148,7 @@ export default function ArtLayout({ post }: ArtLayoutProps) {
                     rel="noopener noreferrer"
                     className="block w-full py-4 bg-black text-cream font-heading font-bold uppercase text-center hover:bg-goldenrod hover:text-black transition-colors border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.2)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.2)] hover:-translate-y-0.5 transition-all"
                   >
-                    {post.ctaText || 'Inquire About Purchase'}
+                    {typeof post.ctaText === 'string' ? post.ctaText : 'Inquire About Purchase'}
                   </a>
                   <p className="text-xs font-body text-black/50 text-center">
                     Limited availability · Contact for pricing
