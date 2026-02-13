@@ -188,7 +188,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
               </div>
             )}
 
-            {stockLow && !soldOut && (
+            {stockLow && !soldOut && typeof post.stock === 'number' && (
               <div className="bg-red/20 border-2 border-red text-red p-4 mb-8 flex items-center gap-3">
                 <AlertCircle className="w-5 h-5 flex-shrink-0" />
                 <p className="font-heading text-sm font-bold uppercase">
@@ -198,19 +198,19 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
             )}
 
             {/* Price */}
-            {post.price && (
+            {post.price && typeof post.price === 'number' && (
               <div className="mb-8">
                 <div className="flex items-baseline gap-4 mb-2">
                   <span className="text-5xl font-heading font-bold text-black">
                     ${post.price}
                   </span>
-                  {post.originalPrice && (
+                  {post.originalPrice && typeof post.originalPrice === 'number' && (
                     <span className="text-2xl font-heading text-black/40 line-through">
                       ${post.originalPrice}
                     </span>
                   )}
                 </div>
-                {post.originalPrice && (
+                {post.originalPrice && typeof post.originalPrice === 'number' && (
                   <p className="text-sm font-heading text-red font-bold uppercase">
                     Save ${(post.originalPrice - post.price).toFixed(2)}
                   </p>
@@ -277,9 +277,9 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
                     onClick={handleAddToCart}
                     className="w-full py-5 bg-black text-cream hover:bg-goldenrod hover:text-black transition-colors border-2 border-black font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all"
                   >
-                    Add to Cart — ${post.price}
+                    Add to Cart{typeof post.price === 'number' ? ` — $${post.price}` : ''}
                   </button>
-                  {post.ctaLink && (
+                  {post.ctaLink && typeof post.ctaLink === 'string' && (
                     <a
                       href={post.ctaLink}
                       target="_blank"

@@ -49,7 +49,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
                   {post.title}
                 </h1>
 
-                {post.courseLocation && (
+                {post.courseLocation && typeof post.courseLocation === 'string' && (
                   <div className="flex items-center gap-2 text-white/80">
                     <MapPin className="w-5 h-5 text-goldenrod" />
                     <span className="font-heading text-lg uppercase tracking-wider">{post.courseLocation}</span>
@@ -70,7 +70,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
                 <Flag className="w-4 h-4" />
                 <span className="font-heading text-xs uppercase tracking-widest">Par</span>
               </div>
-              <span className="font-heading text-2xl font-bold">{post.coursePar || '-'}</span>
+              <span className="font-heading text-2xl font-bold">{(typeof post.coursePar === 'number' || typeof post.coursePar === 'string') ? post.coursePar : '-'}</span>
             </div>
             
             <div className="flex flex-col items-center md:items-start border-r border-white/10 last:border-0">
@@ -78,7 +78,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
                 <Trophy className="w-4 h-4" />
                 <span className="font-heading text-xs uppercase tracking-widest">Rating</span>
               </div>
-              <span className="font-heading text-2xl font-bold">{post.courseRating ? `${post.courseRating}/10` : '-'}</span>
+              <span className="font-heading text-2xl font-bold">{typeof post.courseRating === 'number' ? `${post.courseRating}/10` : '-'}</span>
             </div>
 
             <div className="flex flex-col items-center md:items-start border-r border-white/10 last:border-0">
@@ -86,7 +86,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
                 <Activity className="w-4 h-4" />
                 <span className="font-heading text-xs uppercase tracking-widest">Difficulty</span>
               </div>
-              <span className="font-heading text-2xl font-bold">{post.courseDifficulty ? `${post.courseDifficulty}/10` : '-'}</span>
+              <span className="font-heading text-2xl font-bold">{typeof post.courseDifficulty === 'number' ? `${post.courseDifficulty}/10` : '-'}</span>
             </div>
 
             <div className="flex flex-col items-center md:items-start border-r border-white/10 last:border-0">
@@ -94,7 +94,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
                 <Wind className="w-4 h-4" />
                 <span className="font-heading text-xs uppercase tracking-widest">Conditions</span>
               </div>
-              <span className="font-heading text-2xl font-bold">{post.courseConditions ? `${post.courseConditions}/10` : '-'}</span>
+              <span className="font-heading text-2xl font-bold">{typeof post.courseConditions === 'number' ? `${post.courseConditions}/10` : '-'}</span>
             </div>
           </div>
         </Container>
@@ -188,7 +188,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
               </h3>
 
               <div className="space-y-4 relative z-10">
-                {post.courseWebsite && (
+                {post.courseWebsite && typeof post.courseWebsite === 'string' && (
                   <a 
                     href={post.courseWebsite} 
                     target="_blank" 
@@ -202,7 +202,7 @@ export default function CourseReviewLayout({ post }: CourseReviewLayoutProps) {
                   </a>
                 )}
                 
-                {post.coursePhone && (
+                {post.coursePhone && typeof post.coursePhone === 'string' && (
                   <a 
                     href={`tel:${post.coursePhone}`}
                     className="flex items-center gap-3 text-white hover:text-goldenrod transition-colors group"

@@ -108,7 +108,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
 
               {/* Recipe Meta */}
               <div className="flex flex-wrap items-center gap-4 md:gap-6">
-                {post.prepTime && (
+                {post.prepTime && typeof post.prepTime === 'string' && (
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 border border-white/20">
                     <Clock className="w-4 h-4 text-orange-400" />
                     <div>
@@ -117,7 +117,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
                     </div>
                   </div>
                 )}
-                {post.cookTime && (
+                {post.cookTime && typeof post.cookTime === 'string' && (
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 border border-white/20">
                     <Flame className="w-4 h-4 text-orange-400" />
                     <div>
@@ -126,7 +126,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
                     </div>
                   </div>
                 )}
-                {post.servings && (
+                {post.servings && (typeof post.servings === 'string' || typeof post.servings === 'number') && (
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 border border-white/20">
                     <Users className="w-4 h-4 text-orange-400" />
                     <div>
@@ -135,7 +135,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
                     </div>
                   </div>
                 )}
-                {post.difficulty && (
+                {post.difficulty && typeof post.difficulty === 'string' && (
                   <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 border border-white/20">
                     <ChefHat className="w-4 h-4 text-orange-400" />
                     <div>
@@ -144,7 +144,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
                     </div>
                   </div>
                 )}
-                {post.cuisine && (
+                {post.cuisine && typeof post.cuisine === 'string' && (
                   <div className="bg-orange-500 text-white px-4 py-2 font-heading font-bold uppercase text-xs tracking-wider">
                     {post.cuisine}
                   </div>
@@ -187,7 +187,7 @@ export default function NomNomLayout({ post }: NomNomLayoutProps) {
                 )}
 
                 {/* Difficulty Badge */}
-                {post.difficulty && (
+                {post.difficulty && typeof post.difficulty === 'string' && (
                   <div className="mt-8 pt-6 border-t-2 border-black/10">
                     <p className="font-heading text-xs uppercase tracking-wider text-black/50 mb-2">Difficulty</p>
                     <div className={`inline-block px-4 py-2 ${difficultyColors[post.difficulty] || 'bg-gray-500'} text-white font-heading font-bold uppercase text-sm`}>

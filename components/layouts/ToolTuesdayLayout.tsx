@@ -85,7 +85,7 @@ export default function ToolTuesdayLayout({ post }: ToolTuesdayLayoutProps) {
                 )}
 
                 {/* Rating */}
-                {post.toolRating && (
+                {post.toolRating && typeof post.toolRating === 'number' && (
                   <div className="mb-6">
                     <p className="font-heading text-xs uppercase tracking-widest text-black/60 mb-2">
                       My Rating
@@ -100,14 +100,14 @@ export default function ToolTuesdayLayout({ post }: ToolTuesdayLayoutProps) {
                 )}
 
                 {/* Price */}
-                {post.toolPrice && (
+                {post.toolPrice && typeof post.toolPrice === 'string' && (
                   <div className="inline-block px-6 py-3 bg-goldenrod border-2 border-black font-heading text-2xl font-bold mb-6">
                     {post.toolPrice}
                   </div>
                 )}
 
                 {/* CTA Button */}
-                {post.toolWebsite && (
+                {post.toolWebsite && typeof post.toolWebsite === 'string' && (
                   <div className="mt-6">
                     <a
                       href={post.toolWebsite}
@@ -115,7 +115,7 @@ export default function ToolTuesdayLayout({ post }: ToolTuesdayLayoutProps) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-3 px-8 py-4 bg-black text-cream hover:bg-teal hover:text-black transition-colors border-2 border-black font-heading font-bold uppercase text-lg shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.3)] hover:-translate-y-0.5 transition-all"
                     >
-                      Try {post.toolName || 'Tool'}
+                      Try {typeof post.toolName === 'string' ? post.toolName : 'Tool'}
                       <ExternalLink className="w-5 h-5" />
                     </a>
                   </div>

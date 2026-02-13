@@ -40,7 +40,7 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
               <span className="font-heading font-bold uppercase text-xs tracking-[0.3em] text-black/60">
                 Prompt of the Week
               </span>
-              {post.aiTool && (
+              {post.aiTool && typeof post.aiTool === 'string' && (
                 <>
                   <span className="text-black/20">/</span>
                   <span className="font-heading font-bold uppercase text-xs tracking-widest text-goldenrod">
@@ -79,7 +79,7 @@ export default function PromptWeekLayout({ post }: PromptWeekLayoutProps) {
 
           <div className="flex-1 relative mb-8">
             <div className="bg-black border-4 border-black p-6 font-mono text-sm lg:text-base text-cream leading-relaxed shadow-xl">
-              <pre className="whitespace-pre-wrap">{post.promptText}</pre>
+              <pre className="whitespace-pre-wrap">{typeof post.promptText === 'string' ? post.promptText : 'Prompt not available'}</pre>
             </div>
 
             <button
