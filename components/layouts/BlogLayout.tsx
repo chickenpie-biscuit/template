@@ -29,7 +29,7 @@ export default function BlogLayout({ post }: BlogLayoutProps) {
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex items-center justify-center gap-4 mb-8">
               <span className="font-heading font-bold uppercase text-xs tracking-widest text-black/40">
-                {post.category || 'Journal'}
+                {typeof post.category === 'string' ? post.category : 'Journal'}
               </span>
               <span className="w-1 h-1 bg-black rounded-full" />
               <span className="font-heading font-bold uppercase text-xs tracking-widest text-black/40">

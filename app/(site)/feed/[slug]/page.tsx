@@ -61,7 +61,8 @@ export async function generateMetadata({
     ? urlFor(post.featuredImage).width(1200).height(630).url()
     : null;
   
-  const categoryLabel = categoryLabels[post.category] || post.category;
+  const safeCategory = typeof post.category === 'string' ? post.category : '';
+  const categoryLabel = categoryLabels[safeCategory] || safeCategory || 'Uncategorized';
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const postUrl = `${siteUrl}/feed/${post.slug}`;
   
@@ -143,42 +144,45 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     notFound();
   }
 
+  // Normalize category - some posts have category as a reference object instead of a string
+  const postCategory = typeof post.category === 'string' ? post.category : '';
+
   // Determine Layout based on Category
   let LayoutComponent = BlogLayout;
 
-  if (post.category === 'design-work') {
+  if (postCategory === 'design-work') {
     LayoutComponent = DesignWorkLayout;
-  } else if (post.category === 'art') {
+  } else if (postCategory === 'art') {
     LayoutComponent = ArtLayout;
-  } else if (post.category === 'merch-drops') {
+  } else if (postCategory === 'merch-drops') {
     LayoutComponent = CommerceLayout;
-  } else if (post.category === 'prompt-week') {
+  } else if (postCategory === 'prompt-week') {
     LayoutComponent = PromptWeekLayout;
-  } else if (post.category === 'chronicles') {
+  } else if (postCategory === 'chronicles') {
     LayoutComponent = ChroniclesLayout;
-  } else if (post.category === 'tool-tuesday') {
+  } else if (postCategory === 'tool-tuesday') {
     LayoutComponent = ToolTuesdayLayout;
-  } else if (post.category === 'solopreneur') {
+  } else if (postCategory === 'solopreneur') {
     LayoutComponent = SolopreneurLayout;
-  } else if (post.category === 'sunday-swings') {
+  } else if (postCategory === 'sunday-swings') {
     LayoutComponent = SundaySwingsLayout;
-  } else if (post.category === 'nom-nom') {
+  } else if (postCategory === 'nom-nom') {
     LayoutComponent = NomNomLayout;
-  } else if (post.category === 'course-review') {
+  } else if (postCategory === 'course-review') {
     LayoutComponent = CourseReviewLayout;
   }
 
   // Hide back button on commerce pages (merch drops have their own navigation style)
-  const showBackButton = post.category !== 'merch-drops';
+  const showBackButton = postCategory !== 'merch-drops';
   
   // Show sidebar banner on certain layouts
-  const showSidebarBanner = ['art', 'chronicles', 'prompt-week', 'tool-tuesday', 'solopreneur', 'sunday-swings', 'nom-nom'].includes(post.category);
+  const showSidebarBanner = ['art', 'chronicles', 'prompt-week', 'tool-tuesday', 'solopreneur', 'sunday-swings', 'nom-nom'].includes(postCategory);
   const sidebarBanners = banners?.filter(b => b.placement === 'sidebar') || [];
 
   // SEO data
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
   const postUrl = `${siteUrl}/feed/${params.slug}`;
-  const categoryLabel = categoryLabels[post.category] || post.category;
+  const categoryLabel = categoryLabels[postCategory] || postCategory || 'Uncategorized';
   const imageUrl = post.featuredImage 
     ? urlFor(post.featuredImage).width(1200).height(630).url()
     : null;
@@ -201,7 +205,7 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
       {/* Breadcrumb Schema */}
       <BreadcrumbSchema
         items={[
-          { name: categoryLabel, url: `${siteUrl}/?filter=${post.category}` },
+          { name: categoryLabel, url: `${siteUrl}/?filter=${postCategory}` },
           { name: post.title, url: postUrl },
         ]}
       />
