@@ -6,7 +6,10 @@ import adBanner from './documents/adBanner';
 import feedPost from './documents/feedPost';
 import studioProject from './documents/studioProject';
 import contactSubmission from './documents/contactSubmission';
+import shopBanner from './documents/shopBanner';
 import seo from './objects/seo';
+import seoImage from './objects/seoImage';
+import review from './objects/review';
 import link from './objects/link';
 
 export const schemaTypes = [
@@ -20,8 +23,10 @@ export const schemaTypes = [
   feedPost,
   studioProject,
   contactSubmission,
+  shopBanner,
   // Objects
   seo,
+  seoImage,
+  review,
   link,
 ];
-

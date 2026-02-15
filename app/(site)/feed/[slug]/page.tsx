@@ -21,6 +21,7 @@ import SolopreneurLayout from '@/components/layouts/SolopreneurLayout';
 import SundaySwingsLayout from '@/components/layouts/SundaySwingsLayout';
 import NomNomLayout from '@/components/layouts/NomNomLayout';
 import CourseReviewLayout from '@/components/layouts/CourseReviewLayout';
+import QuoteLayout from '@/components/layouts/QuoteLayout';
 import ArticleSchema from '@/components/seo/ArticleSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 
@@ -41,6 +42,8 @@ const categoryLabels: Record<string, string> = {
   'tool-tuesday': 'Tool Tuesday',
   'solopreneur': 'Solopreneur Sundays',
   'sunday-swings': 'Sunday Swings',
+  'course-review': 'Course Review',
+  'quotes': 'Quotes',
 };
 
 export async function generateMetadata({
@@ -170,6 +173,8 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
     LayoutComponent = NomNomLayout;
   } else if (postCategory === 'course-review') {
     LayoutComponent = CourseReviewLayout;
+  } else if (postCategory === 'quotes') {
+    LayoutComponent = QuoteLayout;
   }
 
   // Hide back button on commerce pages (merch drops have their own navigation style)
