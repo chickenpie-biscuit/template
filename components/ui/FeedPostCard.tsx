@@ -45,6 +45,8 @@ interface FeedPost {
   courseRating?: number;
   courseDifficulty?: number;
   courseConditions?: number;
+  // Date
+  publishedAt?: string;
 }
 
 // Helper to get YouTube/Vimeo embed URL
@@ -96,18 +98,28 @@ const categoryColors: Record<string, string> = {
   'course-review': 'bg-emerald-700',
 };
 
+const formatDate = (dateStr?: string) => {
+  if (!dateStr) return null;
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+};
+
 function FeedPostCard({ post }: FeedPostCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
   // Handle both feedPost (featuredImage) and regular post (mainImage)
   const image = post.featuredImage || post.mainImage;
+  const isArt = (typeof post.category === 'string' ? post.category : '') === 'art';
   const imageUrl = image
-    ? urlFor(image).width(800).height(1200).url()
+    ? isArt
+      ? urlFor(image).width(800).url()
+      : urlFor(image).width(800).height(1200).url()
     : null;
-  
+
   const blurDataUrl = image
-    ? urlFor(image).width(20).height(20).blur(10).url()
+    ? isArt
+      ? urlFor(image).width(20).blur(10).url()
+      : urlFor(image).width(20).height(20).blur(10).url()
     : undefined;
 
   // Determine if we should show video instead of image
@@ -133,6 +145,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
   
   // Truncate title for display
   const truncatedTitle = post.title.length > 60 ? post.title.substring(0, 60) + '...' : post.title;
+  const formattedDate = formatDate(post.publishedAt);
 
   // Video thumbnail component
   const VideoThumbnail = ({ className = '', aspectClass = 'aspect-[4/3]' }: { className?: string; aspectClass?: string }) => {
@@ -179,12 +192,15 @@ function FeedPostCard({ post }: FeedPostCardProps) {
       >
         <div className="relative p-8 min-h-[400px] flex flex-col bg-cream">
           {/* Category Badge */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-2">
             <div className="w-6 h-0.5 bg-goldenrod" />
             <span className="font-heading text-xs font-bold uppercase tracking-widest text-goldenrod">
               {categoryLabel}
             </span>
           </div>
+          {formattedDate && (
+            <p className="font-heading text-[10px] uppercase tracking-wider text-black/40 mb-4">{formattedDate}</p>
+          )}
 
           {/* Title */}
           <h3 className="font-heading text-2xl md:text-3xl font-bold uppercase text-black leading-tight mb-4 flex-1">
@@ -263,8 +279,13 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               {displayDescription}
             </p>
           )}
-          <div className="bg-black text-goldenrod px-4 py-2 inline-block border-2 border-black font-heading text-xs font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
-            READ STORY
+          <div className="flex items-center justify-between">
+            {formattedDate && (
+              <span className="font-heading text-[10px] uppercase tracking-wider text-black/40">{formattedDate}</span>
+            )}
+            <div className="bg-black text-goldenrod px-4 py-2 inline-block border-2 border-black font-heading text-xs font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
+              READ STORY
+            </div>
           </div>
         </div>
       </Link>
@@ -328,7 +349,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
 
           <div className="flex items-center justify-between">
             <div className="text-black/50 font-heading text-[10px] uppercase tracking-wider">
-              Tool Review
+              {formattedDate || 'Tool Review'}
             </div>
             <div className="bg-black text-teal px-3 py-1.5 font-heading text-xs font-bold uppercase group-hover:bg-teal group-hover:text-black transition-colors">
               Read Review
@@ -348,11 +369,14 @@ function FeedPostCard({ post }: FeedPostCardProps) {
       >
         <div className="p-8">
           {/* Header */}
-          <div className="bg-gradient-to-r from-teal to-goldenrod text-black px-4 py-2 mb-6 inline-block">
+          <div className="bg-gradient-to-r from-teal to-goldenrod text-black px-4 py-2 mb-2 inline-block">
             <span className="font-heading text-xs font-bold uppercase tracking-widest">
               {categoryLabel}
             </span>
           </div>
+          {formattedDate && (
+            <p className="font-heading text-[10px] uppercase tracking-wider text-cream/40 mb-4">{formattedDate}</p>
+          )}
 
           {/* Week Number */}
           <h3 className="font-heading text-4xl font-bold text-cream mb-4">
@@ -464,8 +488,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-black/50 font-heading text-[10px] uppercase tracking-wider">
               <span>Essay</span>
-              <span>•</span>
-              <span>5 min</span>
+              {formattedDate && (
+                <>
+                  <span>•</span>
+                  <span>{formattedDate}</span>
+                </>
+              )}
             </div>
             <div className="bg-black text-goldenrod px-3 py-1.5 font-heading text-xs font-bold uppercase group-hover:bg-goldenrod group-hover:text-black transition-colors">
               Read
@@ -528,6 +556,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             <span className="font-heading text-xs font-bold uppercase tracking-widest text-emerald-900">
               {categoryLabel}
             </span>
+            {formattedDate && (
+              <>
+                <span className="text-emerald-800/30">•</span>
+                <span className="font-heading text-[10px] uppercase tracking-wider text-emerald-800/40">{formattedDate}</span>
+              </>
+            )}
           </div>
 
           <h3 className="font-heading text-xl font-bold uppercase text-black leading-tight mb-2">
@@ -656,6 +690,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
                 <>
                   <span>•</span>
                   <span>{(post as any).servings}</span>
+                </>
+              )}
+              {formattedDate && (
+                <>
+                  <span>•</span>
+                  <span>{formattedDate}</span>
                 </>
               )}
             </div>
@@ -837,6 +877,9 @@ function FeedPostCard({ post }: FeedPostCardProps) {
             </h3>
             <p className="font-heading text-[10px] uppercase tracking-widest text-black/40 mt-1">
               {categoryLabel}
+              {formattedDate && (
+                <span> • {formattedDate}</span>
+              )}
             </p>
           </div>
         </Link>
@@ -896,7 +939,7 @@ function FeedPostCard({ post }: FeedPostCardProps) {
         {/* Product Details on Black BG */}
         <div className="p-6 bg-black text-white">
           {/* Category Badge */}
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-1">
             <span className={`${categoryColor} text-white px-2 py-1 font-heading text-[10px] font-bold uppercase tracking-widest`}>
                   {categoryLabel}
                 </span>
@@ -911,6 +954,9 @@ function FeedPostCard({ post }: FeedPostCardProps) {
               </span>
             )}
               </div>
+          {formattedDate && (
+            <p className="font-heading text-[10px] uppercase tracking-wider text-white/30 mb-2">{formattedDate}</p>
+          )}
 
           {/* Title */}
           <h3 className="font-heading text-lg md:text-xl font-bold uppercase text-white mb-2 line-clamp-2 leading-tight">
@@ -1025,6 +1071,12 @@ function FeedPostCard({ post }: FeedPostCardProps) {
                   <span>{(post as any).projectYear}</span>
                 </>
               )}
+              {formattedDate && (
+                <>
+                  <span>•</span>
+                  <span>{formattedDate}</span>
+                </>
+              )}
               </div>
 
             {/* CTA Arrow */}
@@ -1070,6 +1122,9 @@ function FeedPostCard({ post }: FeedPostCardProps) {
           <h3 className="font-heading text-xl font-bold uppercase mb-2">{truncatedTitle}</h3>
           {displayDescription && (
             <p className="font-body text-xs text-black/70 line-clamp-3">{displayDescription}</p>
+          )}
+          {formattedDate && (
+            <p className="font-heading text-[10px] uppercase tracking-wider text-black/40 mt-3">{formattedDate}</p>
           )}
         </div>
       </Link>

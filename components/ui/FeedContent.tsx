@@ -39,6 +39,8 @@ interface FeedPost {
   sku?: string;
   downloadUrl?: string;
   productGallery?: any[];
+  // Date
+  publishedAt?: string;
 }
 
 interface FeedContentProps {
