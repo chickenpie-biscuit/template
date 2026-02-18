@@ -11,6 +11,7 @@
     "ci": "next build"
   },
   "dependencies": {
+    "@paypal/react-paypal-js": "^8.9.2",
     "@portabletext/react": "^3.0.0",
     "@portabletext/types": "^3.0.0",
     "@sanity/image-url": "^1.2.0",
