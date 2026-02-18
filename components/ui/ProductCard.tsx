@@ -38,7 +38,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
     if (soldOut) return;
     
     addItem({
-      id: product._id,
+      id: product.slug,
       name: product.title,
       price: product.price,
       image: imageUrl,

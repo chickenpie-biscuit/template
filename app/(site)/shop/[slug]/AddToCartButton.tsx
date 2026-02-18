@@ -30,7 +30,7 @@ export default function AddToCartButton({ product, selectedSize }: AddToCartButt
     }
 
     addItem({
-      id: product._id,
+      id: product.slug,
       name: product.title,
       price: product.price,
       image: imageUrl,

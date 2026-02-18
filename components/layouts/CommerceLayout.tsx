@@ -55,7 +55,7 @@ export default function CommerceLayout({ post }: CommerceLayoutProps) {
     }
     
     addItem({
-      id: post._id,
+      id: post.slug,
       name: post.title,
       price: post.price,
       image: imageUrl || '',
