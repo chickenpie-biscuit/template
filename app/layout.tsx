@@ -68,6 +68,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Pinterest Domain Verification */}
+        <meta name="p:domain_verify" content="f6d1b71d28e994403cde143801364e52" />
         {/* Google Tag Manager */}
         <Script id="gtm-script" strategy="afterInteractive">
           {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
