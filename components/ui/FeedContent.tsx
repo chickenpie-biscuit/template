@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import FeedPostCard from './FeedPostCard';
 import SkeletonCard from './SkeletonCard';
 import AdBannerComponent from './AdBanner';
+import NewsletterSignup from './NewsletterSignup';
 import { client } from '@/sanity/lib/client';
 import { getAllFeedPosts, getAllFeedPostsAsc, getFeedPostsByCategory, getFeedPostsByCategoryAsc } from '@/sanity/lib/queries';
 import { AdBanner } from '@/types/sanity';
@@ -180,7 +181,12 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
     
     posts.forEach((post, index) => {
       result.push(post);
-      
+
+      // Insert newsletter signup after 6th post
+      if (index === 5) {
+        result.push({ type: 'newsletter' } as any);
+      }
+
       // Insert banner after every BANNER_INTERVAL posts
       if ((index + 1) % BANNER_INTERVAL === 0 && inlineBanners.length > 0) {
         result.push({ type: 'banner', index: bannerIndex });
@@ -200,6 +206,18 @@ export default function FeedContent({ initialPosts, initialFilter, banners = [] 
           {/* Masonry Grid - Tighter spacing for cohesive look */}
           <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 2xl:columns-6 gap-4 md:gap-5">
             {contentItems.map((item, idx) => {
+              // Newsletter signup card
+              if ('type' in item && (item as any).type === 'newsletter') {
+                return (
+                  <div
+                    key="newsletter-cta"
+                    className="break-inside-avoid mb-4 md:mb-5 feed-item opacity-0 translate-y-4 transition-all duration-500 ease-out [&.animated]:opacity-100 [&.animated]:translate-y-0"
+                  >
+                    <NewsletterSignup source="feed-banner" variant="card" />
+                  </div>
+                );
+              }
+
               // Check if this is a banner placeholder
               if ('type' in item && item.type === 'banner') {
                 return (

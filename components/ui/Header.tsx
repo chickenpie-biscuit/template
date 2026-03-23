@@ -6,6 +6,7 @@ import { Menu, X, Instagram, Twitter } from 'lucide-react';
 import { useCartStore } from '@/lib/store';
 import CartButton from '@/components/cart/CartButton';
 import Container from './Container';
+import NewsletterSignup from './NewsletterSignup';
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,8 +54,11 @@ function Header() {
             ))}
           </nav>
 
-          {/* Cart & Mobile Menu - Right */}
+          {/* Newsletter & Cart & Mobile Menu - Right */}
           <div className="flex items-center space-x-4">
+            <div className="hidden lg:block">
+              <NewsletterSignup source="header" variant="inline" />
+            </div>
             <div data-cursor-text="CART">
               <CartButton />
             </div>

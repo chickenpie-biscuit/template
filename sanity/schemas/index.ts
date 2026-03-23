@@ -7,6 +7,7 @@ import shopBanner from './documents/shopBanner';
 import feedPost from './documents/feedPost';
 import studioProject from './documents/studioProject';
 import contactSubmission from './documents/contactSubmission';
+import subscriber from './documents/subscriber';
 import seo from './objects/seo';
 import link from './objects/link';
 import seoImage from './objects/seoImage';
@@ -24,6 +25,7 @@ export const schemaTypes = [
   feedPost,
   studioProject,
   contactSubmission,
+  subscriber,
   // Objects
   seo,
   link,

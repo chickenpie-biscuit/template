@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Container from './Container';
 import { Instagram, Twitter } from 'lucide-react';
+import NewsletterSignup from './NewsletterSignup';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -116,8 +117,13 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Newsletter Signup */}
+        <div className="mt-16 mb-8">
+          <NewsletterSignup source="footer" variant="card" className="bg-cream/10 border-cream/20" />
+        </div>
+
         {/* Bottom Bar */}
-        <div className="mt-24 pt-8 border-t-2 border-cream/20 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
+        <div className="mt-8 pt-8 border-t-2 border-cream/20 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
           <p className="font-body text-sm text-cream/40 uppercase tracking-wide">
             © {currentYear} Chickenpie. All rights reserved.
           </p>
