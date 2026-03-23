@@ -270,26 +270,6 @@ export default function ContactForm() {
           )}
         </motion.form>
 
-        {/* Footer CTA */}
-        <motion.div
-          className="text-center mt-24 p-12 bg-black text-cream border-2 border-black"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          <h3 className="text-3xl lg:text-4xl font-heading font-bold uppercase mb-4">
-            Ready to spread some love?
-          </h3>
-          <p className="font-body text-lg mb-6 text-cream/80">
-            Let&apos;s create something special together. ✨
-          </p>
-          <a
-            href="mailto:hello@chickenpie.co"
-            className="inline-block px-8 py-4 bg-cream text-black border-2 border-cream font-heading font-bold uppercase hover:bg-cream/90 transition-colors"
-          >
-            hello@chickenpie.co
-          </a>
-        </motion.div>
       </div>
     </section>
   );

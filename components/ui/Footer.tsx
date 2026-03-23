@@ -119,7 +119,7 @@ export default function Footer() {
 
         {/* Newsletter Signup */}
         <div className="mt-16 mb-8">
-          <NewsletterSignup source="footer" variant="card" className="bg-cream/10 border-cream/20" />
+          <NewsletterSignup source="footer" variant="banner" />
         </div>
 
         {/* Bottom Bar */}
