@@ -24,6 +24,7 @@ import CourseReviewLayout from '@/components/layouts/CourseReviewLayout';
 import QuoteLayout from '@/components/layouts/QuoteLayout';
 import ArticleSchema from '@/components/seo/ArticleSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 interface FeedPostPageProps {
   params: { slug: string };
@@ -234,6 +235,11 @@ export default async function FeedPostPage({ params }: FeedPostPageProps) {
 
       {/* Render Specific Layout */}
       <LayoutComponent post={post} />
+
+      {/* Newsletter CTA */}
+      {postCategory !== 'merch-drops' && (
+        <NewsletterSignup source="feed-post" variant="banner" />
+      )}
 
       {/* Post-Content Banner Section */}
       {sidebarBanners.length > 0 && showSidebarBanner && (

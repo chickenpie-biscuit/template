@@ -57,6 +57,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://chickenpie.co',
+    types: {
+      'application/rss+xml': 'https://chickenpie.co/rss.xml',
+    },
   },
 };
 

@@ -6,6 +6,7 @@ import Container from '@/components/ui/Container';
 import ShopHero from '@/components/ui/ShopHero';
 import ShopFilterBar from '@/components/ui/ShopFilterBar';
 import ShopBannerComponent from '@/components/ui/ShopBanner';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { Flame, Gift, ArrowRight, Sparkles } from 'lucide-react';
@@ -227,32 +228,12 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       </section>
 
       {/* Newsletter/Updates Section */}
-      <section className="bg-black py-16 lg:py-20 border-t-2 border-cream/20">
-        <Container>
-          <div className="max-w-2xl mx-auto text-center">
-            <Sparkles className="w-10 h-10 mx-auto mb-6 text-goldenrod" />
-            <h2 className="font-heading font-bold uppercase text-3xl lg:text-4xl text-cream mb-4">
-              Don&apos;t Miss a Drop
-            </h2>
-            <p className="font-body text-lg text-cream/70 mb-8">
-              Be the first to know about new releases, exclusive drops, and special offers.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-5 py-4 bg-cream/10 border-2 border-cream/30 text-cream placeholder:text-cream/40 font-body focus:outline-none focus:border-goldenrod transition-colors"
-              />
-              <button className="px-8 py-4 bg-goldenrod text-black border-2 border-goldenrod font-heading font-bold uppercase hover:bg-cream transition-colors">
-                Subscribe
-              </button>
-            </div>
-            <p className="font-body text-xs text-cream/40 mt-4">
-              No spam, ever. Unsubscribe anytime.
-            </p>
-          </div>
-        </Container>
-      </section>
+      <NewsletterSignup
+        source="shop"
+        variant="banner"
+        heading="Don't Miss a Drop"
+        subheading="Be the first to know about new releases, exclusive drops, and special offers."
+      />
     </div>
   );
 }

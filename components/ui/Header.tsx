@@ -56,7 +56,7 @@ function Header() {
 
           {/* Newsletter & Cart & Mobile Menu - Right */}
           <div className="flex items-center space-x-4">
-            <div className="hidden lg:block">
+            <div className="hidden xl:block">
               <NewsletterSignup source="header" variant="inline" />
             </div>
             <div data-cursor-text="CART">
@@ -101,6 +101,9 @@ function Header() {
                 className="pb-12 border-t-2 border-black/10 pt-8 mt-auto animate-in fade-in"
                 style={{ animationDelay: '300ms', animationFillMode: 'both' }}
               >
+                <div className="mb-8">
+                  <NewsletterSignup source="header" variant="inline" className="justify-center" />
+                </div>
                 <p className="text-xs font-heading font-bold uppercase tracking-widest text-black/40 mb-4">
                   Follow Us
                 </p>

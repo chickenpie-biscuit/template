@@ -37,13 +37,13 @@ export default function PayPalCheckoutButton({ items }: PayPalCheckoutButtonProp
         const res = await fetch('/api/paypal/capture-order', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderID: data.orderID }),
+          body: JSON.stringify({ orderID: data.orderID, items }),
         });
         const result = await res.json();
         if (result.status === 'COMPLETED') {
           clearCart();
           closeCart();
-          router.push('/shop?success=true');
+          router.push('/shop/success');
         } else {
           console.error('Payment not completed:', result);
           alert('Payment was not completed. Please try again.');

@@ -3,12 +3,14 @@
 import { useState } from 'react';
 
 interface NewsletterSignupProps {
-  source: 'header' | 'feed-banner' | 'contact' | 'footer';
+  source: 'header' | 'feed-banner' | 'contact' | 'footer' | 'shop' | 'about-cta' | 'blog' | 'feed-post';
   variant?: 'inline' | 'banner' | 'card';
+  heading?: string;
+  subheading?: string;
   className?: string;
 }
 
-export default function NewsletterSignup({ source, variant = 'inline', className = '' }: NewsletterSignupProps) {
+export default function NewsletterSignup({ source, variant = 'inline', heading, subheading, className = '' }: NewsletterSignupProps) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error' | 'exists'>('idle');
 
@@ -23,8 +25,6 @@ export default function NewsletterSignup({ source, variant = 'inline', className
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, source }),
       });
-
-      const data = await response.json();
 
       if (response.status === 409) {
         setStatus('exists');
@@ -47,10 +47,10 @@ export default function NewsletterSignup({ source, variant = 'inline', className
       <section className={`bg-black text-cream border-y-2 border-black ${className}`}>
         <div className="max-w-4xl mx-auto px-4 py-12 md:py-16 text-center">
           <h2 className="text-3xl md:text-5xl font-heading font-bold uppercase mb-4 tracking-tight">
-            Join the Flock 🐔
+            {heading || 'Join the Flock 🐔'}
           </h2>
           <p className="font-body text-sm md:text-base text-cream/70 max-w-lg mx-auto mb-8">
-            Get weekly updates on our journey with AI — what we&apos;re building, breaking, and learning along the way.
+            {subheading || 'Get weekly updates on our journey with AI \u2014 what we\u0027re building, breaking, and learning along the way.'}
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
@@ -79,10 +79,10 @@ export default function NewsletterSignup({ source, variant = 'inline', className
     return (
       <div className={`bg-cream border-2 border-black p-8 ${className}`}>
         <h3 className="text-xl font-heading font-bold uppercase mb-2">
-          Join the Flock 🐔
+          {heading || 'Join the Flock 🐔'}
         </h3>
         <p className="font-body text-sm text-black/60 mb-6">
-          Weekly updates on our AI journey. No spam.
+          {subheading || 'Weekly updates on our AI journey. No spam.'}
         </p>
         <form onSubmit={handleSubmit} className="space-y-3">
           <input

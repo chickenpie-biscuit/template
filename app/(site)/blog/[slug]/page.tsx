@@ -11,9 +11,12 @@ import PortableText from '@/components/sanity/PortableText';
 import AdBannerComponent from '@/components/ui/AdBanner';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Calendar, User, ArrowLeft, Share2, BookOpen } from 'lucide-react';
+import { Calendar, User, ArrowLeft, BookOpen } from 'lucide-react';
 import ArticleSchema from '@/components/seo/ArticleSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import ShareButtons from '@/components/ui/ShareButtons';
+import ReadingProgress from '@/components/ui/ReadingProgress';
+import NewsletterSignup from '@/components/ui/NewsletterSignup';
 
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
@@ -139,6 +142,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         ]}
       />
       
+      <ReadingProgress />
       <article className="min-h-screen bg-cream">
       {/* Hero Section */}
       <section className="relative bg-black overflow-hidden">
@@ -316,16 +320,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
               {/* Share Section */}
               <div className="mt-12 pt-8 border-t-2 border-black/10">
-                <div className="flex items-center justify-between flex-wrap gap-4">
-                  <p className="font-heading font-bold uppercase text-sm tracking-wider text-black/60">
-                    Share this article
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <button className="w-10 h-10 bg-black text-cream flex items-center justify-center hover:bg-teal hover:text-black transition-colors border-2 border-black">
-                      <Share2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+                <ShareButtons url={postUrl} title={post.title} />
+              </div>
+
+              {/* Newsletter CTA */}
+              <div className="mt-12">
+                <NewsletterSignup source="blog" variant="card" />
               </div>
 
               {/* Inline Banner - After Content */}

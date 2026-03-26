@@ -77,7 +77,7 @@ export default function ContactForm() {
   ];
 
   return (
-    <section className="py-16 lg:py-24 bg-cream">
+    <section className="pt-16 lg:pt-24 pb-8 lg:pb-12 bg-cream">
       <div className="max-w-4xl mx-auto px-4 md:px-6">
         {/* Header */}
         <motion.div

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Container from './Container';
+import NewsletterSignup from './NewsletterSignup';
 
 export default function CTASection() {
   return (
@@ -40,23 +41,10 @@ export default function CTASection() {
             <h3 className="text-2xl font-heading font-bold uppercase mb-4 text-black">
               Join the flock
             </h3>
-            <form className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-2 bg-cream text-black border-2 border-black font-body focus:outline-none focus:ring-2 focus:ring-red-300"
-              />
-              <button
-                type="submit"
-                className="px-6 py-2 bg-black text-cream border-2 border-black font-heading font-bold uppercase hover:bg-black/90 transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
+            <NewsletterSignup source="about-cta" variant="inline" className="justify-center" />
           </div>
         </motion.div>
       </Container>
     </section>
   );
 }
-
