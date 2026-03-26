@@ -59,8 +59,8 @@ export default function AdBannerComponent({
       if (banner.startDate && new Date(banner.startDate) > now) return false;
       if (banner.endDate && new Date(banner.endDate) < now) return false;
       
-      // For non-sticky variants, require an image
-      if (variant !== 'sticky' && !banner.image) return false;
+      // For non-sticky variants, require an image with an actual asset
+      if (variant !== 'sticky' && (!banner.image || !banner.image.asset)) return false;
       
       // Must have at least a title
       if (!banner.title) return false;
@@ -83,12 +83,13 @@ export default function AdBannerComponent({
 
   const banner = filteredBanners[currentIndex];
   
-  // Generate image URLs for different sizes
-  const imageUrl = banner.image 
-    ? urlFor(banner.image as any).width(1400).height(400).url() 
+  // Generate image URLs for different sizes (only if asset exists)
+  const hasImageAsset = banner.image && (banner.image as any).asset;
+  const imageUrl = hasImageAsset
+    ? urlFor(banner.image as any).width(1400).height(400).url()
     : null;
-    
-  const feedpostImageUrl = banner.image
+
+  const feedpostImageUrl = hasImageAsset
     ? urlFor(banner.image as any).width(800).height(1200).url()
     : null;
 
