@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { client } from '@/sanity/lib/client';
+import { writeClient } from '@/sanity/lib/client';
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get('token');
@@ -12,14 +12,14 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    if (!client) {
+    if (!writeClient) {
       return new NextResponse(unsubscribePage('Service unavailable.', false), {
         headers: { 'Content-Type': 'text/html' },
         status: 500,
       });
     }
 
-    const subscriber = await client.fetch<any>(
+    const subscriber = await writeClient.fetch<any>(
       `*[_type == "subscriber" && unsubscribeToken == $token][0]`,
       { token } as any
     );
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    await client
+    await writeClient
       .patch(subscriber._id)
       .set({
         status: 'unsubscribed',

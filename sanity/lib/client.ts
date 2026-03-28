@@ -24,6 +24,17 @@ export const previewClient: SanityClient | null = isConfigured
     })
   : null;
 
+// Write client for mutations (subscribe, contact, orders)
+export const writeClient: SanityClient | null = isConfigured
+  ? createClient({
+      projectId,
+      dataset,
+      apiVersion,
+      useCdn: false,
+      token: process.env.SANITY_API_WRITE_TOKEN,
+    })
+  : null;
+
 export async function getClient(preview?: boolean): Promise<SanityClient | null> {
   if (!isConfigured) {
     return null;

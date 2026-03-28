@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { client } from '@/sanity/lib/client';
+import { client, writeClient } from '@/sanity/lib/client';
 import { resend, FROM_EMAIL } from '@/lib/resend';
 import crypto from 'crypto';
 
@@ -15,15 +15,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!client) {
+    if (!writeClient) {
       return NextResponse.json(
-        { error: 'CMS client not available' },
+        { error: 'CMS write client not available' },
         { status: 500 }
       );
     }
 
     // Check if already subscribed
-    const existing = await client.fetch(
+    const existing = await writeClient.fetch(
       `*[_type == "subscriber" && email == $email][0]`,
       { email: email.toLowerCase() }
     );
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
       }
       // Re-subscribe
       const newToken = crypto.randomBytes(32).toString('hex');
-      await client
+      await writeClient
         .patch(existing._id)
         .set({
           status: 'active',
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
     // Create new subscriber
     const unsubscribeToken = crypto.randomBytes(32).toString('hex');
 
-    await client.create({
+    await writeClient.create({
       _type: 'subscriber',
       email: email.toLowerCase(),
       name: name || '',

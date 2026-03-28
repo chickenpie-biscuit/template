@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPayPalAccessToken, PAYPAL_BASE_URL } from '@/lib/paypal';
 import { resend, FROM_EMAIL } from '@/lib/resend';
-import { client } from '@/sanity/lib/client';
+import { writeClient } from '@/sanity/lib/client';
 
 interface CartItem {
   id: string;
@@ -161,19 +161,19 @@ async function sendSaleNotificationEmail(
 }
 
 async function decrementStock(items: CartItem[]) {
-  if (!client || items.length === 0) return;
+  if (!writeClient || items.length === 0) return;
 
   for (const item of items) {
     try {
       // Look up product by slug (cart stores id as slug)
-      const product = await client.fetch<{ _id: string; stock: number } | null>(
+      const product = await writeClient.fetch<{ _id: string; stock: number } | null>(
         `*[_type == "product" && slug.current == $slug][0]{ _id, stock }`,
         { slug: item.id } as any
       );
 
       if (product && product.stock > 0) {
         const newStock = Math.max(0, product.stock - item.quantity);
-        await client.patch(product._id).set({ stock: newStock }).commit();
+        await writeClient.patch(product._id).set({ stock: newStock }).commit();
       }
     } catch (err) {
       console.error(`Failed to decrement stock for ${item.id}:`, err);

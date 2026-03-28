@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { client } from '@/sanity/lib/client';
+import { writeClient } from '@/sanity/lib/client';
 import { resend, FROM_EMAIL } from '@/lib/resend';
 
 export async function POST(request: NextRequest) {
@@ -16,14 +16,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Create contact submission in Sanity
-    if (!client) {
+    if (!writeClient) {
       return NextResponse.json(
         { error: 'CMS client not available' },
         { status: 500 }
       );
     }
 
-    const submission = await client.create({
+    const submission = await writeClient.create({
       _type: 'contactSubmission',
       name,
       email,
