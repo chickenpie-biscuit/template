@@ -1,5 +1,12 @@
 import { Resend } from 'resend';
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+function getResendClient() {
+  if (!process.env.RESEND_API_KEY) {
+    return null;
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
-export const FROM_EMAIL = 'Chickenpie <hello@chickenpie.co>';
+export const resend = getResendClient();
+
+export const FROM_EMAIL = 'Template <noreply@template.dev>';

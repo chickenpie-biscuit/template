@@ -1,191 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Shimmer animation for loading states */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.shimmer {
-  animation: shimmer 2s infinite;
-}
-
-/* Hide scrollbar but keep functionality */
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-/* Noise Texture */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9998;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.4;
-  mix-blend-mode: overlay;
-}
-
-/* Selection */
-::selection {
-  background-color: #E74C3C; /* Red */
-  color: #F5F1E8; /* Cream */
-}
-
-/* Custom Scrollbar (Desktop) */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-track {
-  background: #F5F1E8;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #000;
-  border: 2px solid #F5F1E8;
-  border-radius: 0;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #E74C3C;
-}
-
-/* Lenis Recommended Styles */
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-scrolling iframe {
-  pointer-events: none;
-}
-
+/* ============================================================
+   CSS VARIABLES — edit these to reskin the entire template.
+   Matches config/site.ts theme values.
+   ============================================================ */
 :root {
-  --color-cream: #F5F1E8;
-  --color-red: #E74C3C;
-  --color-teal: #4ECDC4;
-  --color-goldenrod: #F4A261;
-  --color-black: #000000;
+  /* Colors */
+  --color-bg: #ffffff;
+  --color-fg: #000000;
+  --color-primary: #000000;
+  --color-secondary: #f5f5f5;
+  --color-accent: #6366f1;
+  --color-surface: #ffffff;
+  --color-border: #e5e5e5;
+  --color-muted: #888888;
+  --color-text: #000000;
+  --color-text-secondary: #666666;
+
+  /* Fonts */
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Mono', monospace;
+  --font-pixel: 'Press Start 2P', cursive;
 }
 
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply text-black antialiased bg-cream font-body;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
-    @apply font-heading font-bold uppercase;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
-  
-  h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
-  }
-  
-  h2 {
-    @apply text-3xl md:text-4xl lg:text-5xl;
-  }
-  
-  h3 {
-    @apply text-2xl md:text-3xl lg:text-4xl;
-  }
+
+  h1 { @apply text-4xl md:text-5xl lg:text-6xl; }
+  h2 { @apply text-3xl md:text-4xl lg:text-5xl; }
+  h3 { @apply text-2xl md:text-3xl lg:text-4xl; }
 }
 
+/* ============================================================
+   COMPONENTS
+   ============================================================ */
 @layer components {
   .container-custom {
     @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
-  
-  /* Category badge colors */
-  .badge-design {
-    @apply bg-red-200 text-red-300;
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-heading font-semibold uppercase tracking-wider transition-all duration-200;
   }
-  
-  .badge-merch {
-    @apply bg-teal-200 text-teal-300;
+
+  .btn-primary:hover {
+    background-color: var(--color-accent);
   }
-  
-  .badge-food {
-    @apply bg-goldenrod-200 text-goldenrod-300;
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 border-2 border-primary bg-transparent text-primary font-heading font-semibold uppercase tracking-wider transition-all duration-200;
   }
-  
-  .badge-finds {
-    @apply bg-red-200 text-red-300;
-  }
-  
-  .badge-thoughts {
-    @apply bg-teal-200 text-teal-300;
-  }
-  
-  /* Hide scrollbar but keep functionality */
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+
+  .btn-outline:hover {
+    background-color: var(--color-primary);
+    color: var(--color-bg);
   }
 }
 
-/* CSS Animations for performance (replacing framer-motion) */
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideInFromTop {
-  from { transform: translateY(-1rem); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
+.shimmer { animation: shimmer 2s infinite; }
+.animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
 
-@keyframes slideInFromLeft {
-  from { transform: translateX(-1rem); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-secondary); }
+::-webkit-scrollbar-thumb { background: var(--color-primary); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
 
-.animate-in {
-  animation-duration: 200ms;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
-}
+/* Selection */
+::selection { background-color: var(--color-accent); color: white; }
 
-.fade-in {
-  animation-name: fadeIn;
-}
-
-.slide-in-from-top-4 {
-  animation-name: slideInFromTop;
-}
-
-.slide-in-from-left-4 {
-  animation-name: slideInFromLeft;
-}
+/* Lenis smooth scroll */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }

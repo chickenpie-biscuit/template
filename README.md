@@ -1,256 +1,95 @@
-# Next.js 14 + Sanity CMS Template
+# NXT Web Template
 
-A modern, production-ready template for building websites with Next.js 14 (App Router) and Sanity CMS. This template includes e-commerce functionality, blog capabilities, and a complete content management system.
+A production-ready Next.js 14 + Sanity CMS template. Built for fast reskinning and easy deployment.
 
-## Features
+## Quick Start
 
-- ✅ Next.js 14 with App Router
-- ✅ TypeScript
-- ✅ TailwindCSS for styling
-- ✅ Sanity CMS integration
-- ✅ E-commerce shop with cart functionality
-- ✅ Blog system
-- ✅ Dynamic pages
-- ✅ Zustand for state management
-- ✅ Stripe integration ready
-- ✅ Responsive design
-- ✅ SEO optimized
-- ✅ Image optimization with next-sanity
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Copy env and fill in your values
+cp .env.local.example .env.local
+
+# 3. Run dev server
+npm run dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000)
+
+## Reskinning (No Code Required)
+
+Edit `config/site.ts` to change:
+- **Brand name, tagline, description**
+- **Navigation links**
+- **Colors** (primary, accent, surface, etc.)
+- **Fonts** (any Google Font)
+- **Hero content**
+- **Feature list**
+- **Footer links**
+
+The entire CSS variable system at `:root` in `app/globals.css` mirrors the config — change one, the other updates.
+
+## Adding Content (Sanity CMS)
+
+1. Create a project at [sanity.io](https://sanity.io)
+2. Add your `SANITY_PROJECT_ID` to `.env.local`
+3. Visit `/studio` to manage content
+
+If Sanity is not configured, the site renders without dynamic content and all CMS calls fail gracefully.
+
+## Tech Stack
+
+- **Next.js 14** — App Router, TypeScript
+- **Tailwind CSS** — Utility-first styling
+- **GSAP + Lenis** — Scroll animations and smooth scroll
+- **Framer Motion** — UI animations
+- **Sanity CMS** — Optional headless CMS (graceful fallback)
+- **Stripe + PayPal** — Optional e-commerce (requires env vars)
+- **Resend** — Optional transactional email (requires env var)
+
+## Deploy to Vercel
+
+```bash
+npm run build
+vercel --prod
+```
+
+Or push to GitHub and connect to Vercel — the `vercel.json` is already configured.
 
 ## Project Structure
 
 ```
-/app
-  /studio          # Sanity Studio route
-  /api             # API routes
-  /(site)          # Main site pages
-    /shop          # E-commerce pages
-    /blog          # Blog pages
-    /[slug]        # Dynamic pages
-
-/sanity
-  /lib             # Sanity client and utilities
-  /schemas         # Sanity schemas
-
-/components
-  /ui              # UI components
-  /cart            # Cart components
-  /sanity          # Sanity-specific components
-
-/lib               # Utilities and stores
-/types             # TypeScript types
+├── app/
+│   ├── (site)/          # Main site pages (home, blog, shop, etc.)
+│   ├── api/             # API routes (contact, subscribe, checkout)
+│   └── layout.tsx       # Root layout
+├── components/          # UI components (ui, cart, seo, etc.)
+├── config/
+│   └── site.ts          # ← Edit this file to reskin
+├── lib/                 # Utilities (sanity client, stripe, resend, etc.)
+├── public/              # Static assets
+└── sanity/              # Sanity schema and studio
 ```
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-- A Sanity account (free tier works)
-
-### Installation
-
-1. **Clone or copy this template**
-
-2. **Install dependencies**
-
-```bash
-npm install
-```
-
-3. **Set up Sanity**
-
-First, create a new Sanity project:
-
-```bash
-npx sanity init
-```
-
-Follow the prompts to:
-- Create a new project or link to existing
-- Choose dataset name (default: `production`)
-- Configure project
-
-4. **Configure environment variables**
-
-Create a `.env.local` file in the root directory with the following variables:
-
-```env
-# Required: Sanity Configuration
-NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
-NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_SANITY_API_VERSION=2024-01-01
-SANITY_API_READ_TOKEN=your-read-token
-
-# Optional: Stripe Configuration (for e-commerce payments)
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your-stripe-publishable-key
-STRIPE_SECRET_KEY=your-stripe-secret-key
-
-# Optional: Sanity Revalidation (for draft mode)
-SANITY_REVALIDATE_SECRET=your-revalidate-secret
-```
-
-**To get your Sanity credentials:**
-- **Project ID**: Found in your [Sanity project dashboard](https://sanity.io/manage)
-- **Read Token**: Go to Sanity Manage → API → Tokens → Create token with **Read** permissions
-- **Dataset**: Usually `production` (or `development` if you're using a dev dataset)
-
-**Note:** The `.env.local` file is automatically ignored by git. Never commit your actual tokens to version control.
-
-5. **Deploy Sanity schemas**
-
-The schemas are already configured. To deploy them to your Sanity project:
-
-```bash
-npx sanity schema deploy
-```
-
-Or use the Sanity Studio (see below).
-
-6. **Run the development server**
-
-```bash
-npm run dev
-```
-
-7. **Access Sanity Studio**
-
-Navigate to `http://localhost:3000/studio` to access the Sanity Studio and start adding content.
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-
-## Sanity Schemas
-
-The template includes the following content types:
-
-- **Page** - Dynamic pages with SEO
-- **Post** - Blog posts with categories
-- **Product** - E-commerce products
-- **Category** - Product/blog categories
-- **Ad Banner** - Advertisement banners
-
-All schemas are located in `/sanity/schemas/`.
-
-## Content Management
-
-### Adding Content
-
-1. Access Sanity Studio at `/studio`
-2. Create new documents for Pages, Posts, Products, etc.
-3. Content will automatically appear on your site
-
-### Preview Mode
-
-The template includes draft mode support. To enable:
-
-1. Set `SANITY_REVALIDATE_SECRET` in your environment
-2. Access `/api/draft?secret=YOUR_SECRET&slug=page-slug`
-
-## E-commerce Features
-
-- Shopping cart with Zustand
-- Product listings
-- Product detail pages
-- Category filtering
-- Cart persistence (localStorage)
-- Stripe integration ready
-
-## Blog Features
-
-- Blog post listings
-- Individual post pages
-- Category filtering
-- Featured posts
-- Related posts
-
-## Styling
-
-The template uses TailwindCSS with a custom color scheme:
-
-- Primary: Blue (`#3b82f6`)
-- Secondary: Purple (`#8b5cf6`)
-
-Customize colors in `tailwind.config.ts`.
-
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in Vercel
-3. Add environment variables
-4. Deploy
-
-### Other Platforms
-
-1. Build the project: `npm run build`
-2. Start the server: `npm start`
-3. Ensure all environment variables are set
-
-### Sanity Studio Deployment
-
-The Sanity Studio is embedded in the Next.js app at `/studio`. No separate deployment needed.
-
-## Customization
-
-### Branding
-
-- Update site name in `components/ui/Header.tsx`
-- Update footer in `components/ui/Footer.tsx`
-- Add your logo to `/public/images/logo.svg`
-- Add a placeholder image to `/public/images/placeholder.jpg` (used when product/blog images are missing)
-
-### Colors
-
-Edit `tailwind.config.ts` to customize the color scheme.
-
-### Content Types
-
-Add new schemas in `/sanity/schemas/documents/` and export them in `/sanity/schemas/index.ts`.
-
-## Troubleshooting
-
-### Sanity Client Errors
-
-- Verify your `NEXT_PUBLIC_SANITY_PROJECT_ID` is correct
-- Check that your dataset name matches
-- Ensure your API token has read permissions
-
-### Image Issues
-
-- Verify Sanity image domains in `next.config.js`
-- Check that images are properly uploaded in Sanity Studio
-
-### Build Errors
-
-- Run `npm run lint` to check for issues
-- Ensure all environment variables are set
-- Check that all imports are correct
-
-## Support
-
-For issues and questions:
-- Check the [Next.js documentation](https://nextjs.org/docs)
-- Check the [Sanity documentation](https://www.sanity.io/docs)
-- Review the code comments in the template
-
-## License
-
-This template is provided as-is for use in your projects.
-
-## Next Steps
-
-1. Customize the branding and colors
-2. Add your content in Sanity Studio
-3. Configure Stripe for payments
-4. Add your own custom pages and components
-5. Deploy to production
-
-Happy building! 🚀
-
+## Customizing Pages
+
+Pages live in `app/(site)/`:
+- `page.tsx` — Homepage
+- `blog/page.tsx` — Blog listing
+- `blog/[slug]/page.tsx` — Blog post
+- `shop/page.tsx` — Shop listing
+- `shop/[slug]/page.tsx` — Product page
+- `about/page.tsx`, `contact/page.tsx`, etc.
+
+## Environment Variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `SANITY_PROJECT_ID` | No | Sanity project ID (enables CMS) |
+| `SANITY_DATASET` | No | Sanity dataset (default: production) |
+| `RESEND_API_KEY` | No | Resend API key (enables transactional email) |
+| `PAYPAL_CLIENT_ID` | No | PayPal client ID (enables PayPal checkout) |
+| `STRIPE_SECRET_KEY` | No | Stripe secret key (enables Stripe checkout) |
+
+Without any env vars, the template builds and runs in standalone static/ISR mode.

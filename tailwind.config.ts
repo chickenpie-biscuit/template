@@ -9,63 +9,26 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Vintage poster aesthetic color palette
-        primary: {
-          DEFAULT: "#000000",
-          50: "#999999",
-          100: "#808080",
-          200: "#666666",
-          300: "#4d4d4d",
-          400: "#333333",
-          500: "#1a1a1a",
-          600: "#000000",
-          700: "#000000",
-          800: "#000000",
-          900: "#000000",
-        },
-        cream: {
-          DEFAULT: "#F5F1E8",
-          50: "#FDFCFA",
-          100: "#F5F1E8",
-          200: "#E8E0D0",
-          300: "#D9CFB8",
-        },
-        red: {
-          DEFAULT: "#E74C3C",
-          50: "#FADBD8",
-          100: "#F1948A",
-          200: "#E74C3C",
-          300: "#C0392B",
-        },
-        teal: {
-          DEFAULT: "#4ECDC4",
-          50: "#D5F4F2",
-          100: "#85E0D9",
-          200: "#4ECDC4",
-          300: "#2E9B94",
-        },
-        goldenrod: {
-          DEFAULT: "#F4A261",
-          50: "#FCE4D6",
-          100: "#F9C49A",
-          200: "#F4A261",
-          300: "#E67E22",
-        },
-        black: {
-          DEFAULT: "#000000",
-        },
+        // Neutral template palette — override via CSS variables at :root
+        background: "var(--color-bg)",
+        foreground: "var(--color-fg)",
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        accent: "var(--color-accent)",
+        surface: "var(--color-surface)",
+        border: "var(--color-border)",
+        muted: "var(--color-muted)",
       },
       fontFamily: {
-        heading: ['"Space Grotesk"', 'sans-serif'],
-        body: ['"Space Mono"', 'monospace'],
-        pixel: ['"Press Start 2P"', 'cursive'],
+        heading: ["var(--font-heading)"],
+        body: ["var(--font-body)"],
+        pixel: ["var(--font-pixel)"],
       },
       typography: {
         DEFAULT: {
           css: {
-            maxWidth: "65ch",
-            color: "#000000",
-            fontFamily: '"Space Mono", monospace',
+            color: "var(--color-fg)",
+            fontFamily: "var(--font-body)",
           },
         },
       },
@@ -74,4 +37,3 @@ const config: Config = {
   plugins: [],
 };
 export default config;
-
