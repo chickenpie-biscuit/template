@@ -2,19 +2,18 @@
 
 import Link from 'next/link';
 import Container from './Container';
-import { Instagram, Twitter } from 'lucide-react';
 import NewsletterSignup from './NewsletterSignup';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-black text-cream border-t-2 border-black overflow-hidden">
+    <footer className="bg-black text-[var(--color-bg)] border-t-2 border-black overflow-hidden">
       <div className="pt-16 pb-8 md:pt-24 md:pb-12 px-4 md:px-8">
         {/* Massive Wordmark */}
-        <div className="w-full border-b-2 border-cream/20 mb-16 pb-8">
-          <h1 className="text-[12vw] leading-[0.8] font-heading font-bold uppercase text-center tracking-tighter text-cream select-none pointer-events-none">
-            Chickenpie
+        <div className="w-full border-b-2 border-white/20 mb-16 pb-8">
+          <h1 className="text-[12vw] leading-[0.8] font-heading font-bold uppercase text-center tracking-tighter text-[var(--color-bg)] select-none pointer-events-none">
+            NXT
           </h1>
         </div>
 
@@ -23,35 +22,35 @@ export default function Footer() {
           <div className="md:col-span-4 flex flex-col justify-between h-full min-h-[200px]">
             <div>
               <h3 className="text-xl font-heading font-bold uppercase mb-4">
-                Based in the Universe
+                Template Demo
               </h3>
-              <p className="text-lg font-body text-cream/60 max-w-xs leading-relaxed">
-                A creative studio and lifestyle brand blurring the lines between work and play.
+              <p className="text-lg font-body text-white/60 max-w-xs leading-relaxed">
+                A production-ready Next.js + Sanity template. Built for fast reskinning and easy deployment.
               </p>
             </div>
-            
+
             <div className="mt-auto pt-8">
-              <a 
-                href="mailto:hello@chickenpie.co" 
-                className="text-2xl font-heading font-bold uppercase hover:text-red transition-colors inline-block relative group"
+              <a
+                href="mailto:hello@template.dev"
+                className="text-2xl font-heading font-bold uppercase hover:text-[var(--color-accent)] transition-colors inline-block relative group"
               >
-                hello@chickenpie.co
-                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-red transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                hello@template.dev
+                <span className="absolute left-0 bottom-0 w-full h-[2px] bg-[var(--color-accent)] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
               </a>
             </div>
           </div>
 
           {/* Navigation Columns */}
           <div className="md:col-span-2 md:col-start-6">
-            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-cream/40 mb-6">
+            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-white/40 mb-6">
               Explore
             </h4>
             <ul className="space-y-4">
-              {['Feed', 'Studio', 'Shop', 'About'].map((item) => (
+              {['Home', 'Studio', 'Shop', 'About'].map((item) => (
                 <li key={item}>
-                  <Link 
-                    href={item === 'Feed' ? '/' : `/${item.toLowerCase()}`}
-                    className="text-xl font-body uppercase hover:text-red transition-colors inline-block"
+                  <Link
+                    href={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                    className="text-xl font-body uppercase hover:text-[var(--color-accent)] transition-colors inline-block"
                   >
                     {item}
                   </Link>
@@ -61,56 +60,41 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-cream/40 mb-6">
+            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-white/40 mb-6">
               Connect
             </h4>
             <ul className="space-y-4">
               <li>
-                <Link href="/contact" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                <Link href="/contact" className="text-xl font-body uppercase hover:text-[var(--color-accent)] transition-colors inline-block">
                   Contact
                 </Link>
               </li>
               <li>
-                <a 
-                  href="https://instagram.com/chickenpie" 
-                  target="_blank" 
+                <a
+                  href="https://github.com/chickenpie-biscuit/template"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xl font-body uppercase hover:text-red transition-colors inline-block"
+                  className="text-xl font-body uppercase hover:text-[var(--color-accent)] transition-colors inline-block"
                 >
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="https://twitter.com/chickenpie" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xl font-body uppercase hover:text-red transition-colors inline-block"
-                >
-                  Twitter/X
+                  GitHub
                 </a>
               </li>
             </ul>
           </div>
 
           <div className="md:col-span-2">
-            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-cream/40 mb-6">
+            <h4 className="font-heading font-bold uppercase text-sm tracking-widest text-white/40 mb-6">
               Legal
             </h4>
             <ul className="space-y-4">
               <li>
-                <Link href="/privacy" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                <Link href="/privacy" className="text-xl font-body uppercase hover:text-[var(--color-accent)] transition-colors inline-block">
                   Privacy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
+                <Link href="/terms" className="text-xl font-body uppercase hover:text-[var(--color-accent)] transition-colors inline-block">
                   Terms
-                </Link>
-              </li>
-              <li>
-                <Link href="/affiliate-disclaimer" className="text-xl font-body uppercase hover:text-red transition-colors inline-block">
-                  Affiliate
                 </Link>
               </li>
             </ul>
@@ -123,12 +107,12 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 pt-8 border-t-2 border-cream/20 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
-          <p className="font-body text-sm text-cream/40 uppercase tracking-wide">
-            © {currentYear} Chickenpie. All rights reserved.
+        <div className="mt-8 pt-8 border-t-2 border-white/20 flex flex-col md:flex-row justify-between items-end md:items-center gap-4">
+          <p className="font-body text-sm text-white/40 uppercase tracking-wide">
+            © {currentYear} NXT Template. All rights reserved.
           </p>
-          <p className="font-body text-sm text-cream/40 uppercase tracking-wide">
-            Designed with ❤️ & 🐔
+          <p className="font-body text-sm text-white/40 uppercase tracking-wide">
+            Built on Next.js + Sanity
           </p>
         </div>
       </div>

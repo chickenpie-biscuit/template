@@ -2,23 +2,20 @@
 
 import Link from 'next/link';
 import { useState, useEffect, memo } from 'react';
-import { Menu, X, Instagram, Twitter } from 'lucide-react';
-import { useCartStore } from '@/lib/store';
+import { Menu, X } from 'lucide-react';
 import CartButton from '@/components/cart/CartButton';
 import Container from './Container';
 import NewsletterSignup from './NewsletterSignup';
 
-function Header() {
+export default memo(function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const itemCount = useCartStore((state) => state.getItemCount());
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
   }, []);
 
   const links = [
-    { href: '/', label: 'Feed' },
+    { href: '/', label: 'Home' },
     { href: '/studio', label: 'Studio' },
     { href: '/shop', label: 'Shop' },
     { href: '/about', label: 'About' },
@@ -26,13 +23,13 @@ function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-md border-b-2 border-black">
+    <header className="sticky top-0 z-50 bg-[var(--color-bg)]/95 backdrop-blur-md border-b-2 border-black">
       <Container>
         <div className="flex h-20 items-center justify-between">
           {/* Logo - Left */}
           <Link href="/" className="flex items-center space-x-2 z-50 group">
-            <span className="text-2xl font-heading font-bold uppercase tracking-tight text-black group-hover:text-red transition-colors" data-cursor-text="HOME">
-              Chickenpie
+            <span className="text-2xl font-heading font-bold uppercase tracking-tight text-black group-hover:text-[var(--color-accent)] transition-colors">
+              NXT
             </span>
           </Link>
 
@@ -47,23 +44,20 @@ function Header() {
                 <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">
                   {link.label}
                 </span>
-                <span className="absolute left-0 top-0 inline-block transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-red">
+                <span className="absolute left-0 top-0 inline-block transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-[var(--color-accent)]">
                   {link.label}
                 </span>
               </Link>
             ))}
           </nav>
 
-          {/* Newsletter & Cart & Mobile Menu - Right */}
+          {/* Cart & Mobile Menu - Right */}
           <div className="flex items-center space-x-4">
-            <div className="hidden xl:block">
-              <NewsletterSignup source="header" variant="inline" />
-            </div>
             <div data-cursor-text="CART">
               <CartButton />
             </div>
             <button
-              className="lg:hidden p-2 text-black hover:text-red transition-colors"
+              className="lg:hidden p-2 text-black hover:text-[var(--color-accent)] transition-colors"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -72,13 +66,13 @@ function Header() {
           </div>
         </div>
 
-        {/* Mobile Menu Overlay - CSS animations instead of framer-motion */}
+        {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
           <div
-            className="lg:hidden fixed left-0 right-0 bottom-0 z-40 border-t-2 border-black bg-cream animate-in fade-in slide-in-from-top-4 duration-200"
+            className="lg:hidden fixed left-0 right-0 bottom-0 z-40 bg-[var(--color-bg)] border-t-2 border-black animate-in fade-in slide-in-from-top-4 duration-200"
             style={{ top: '80px', height: 'calc(100vh - 80px)' }}
           >
-            <nav className="px-6 py-8 h-full flex flex-col justify-between overflow-y-auto max-w-md mx-auto w-full bg-cream">
+            <nav className="px-6 py-8 h-full flex flex-col justify-between overflow-y-auto max-w-md mx-auto w-full">
               <div className="flex flex-col space-y-8 mt-4">
                 {links.map((link, index) => (
                   <div
@@ -88,7 +82,7 @@ function Header() {
                   >
                     <Link
                       href={link.href}
-                      className="text-5xl font-heading font-bold uppercase tracking-tight text-black hover:text-red transition-colors inline-block"
+                      className="text-5xl font-heading font-bold uppercase tracking-tight text-black hover:text-[var(--color-accent)] transition-colors inline-block"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {link.label}
@@ -96,27 +90,16 @@ function Header() {
                   </div>
                 ))}
               </div>
-              
-              <div 
+
+              <div
                 className="pb-12 border-t-2 border-black/10 pt-8 mt-auto animate-in fade-in"
                 style={{ animationDelay: '300ms', animationFillMode: 'both' }}
               >
                 <div className="mb-8">
                   <NewsletterSignup source="header" variant="inline" className="justify-center" />
                 </div>
-                <p className="text-xs font-heading font-bold uppercase tracking-widest text-black/40 mb-4">
-                  Follow Us
-                </p>
-                <div className="flex gap-6 mb-8">
-                  <a href="https://instagram.com/chickenpie" target="_blank" rel="noopener noreferrer" className="text-black hover:text-red transition-colors">
-                    <Instagram size={24} />
-                  </a>
-                  <a href="https://twitter.com/chickenpie" target="_blank" rel="noopener noreferrer" className="text-black hover:text-red transition-colors">
-                    <Twitter size={24} />
-                  </a>
-                </div>
-                <p className="text-sm font-body text-black/60 uppercase tracking-widest">
-                  Based in the Universe
+                <p className="text-sm font-body text-black/40 uppercase tracking-widest">
+                  Template Demo
                 </p>
               </div>
             </nav>
@@ -125,6 +108,4 @@ function Header() {
       </Container>
     </header>
   );
-}
-
-export default memo(Header);
+});

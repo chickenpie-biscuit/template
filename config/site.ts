@@ -5,20 +5,20 @@
 
 export const siteConfig = {
   // Brand identity
-  name: 'Template',
-  tagline: 'Your tagline here',
-  description: 'A modern Next.js + Sanity template',
-  url: 'https://yourdomain.com',
-  email: 'hello@yourdomain.com',
+  name: 'NXT Template',
+  tagline: 'Ship faster. Reskin easier.',
+  description: 'A production-ready Next.js + Sanity template for modern web projects.',
+  url: 'https://template-site.vercel.app',
+  email: 'hello@template.dev',
 
   // Social
   twitter: '@yourhandle',
-  instagram: '@yourhandle',
+  github: 'chickenpie-biscuit/template',
 
   // Navigation
   nav: [
     { label: 'Home', href: '/' },
-    { label: 'Blog', href: '/blog' },
+    { label: 'Studio', href: '/studio' },
     { label: 'Shop', href: '/shop' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
@@ -68,11 +68,10 @@ export const siteConfig = {
   ],
 
   // Header announcement bar (null to disable)
-  announcement: null,
-  // announcement: {
-  //   text: '🚀 New template drop — reskin and ship faster.',
-  //   href: '/blog/new-template',
-  // },
+  announcement: {
+    text: 'Template Demo — Customize config/site.ts to reskin.',
+    href: '/studio',
+  },
 
   // Features (for landing page or about section)
   features: [
@@ -91,15 +90,20 @@ export const siteConfig = {
       title: 'CMS-Ready',
       description: 'Sanity CMS integration with graceful fallback when unconfigured.',
     },
+    {
+      icon: 'Layers',
+      title: 'Deploy in Minutes',
+      description: 'Push to GitHub, connect Vercel, ship. No complex setup required.',
+    },
   ],
 
   // Hero section
   hero: {
-    badge: null,          // e.g. 'Now in beta' or null to hide
-    title: 'Build something\nworth building.',
-    subtitle: 'A Next.js + Sanity template that ships fast and reskins in minutes.',
-    cta: { label: 'Get Started', href: '/contact' },
-    secondaryCta: { label: 'View on GitHub', href: 'https://github.com' },
+    badge: 'Template Demo',
+    title: 'Build anything.\nDeploy everywhere.',
+    subtitle: 'The last template you\'ll ever need. Reskin in minutes, deploy in seconds.',
+    cta: { label: 'Get the Template', href: 'https://github.com/chickenpie-biscuit/template' },
+    secondaryCta: { label: 'View on GitHub', href: 'https://github.com/chickenpie-biscuit/template' },
   },
 
   // SEO
