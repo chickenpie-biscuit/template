@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { FileText, ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | Chickenpie',
-  description: 'Terms and conditions governing your use of Chickenpie services and website.',
+  title: 'Terms of Service | NXT Template',
+  description: 'Terms and conditions governing your use of NXT Template services and website.',
 };
 
 export default function TermsPage() {
@@ -55,7 +55,7 @@ export default function TermsPage() {
             ">
               <h2>1. Agreement to Terms</h2>
               <p>
-                By accessing or using the Chickenpie website (chickenpie.co) and services, you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms, please do not use our services.
+                By accessing or using the NXT Template website (template.dev) and services, you agree to be bound by these Terms of Service (&quot;Terms&quot;). If you do not agree to these Terms, please do not use our services.
               </p>
               <p>
                 These Terms are governed by the laws of the Republic of the Philippines, including but not limited to the Civil Code of the Philippines, the Electronic Commerce Act (R.A. 8792), and the Consumer Act of the Philippines (R.A. 7394).
@@ -63,7 +63,7 @@ export default function TermsPage() {
 
               <h2>2. Definitions</h2>
               <ul>
-                <li><strong>&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; &quot;our&quot;</strong> refers to Chickenpie</li>
+                <li><strong>&quot;Company,&quot; &quot;we,&quot; &quot;us,&quot; &quot;our&quot;</strong> refers to NXT Template</li>
                 <li><strong>&quot;User,&quot; &quot;you,&quot; &quot;your&quot;</strong> refers to individuals accessing our services</li>
                 <li><strong>&quot;Services&quot;</strong> includes our website, products, content, and all related offerings</li>
                 <li><strong>&quot;Content&quot;</strong> means text, images, videos, and other materials on our platform</li>
@@ -128,7 +128,7 @@ export default function TermsPage() {
 
               <h2>9. Intellectual Property</h2>
               <p>
-                All content on our website, including but not limited to text, graphics, logos, images, designs, and software, is the property of Chickenpie and protected by Philippine intellectual property laws (Intellectual Property Code, R.A. 8293) and international treaties.
+                All content on our website, including but not limited to text, graphics, logos, images, designs, and software, is the property of NXT Template and protected by Philippine intellectual property laws (Intellectual Property Code, R.A. 8293) and international treaties.
               </p>
               <p>
                 You may not reproduce, distribute, modify, or create derivative works without our express written permission.
@@ -161,7 +161,7 @@ export default function TermsPage() {
 
               <h2>12. Indemnification</h2>
               <p>
-                You agree to indemnify and hold harmless Chickenpie, its officers, directors, employees, and agents from any claims, damages, or expenses arising from your violation of these Terms or misuse of our services.
+                You agree to indemnify and hold harmless NXT Template, its officers, directors, employees, and agents from any claims, damages, or expenses arising from your violation of these Terms or misuse of our services.
               </p>
 
               <h2>13. Third-Party Links</h2>
@@ -197,7 +197,7 @@ export default function TermsPage() {
 
               <h2>18. Entire Agreement</h2>
               <p>
-                These Terms, together with our Privacy Policy and any other legal notices on our website, constitute the entire agreement between you and Chickenpie.
+                These Terms, together with our Privacy Policy and any other legal notices on our website, constitute the entire agreement between you and NXT Template.
               </p>
 
               <h2>19. Contact Information</h2>
@@ -205,9 +205,9 @@ export default function TermsPage() {
                 For questions about these Terms, contact us at:
               </p>
               <p>
-                <strong>Chickenpie</strong><br />
-                Email: <a href="mailto:legal@chickenpie.co">legal@chickenpie.co</a><br />
-                Website: <a href="https://chickenpie.co">chickenpie.co</a>
+                <strong>NXT Template</strong><br />
+                Email: <a href="mailto:legal@template.dev">legal@template.dev</a><br />
+                Website: <a href="https://template.dev">template.dev</a>
               </p>
 
               {/* Branding */}

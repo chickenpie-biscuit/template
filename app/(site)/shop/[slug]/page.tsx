@@ -44,12 +44,12 @@ export async function generateMetadata({
     ? urlFor(product.images[0] as any).width(1200).height(630).url()
     : null;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://template.dev';
   const productUrl = `${siteUrl}/shop/${slug}`;
 
   return {
-    title: product.seo?.metaTitle || `${product.title} | Chickenpie Shop`,
-    description: product.seo?.metaDescription || product.shortDescription || `Shop ${product.title} at Chickenpie`,
+    title: product.seo?.metaTitle || `${product.title} | NXT Shop`,
+    description: product.seo?.metaDescription || product.shortDescription || `Shop ${product.title} at NXT Template`,
     keywords: product.seo?.keywords || [],
     alternates: {
       canonical: product.seo?.canonicalUrl || productUrl,
@@ -59,7 +59,7 @@ export async function generateMetadata({
       title: product.seo?.metaTitle || product.title,
       description: product.seo?.metaDescription || product.shortDescription || `Shop ${product.title}`,
       url: productUrl,
-      siteName: 'Chickenpie',
+      siteName: 'NXT Template',
       images: ogImageUrl ? [{ 
         url: ogImageUrl, 
         width: 1200, 
@@ -118,7 +118,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     : 0;
 
   // SEO data
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://chickenpie.co';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://template.dev';
   const productUrl = `${siteUrl}/shop/${slug}`;
   const mainImage = product.images?.[0];
   const imageUrl = mainImage

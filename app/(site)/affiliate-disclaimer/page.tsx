@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Link2, ArrowLeft, AlertCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Affiliate Disclaimer | Chickenpie',
+  title: 'Affiliate Disclaimer | NXT Template',
   description: 'Disclosure about affiliate relationships and how we may earn commissions from recommendations.',
 };
 
@@ -66,7 +66,7 @@ export default function AffiliateDisclaimerPage() {
             ">
               <h2>1. Affiliate Disclosure</h2>
               <p>
-                Chickenpie (chickenpie.co) is a participant in various affiliate marketing programs. This means that when you click on certain links on our website and make a purchase, we may receive a commission at no additional cost to you.
+                NXT Template (template.dev) is a participant in various affiliate marketing programs. This means that when you click on certain links on our website and make a purchase, we may receive a commission at no additional cost to you.
               </p>
               <p>
                 We want to be completely transparent about our affiliate relationships. This disclosure is provided in accordance with the guidelines set by the Federal Trade Commission (FTC) and applicable Philippine consumer protection laws.
@@ -137,7 +137,7 @@ export default function AffiliateDisclaimerPage() {
                 When you make a purchase through our affiliate links:
               </p>
               <ul>
-                <li>Your transaction is directly with the merchant, not Chickenpie</li>
+                <li>Your transaction is directly with the merchant, not NXT Template</li>
                 <li>We do not have access to your payment information</li>
                 <li>Returns, refunds, and customer service are handled by the merchant</li>
                 <li>We are not responsible for product quality or merchant fulfillment</li>
@@ -194,9 +194,9 @@ export default function AffiliateDisclaimerPage() {
                 If you have questions about our affiliate relationships or this disclaimer, please contact us:
               </p>
               <p>
-                <strong>Chickenpie</strong><br />
-                Email: <a href="mailto:hello@chickenpie.co">hello@chickenpie.co</a><br />
-                Website: <a href="https://chickenpie.co">chickenpie.co</a>
+                <strong>NXT Template</strong><br />
+                Email: <a href="mailto:hello@template.dev">hello@template.dev</a><br />
+                Website: <a href="https://template.dev">template.dev</a>
               </p>
 
               <h2>14. Thank You</h2>

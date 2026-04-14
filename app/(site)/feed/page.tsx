@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Container from '@/components/ui/Container';
-import { siteConfig } from '@/config/site';
 import { Rss, ShoppingBag, Mail, Send, Users, Eye, Edit3, TrendingUp, Clock } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 const tabs = [
   { id: 'publish', label: 'Publish', icon: Rss },
@@ -53,9 +53,18 @@ export default function FeedPage() {
               <h1 className="font-heading text-7xl md:text-9xl font-bold text-black">Feed Studio</h1>
             </div>
             <p className="text-xl text-black/60 max-w-2xl leading-relaxed">
-              Central hub for managing all your content — posts, products, and subscriber communications. Connect Sanity CMS to enable live data.
+              Central hub for managing all your content — posts, products, and subscriber communications. Connect your CMS to enable live data.
             </p>
           </div>
+        </Container>
+      </section>
+
+      {/* RESTRICTED BANNER */}
+      <section className="py-3 bg-yellow-100 border-b-2 border-black">
+        <Container>
+          <p className="text-center text-sm font-mono text-black/60">
+            This page is part of a template demo — CMS content is illustrative placeholder data
+          </p>
         </Container>
       </section>
 
@@ -99,8 +108,8 @@ export default function FeedPage() {
                   </button>
                 </div>
 
-                <div className="border-2 border-black">
-                  <table className="w-full">
+                <div className="overflow-x-auto -mx-6 px-6">
+                  <table className="w-full min-w-[600px]">
                     <thead>
                       <tr className="border-b-2 border-black bg-black/5">
                         <th className="text-left px-6 py-4 font-heading text-xs uppercase tracking-wider text-black/60">Title</th>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Shield, ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | Chickenpie',
+  title: 'Privacy Policy | NXT Template',
   description: 'Our commitment to protecting your privacy and personal data under the Data Privacy Act of 2012 (Philippines).',
 };
 
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
             ">
               <h2>1. Introduction</h2>
               <p>
-                Chickenpie (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your personal data and respecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website chickenpie.co and use our services.
+                NXT Template (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your personal data and respecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website template.dev and use our services.
               </p>
               <p>
                 We operate in compliance with the <strong>Data Privacy Act of 2012</strong> (Republic Act No. 10173) of the Philippines and its Implementing Rules and Regulations (IRR), as well as applicable international data protection standards.
@@ -171,9 +171,9 @@ export default function PrivacyPage() {
                 For questions about this Privacy Policy or to exercise your rights, contact us at:
               </p>
               <p>
-                <strong>Chickenpie</strong><br />
-                Email: <a href="mailto:privacy@chickenpie.co">privacy@chickenpie.co</a><br />
-                Data Protection Officer: <a href="mailto:dpo@chickenpie.co">dpo@chickenpie.co</a>
+                <strong>NXT Template</strong><br />
+                Email: <a href="mailto:privacy@template.dev">privacy@template.dev</a><br />
+                Data Protection Officer: <a href="mailto:dpo@template.dev">dpo@template.dev</a>
               </p>
               <p>
                 You may also file a complaint with the <strong>National Privacy Commission</strong> of the Philippines at <a href="https://www.privacy.gov.ph" target="_blank" rel="noopener noreferrer">www.privacy.gov.ph</a>.

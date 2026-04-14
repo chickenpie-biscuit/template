@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { CheckCircle, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Order Confirmed | Chickenpie',
+  title: 'Order Confirmed | NXT Template',
   robots: { index: false },
 };
 
@@ -29,8 +29,8 @@ export default function OrderSuccessPage() {
 
             <p className="font-body text-sm text-black/50 mb-12">
               If you have any questions about your order, reach out to{' '}
-              <a href="mailto:hello@chickenpie.co" className="text-red underline">
-                hello@chickenpie.co
+              <a href="mailto:hello@template.dev" className="text-red underline">
+                hello@template.dev
               </a>
             </p>
 
