@@ -2,6 +2,13 @@ import Container from '@/components/ui/Container';
 import { siteConfig } from '@/config/site';
 import Link from 'next/link';
 import { ArrowRight, Layers, Code, Palette } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://chickenpie.co/studio',
+  },
+};
 
 const pages = [
   { label: 'Home', href: '/', desc: 'Hero + feature showcase + CMS demo' },

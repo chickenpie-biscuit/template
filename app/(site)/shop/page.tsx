@@ -1,6 +1,13 @@
 import Container from '@/components/ui/Container';
 import Link from 'next/link';
 import { ArrowRight, Package, ShoppingBag } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://chickenpie.co/shop',
+  },
+};
 
 const categories = ['All', 'Digital', 'Merchandise', 'Print', 'Download'];
 

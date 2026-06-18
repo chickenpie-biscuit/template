@@ -43,59 +43,60 @@ interface SitemapItem {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages with their priorities
+  // lastModified uses real known-good dates, not build time, so Google sees meaningful change signals
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
-      lastModified: new Date(),
+      lastModified: new Date('2026-06-17'),
       changeFrequency: 'daily',
       priority: 1,
     },
     {
       url: `${BASE_URL}/about`,
-      lastModified: new Date(),
+      lastModified: new Date('2026-04-01'),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${BASE_URL}/contact`,
-      lastModified: new Date(),
+      lastModified: new Date('2026-04-01'),
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${BASE_URL}/shop`,
-      lastModified: new Date(),
+      lastModified: new Date('2026-06-01'),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/studio`,
-      lastModified: new Date(),
+      lastModified: new Date('2026-06-01'),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${BASE_URL}/blog`,
-      lastModified: new Date(),
+      lastModified: new Date('2026-06-01'),
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     // Legal pages
     {
       url: `${BASE_URL}/privacy`,
-      lastModified: new Date(),
+      lastModified: new Date('2025-01-01'),
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${BASE_URL}/terms`,
-      lastModified: new Date(),
+      lastModified: new Date('2025-01-01'),
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${BASE_URL}/affiliate-disclaimer`,
-      lastModified: new Date(),
+      lastModified: new Date('2025-01-01'),
       changeFrequency: 'yearly',
       priority: 0.3,
     },
@@ -119,7 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Feed posts (main content)
     const feedPostUrls: MetadataRoute.Sitemap = feedPosts.map((post) => ({
       url: `${BASE_URL}/feed/${post.slug}`,
-      lastModified: post._updatedAt ? new Date(post._updatedAt) : new Date(post.publishedAt || Date.now()),
+      lastModified: new Date(post.publishedAt || post._updatedAt || Date.now()),
       changeFrequency: 'weekly',
       priority: 0.8,
     }));
@@ -127,7 +128,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Blog posts
     const blogPostUrls: MetadataRoute.Sitemap = blogPosts.map((post) => ({
       url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: post._updatedAt ? new Date(post._updatedAt) : new Date(post.publishedAt || Date.now()),
+      lastModified: new Date(post.publishedAt || post._updatedAt || Date.now()),
       changeFrequency: 'monthly',
       priority: 0.7,
     }));
@@ -135,7 +136,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Products
     const productUrls: MetadataRoute.Sitemap = products.map((product) => ({
       url: `${BASE_URL}/shop/${product.slug}`,
-      lastModified: product._updatedAt ? new Date(product._updatedAt) : new Date(product.publishedAt || Date.now()),
+      lastModified: new Date(product.publishedAt || product._updatedAt || Date.now()),
       changeFrequency: 'weekly',
       priority: 0.8,
     }));
@@ -143,7 +144,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Studio projects
     const studioUrls: MetadataRoute.Sitemap = studioProjects.map((project) => ({
       url: `${BASE_URL}/studio/${project.slug}`,
-      lastModified: project._updatedAt ? new Date(project._updatedAt) : new Date(project.publishedAt || Date.now()),
+      lastModified: new Date(project.publishedAt || project._updatedAt || Date.now()),
       changeFrequency: 'monthly',
       priority: 0.7,
     }));
@@ -151,7 +152,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Dynamic pages from Sanity
     const pageUrls: MetadataRoute.Sitemap = pages.map((page) => ({
       url: `${BASE_URL}/${page.slug}`,
-      lastModified: page._updatedAt ? new Date(page._updatedAt) : new Date(page.publishedAt || Date.now()),
+      lastModified: new Date(page.publishedAt || page._updatedAt || Date.now()),
       changeFrequency: 'monthly',
       priority: 0.6,
     }));

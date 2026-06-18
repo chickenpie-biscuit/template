@@ -1,6 +1,13 @@
 import Container from '@/components/ui/Container';
 import NewsletterSignup from '@/components/ui/NewsletterSignup';
 import { siteConfig } from '@/config/site';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://chickenpie.co/contact',
+  },
+};
 
 export default function ContactPage() {
   return (
